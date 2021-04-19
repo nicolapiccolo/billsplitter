@@ -16,6 +16,9 @@ class LoginActivity : AppCompatActivity(),LoginFragment.OnFirstPageFragmentInter
 
         val user = User.getCurrentUser()
 
+
+
+
         if (user!=null) {
             intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)

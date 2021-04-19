@@ -24,7 +24,7 @@ class User {
             return user
         }
 
-        fun getCurrentUser(): ParseUser {
+        fun getCurrentUser(): ParseUser? {
             // After login, Parse will cache it on disk, so
             // we don't need to login every time we open this
             // application
