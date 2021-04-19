@@ -1,6 +1,7 @@
 package it.unito.billsplitter.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.parse.ParseException
 import com.parse.ParseUser
 import it.unito.billsplitter.R
+import it.unito.billsplitter.activity.MainActivity
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -27,11 +29,27 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btnLogin.setOnClickListener {
-            User.loginUser(txtEmail.text.toString(), txtPassword.text.toString())
+
+                ParseUser.logInInBackground(txtEmail.text.toString(), txtPassword.text.toString()) { user: ParseUser?, e: ParseException ->
+                    if (user != null) {
+                        // Hooray! The user is logged in.
+                        Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(context, MainActivity::class.java)
+                        startActivity(intent)
+
+                    } else {
+                        // Login failed. Look at the ParseException to see what happened.
+                            print(e.message)
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+
         }
 
         btnRegister.setOnClickListener {
-            User.createUser("nicola", "nicola", "nikola9piccolo9@gmail.com")
+            //User.createUser("nicola", "nicola", "nikola9piccolo9@gmail.com")
+            Toast.makeText(context, "No action", Toast.LENGTH_SHORT).show()
         }
     }
 

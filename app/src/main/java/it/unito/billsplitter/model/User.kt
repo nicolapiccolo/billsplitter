@@ -1,14 +1,26 @@
 package it.unito.billsplitter.model
 
+import android.content.Intent
 import android.widget.Toast
+import bolts.Task
 import com.parse.ParseException
 import com.parse.ParseUser
+import it.unito.billsplitter.activity.MainActivity
+import kotlinx.android.synthetic.main.fragment_login.*
 
 class User {
     companion object{
-        fun loginUser(email: String, password: String): ParseUser {
-            ParseUser.logInInBackground(email, password)
-            return ParseUser()
+        fun loginUser(email: String, password: String): ParseUser?  {
+            TODO("Implementare login")
+            /*ParseUser.logInInBackground(email, password)  { user: ParseUser?, e: ParseException ->
+                if (user != null) {
+                    // Hooray! The user is logged in.
+
+                } else {
+                    // Login failed. Look at the ParseException to see what happened.
+
+                }
+            }*/
         }
 
         fun createUser(username: String,password: String,email: String): ParseUser {
