@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
 
         btnLogin.setOnClickListener {
 
-                ParseUser.logInInBackground(txtEmail.text.toString(), txtPassword.text.toString()) { user: ParseUser?, e: ParseException ->
+                ParseUser.logInInBackground(txtEmail.text.toString(), txtPassword.text.toString()) { user: ParseUser?, e: ParseException? ->
                     if (user != null) {
                         // Hooray! The user is logged in.
                         Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
@@ -39,8 +39,7 @@ class LoginFragment : Fragment() {
 
                     } else {
                         // Login failed. Look at the ParseException to see what happened.
-                            print(e.message)
-                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, e?.message, Toast.LENGTH_SHORT).show()
 
                     }
                 }
