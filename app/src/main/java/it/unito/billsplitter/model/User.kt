@@ -10,6 +10,11 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 class User {
     companion object{
+
+        var username :String = ""
+        var email :String = ""
+
+
         fun loginUser(email: String, password: String): ParseUser?  {
             TODO("Implementare login")
             /*ParseUser.logInInBackground(email, password)  { user: ParseUser?, e: ParseException ->
@@ -40,7 +45,14 @@ class User {
             // After login, Parse will cache it on disk, so
             // we don't need to login every time we open this
             // application
-            return ParseUser.getCurrentUser()
+            val user = ParseUser.getCurrentUser()
+            username = user?.username.toString()
+            email = user?.email.toString()
+
+
+            return user
         }
+
+
     }
 }
