@@ -13,6 +13,7 @@ class User {
 
         var username :String = ""
         var email :String = ""
+        var id :String = ""
 
 
         fun loginUser(email: String, password: String): ParseUser?  {
@@ -48,6 +49,7 @@ class User {
             val user = ParseUser.getCurrentUser()
             username = user?.username.toString()
             email = user?.email.toString()
+            id = user?.objectId.toString()
 
 
             return user
