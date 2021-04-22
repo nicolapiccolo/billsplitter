@@ -37,7 +37,7 @@ class User {
             // Other fields can be set just like any other ParseObject,
             // using the "put" method, like this: user.put("attribute", "its value");
             // If this field does not exists, it will be automatically created
-            user.signUpInBackground()
+            user.signUp()
             return user
         }
 
@@ -48,8 +48,6 @@ class User {
             val user = ParseUser.getCurrentUser()
             username = user?.username.toString()
             email = user?.email.toString()
-
-
             return user
         }
 

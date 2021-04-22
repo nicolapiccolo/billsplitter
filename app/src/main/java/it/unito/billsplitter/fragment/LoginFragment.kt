@@ -1,7 +1,10 @@
 package it.unito.billsplitter.fragment
 
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +14,13 @@ import androidx.fragment.app.Fragment
 import com.parse.ParseException
 import com.parse.ParseUser
 import it.unito.billsplitter.R
+import it.unito.billsplitter.activity.LandingActivity
 import it.unito.billsplitter.activity.MainActivity
+import it.unito.billsplitter.activity.RegisterActivity
 import it.unito.billsplitter.model.User
+import kotlinx.android.synthetic.main.activity_forgot_password.view.*
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.view.*
 
 
 class LoginFragment : Fragment() {
@@ -36,19 +43,49 @@ class LoginFragment : Fragment() {
                         Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(context, MainActivity::class.java)
                         startActivity(intent)
-
                     } else {
                         // Login failed. Look at the ParseException to see what happened.
                         Toast.makeText(context, e?.message, Toast.LENGTH_SHORT).show()
-
                     }
                 }
 
         }
 
         btnRegister.setOnClickListener {
-            //User.createUser("nicola", "nicola", "nikola9piccolo9@gmail.com")
-            Toast.makeText(context, "No action", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnBack.setOnClickListener{
+            val intent = Intent(context, LandingActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnForgotPassword.setOnClickListener{
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.activity_forgot_password, null)
+            //AlertDialogBuilder
+            val mBuilder = AlertDialog.Builder(context)
+                    .setView(mDialogView)
+            val mAlertDialog = mBuilder.show()
+            mAlertDialog.apply {
+                window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
+            mDialogView.btnSend.setOnClickListener {
+                mAlertDialog.dismiss()
+                ParseUser.requestPasswordResetInBackground(mDialogView.txtRestoreEmail.toString()) {e: ParseException? ->
+                    if(e == null){
+                        Toast.makeText(context, "New Password sent correctly. Check your Email!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(context, LandingActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(context, e?.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            mDialogView.btnCancel.setOnClickListener {
+                mAlertDialog.dismiss()
+            }
+
         }
     }
 

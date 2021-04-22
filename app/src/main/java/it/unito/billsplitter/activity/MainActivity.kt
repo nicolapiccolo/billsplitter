@@ -12,11 +12,9 @@ import it.unito.billsplitter.model.User
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val user = User.getCurrentUser()
-
         if (user==null) {
-            intent = Intent(applicationContext, LoginActivity::class.java)
+            intent = Intent(this, SlidingActivity::class.java)
             startActivity(intent)
         }
         else{
