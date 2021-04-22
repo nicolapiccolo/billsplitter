@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BillSplitter">
         <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.LandingActivity"></activity>
+        <activity android:name=".activity.RegisterActivity"></activity>
+        <activity android:name=".activity.SlidingActivity"></activity>
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
