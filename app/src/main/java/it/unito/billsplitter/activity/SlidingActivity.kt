@@ -29,9 +29,6 @@ class SlidingActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sliding)
 
-        val actionBar: ActionBar? = supportActionBar
-        actionBar!!.hide()
-
         if(!isFirstTimeAppStart()){
             setAppStartStatus(false)
             startActivity(Intent(this, LandingActivity::class.java))
