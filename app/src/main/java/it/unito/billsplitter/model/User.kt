@@ -13,6 +13,7 @@ class User {
 
         var username :String = ""
         var email :String = ""
+        var id :String = ""
 
 
         fun loginUser(email: String, password: String): ParseUser?  {
