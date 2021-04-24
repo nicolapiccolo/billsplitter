@@ -46,6 +46,7 @@ class Model private constructor()   {
     }
 
     fun getAllSplit(): ArrayList<Split> {
+
         val mySplit = getMySplit()
         getOtherSplit(mySplit)
 
