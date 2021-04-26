@@ -3,9 +3,20 @@ package it.unito.billsplitter.model
 import com.parse.ParseObject
 import com.parse.ParseQuery
 import com.parse.ParseRelation
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class Split(var name: String, var total: Float, var date: String, var owner: String) {}
+class Split(var name: String, var total: Float, var date: String, var owner: String) {
+    companion object{
+        fun formatDate(d: Date): String{
+            val df: DateFormat = SimpleDateFormat("EEE, d MMM yyyy")
+            return df.format(d)
+        }
+    }
+}
 
 class Model private constructor()   {
 
@@ -23,22 +34,37 @@ class Model private constructor()   {
 
             val splitObj = (it.get("id_split") as ParseRelation<*>).query.find().get(0)
 
-            println("mysplit1: " + mySplit.get(0))
-            println("splitobj: " + splitObj.objectId)
-            println("check: " + splitObj.objectId in mySplit)
+            //println("mysplit1: " + mySplit.get(0))
+            //println("splitobj: " + splitObj.objectId)
+            //println("check: " + splitObj.objectId in mySplit)
 
-            if (!(splitObj.objectId in mySplit)) {
-                var split = Split("", 0f, "", "")
 
-                //getTotalofSplit(it)
+            println("DATE: " + Split.formatDate(it.createdAt as Date))
+            var split = Split("", 0f, "", "")
 
-                println("other: "  + splitObj.get("name"))
+            if(!mySplit.isEmpty()) {
+                if (!(splitObj.objectId in mySplit)) {
+
+
+                    //getTotalofSplit(it)
+
+                    //println("other: " + splitObj.get("name"))
+                    split.name = getNameSplit(splitObj)
+                    split.total = (it.get("share") as Double).toFloat()
+                    split.date = Split.formatDate(it.createdAt as Date)
+
+                    dataList.add(split)
+
+                }
+            }
+            else{
 
                 split.name = getNameSplit(splitObj)
                 split.total = (it.get("share") as Double).toFloat()
+                split.date = Split.formatDate(it.createdAt as Date)
+
 
                 dataList.add(split)
-
             }
 
         }
@@ -54,8 +80,6 @@ class Model private constructor()   {
     }
 
     fun getMySplit(): List<String>{
-        //var dataList : ArrayList<Split> = ArrayList()
-
 
         var listId = ArrayList<String>()
         val query = ParseQuery.getQuery<ParseObject>("Split")
@@ -72,21 +96,24 @@ class Model private constructor()   {
 
             //getTotalofSplit(it)
             split.name = it.get("name") as String
-
             split.total =  getTotalofMySplit(it)
+            split.date = Split.formatDate(it.createdAt as Date)
+
+
 
             listId.add(it.objectId)
             dataList.add(split)
         }
+
         return listId
     }
 
     fun getTotalofMySplit(id_split: ParseObject): Float{
         var total: Float = 0f
         val query = ParseQuery.getQuery<ParseObject>("Transaction")
-        query.whereEqualTo("id_split",id_split)
-        query.whereNotEqualTo("id_user",User.getCurrentUser())
-        query.whereEqualTo("paid",false)
+        query.whereEqualTo("id_split", id_split)
+        query.whereNotEqualTo("id_user", User.getCurrentUser())
+        query.whereEqualTo("paid", false)
         val queryList: List<ParseObject> = query.find()
 
         queryList.forEach{
@@ -100,12 +127,13 @@ class Model private constructor()   {
 
     fun getNameSplit(id_split: ParseObject): String{
         val query = ParseQuery.getQuery<ParseObject>("Split")
-        query.whereEqualTo("objectId",id_split.objectId)
+        query.whereEqualTo("objectId", id_split.objectId)
 
         return query.find().get(0).get("name").toString()
     }
 
 
+    /*
     fun getSplitElement(position: Int) : Split {
         var split = Split("", 0f, "", "")
         val query = ParseQuery.getQuery<ParseObject>("Split")
@@ -143,6 +171,10 @@ class Model private constructor()   {
         }
         return size
     }
+
+    */
+
+
 
     companion object {
         @JvmStatic val instance = Model()

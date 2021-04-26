@@ -83,7 +83,7 @@
             android:layout_marginEnd="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:background="@drawable/img_account" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
