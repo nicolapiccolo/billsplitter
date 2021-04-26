@@ -17,6 +17,8 @@
         <activity android:name=".activity.LandingActivity"></activity>
         <activity android:name=".activity.RegisterActivity"></activity>
         <activity android:name=".activity.SlidingActivity"></activity>
+        <activity android:name=".activity.CreateSplitActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

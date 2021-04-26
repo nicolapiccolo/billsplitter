@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/ic_card"
+    card_view:cardCornerRadius="15dp"
+    card_view:cardElevation="0dp"
+    card_view:cardPreventCornerOverlap="true"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgAccount"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/txtSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You pay for"
+            android:fontFamily="@font/robo_italic"
+            android:textSize="14dp"
+            android:layout_marginLeft="15dp"
+            card_view:layout_constraintStart_toEndOf="@+id/imgAccount"
+            card_view:layout_constraintTop_toTopOf="@+id/imgAccount"/>
+        <TextView
+            android:id="@+id/txtPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30%"
+            android:fontFamily="@font/robo_bold"
+            android:textSize="24dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            card_view:layout_constraintStart_toEndOf="@+id/imgAccount"
+            card_view:layout_constraintTop_toBottomOf="@+id/txtSubtitle"/>
+        <TextView
+            android:id="@+id/txtPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="€22,20"
+            android:fontFamily="@font/robo_bold"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:layout_marginRight="20dp"
+            card_view:layout_constraintEnd_toEndOf="@+id/topLayout"
+            card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"
+            card_view:layout_constraintTop_toTopOf="@+id/topLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/btnLocker"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintBottom_toBottomOf="parent">
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLocker"
+            android:layout_width="65dp"
+            android:layout_height="55dp"
+            android:background="@drawable/lock_button"
+            card_view:icon="@drawable/ic_password"
+            card_view:layout_constraintBottom_toBottomOf="@+id/bottomLayout"
+            card_view:layout_constraintEnd_toEndOf="@+id/bottomLayout"
+             />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

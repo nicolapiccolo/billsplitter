@@ -36,8 +36,7 @@ class SlidingActivity : AppCompatActivity(){
         }
 
         statusBarTransparent()
-
-        btnNext.setOnClickListener{
+        btnNextSlide.setOnClickListener{
             val currentPage: Int = viewPager.currentItem + 1
             if(currentPage < layouts.size){
                 viewPager.currentItem = currentPage
@@ -67,11 +66,11 @@ class SlidingActivity : AppCompatActivity(){
 
             override fun onPageSelected(position: Int) {
                 if(position == layouts.size - 1){
-                    btnNext.text = "Start"
+                    btnNextSlide.text = "Start"
                     btnSkip.visibility = View.GONE
                 }
                 else{
-                    btnNext.text = "Next"
+                    btnNextSlide.text = "Next"
                     btnSkip.visibility = View.VISIBLE
                 }
                 setDots(position)
