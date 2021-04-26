@@ -34,8 +34,9 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/robo_regular"
-            android:text="PENDING SPLITS"
+            android:text="  PENDING SPLITS"
             android:textColor="@color/black"
+            android:drawableLeft="@drawable/ic_pending"
             android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView"
@@ -48,7 +49,7 @@
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/robo_regular"
             android:text="-$13,50"
-            android:textColor="@color/black"
+            android:textColor="@color/red"
             android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -59,7 +60,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/robo_regular"
             android:text="/"
-            android:textColor="@color/black"
+            android:textColor="@color/darkgrey"
             android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="@+id/txtDebt"
             app:layout_constraintEnd_toStartOf="@+id/txtDebt" />
@@ -70,7 +71,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/robo_regular"
             android:text="+$60,50"
-            android:textColor="@color/black"
+            android:textColor="@color/green"
             android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView4"
             app:layout_constraintEnd_toStartOf="@+id/textView4" />
@@ -107,6 +108,8 @@
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -115,13 +118,15 @@
             android:id="@+id/btnCreate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="32dp"
             android:text="Create new Split"
-            android:background="@drawable/ic_button"
+            android:textSize="18dp"
+            android:background="@drawable/fill_button"
+            android:fontFamily="@font/robo_bold"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

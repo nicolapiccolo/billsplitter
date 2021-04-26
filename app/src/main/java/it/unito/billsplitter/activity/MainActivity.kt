@@ -35,7 +35,12 @@ class MainActivity : AppCompatActivity(),CellClickListener {
 
             //print("DATA: " + Model.instance.getSplit())
 
+            btnCreate.setOnClickListener {
+                intent = Intent(this, CreateSplitActivity::class.java)
+                startActivity(intent)
+            }
         }
+
     }
 
     override fun onCellClickListener(data: Split) {
