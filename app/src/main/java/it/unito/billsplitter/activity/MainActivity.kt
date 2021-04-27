@@ -2,9 +2,12 @@ package it.unito.billsplitter.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import it.unito.billsplitter.AsyncTaskListener
+import it.unito.billsplitter.LoadDataAsyncTask
 import it.unito.billsplitter.R
 import it.unito.billsplitter.RvAdapter
 import it.unito.billsplitter.model.Model
@@ -13,7 +16,7 @@ import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(),CellClickListener {
+class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
 
     private lateinit var adapter: RvAdapter
 
@@ -27,13 +30,17 @@ class MainActivity : AppCompatActivity(),CellClickListener {
         else{
             setContentView(R.layout.activity_main)
 
-            Toast.makeText(baseContext,"Welcome back ${User.username}", Toast.LENGTH_LONG).show()
+            Toast.makeText(baseContext, "Welcome back ${User.username}", Toast.LENGTH_LONG).show()
+            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL ,false)
 
-            populateList(Model.instance.getAllSplit())
+            txtCredit.setVisibility(View.GONE)
+            txtDebt.setVisibility(View.GONE)
 
-            //print("DATA: " + Model.instance.getSplit())
+            recyclerView.setVisibility(View.GONE)
+            progressBar.setVisibility(View.VISIBLE)
+
+            LoadDataAsyncTask(this).execute() //thread caricamento dati
 
             btnCreate.setOnClickListener {
                 intent = Intent(this, CreateSplitActivity::class.java)
@@ -45,7 +52,7 @@ class MainActivity : AppCompatActivity(),CellClickListener {
 
     override fun onCellClickListener(data: Split) {
         //Model.instance.getTotalofSplit("")
-        Toast.makeText(baseContext,"Card Click", Toast.LENGTH_LONG).show()
+        Toast.makeText(baseContext, "Card Click", Toast.LENGTH_LONG).show()
     }
 
 
@@ -53,9 +60,32 @@ class MainActivity : AppCompatActivity(),CellClickListener {
         adapter = RvAdapter(this, list)
         recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
+
+        recyclerView.setVisibility(View.VISIBLE);
+
     }
 
+    private fun setTotal(give: String, have: String){
+        txtCredit.text = have
+        txtDebt.text = give
+
+        txtCredit.setVisibility(View.VISIBLE)
+        txtDebt.setVisibility(View.VISIBLE)
+    }
+
+    override fun giveProgress(progress: Int?) {
+        if (progress != null) {
+            progressBar.setProgress(progress)
+        }
+    }
+
+    override fun sendData(list: ArrayList<Split>, give: String, have: String) {
+        populateList(list)
+        setTotal(give,have)
+    }
 }
+
+
 
 interface CellClickListener {
     fun onCellClickListener(data: Split)

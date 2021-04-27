@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/ic_card"
     android:layout_marginRight="15dp"
     android:layout_marginLeft="15dp"
     card_view:cardCornerRadius="15dp"
@@ -15,40 +14,50 @@
     card_view:cardUseCompatPadding="true">
 
     <LinearLayout
+        android:id="@+id/c_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/ic_card_red"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/c_layout"
             android:layout_width="match_parent"
-            android:layout_height="131dp">
+            android:layout_height="131dp"
+            android:layout_margin="1dp"
+            android:background="@drawable/inner_layout_card_red">
 
-            <TextView
-                android:id="@+id/c_txtName"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:fontFamily="@font/robo_black"
-                android:text="Split"
-                android:textColor="@color/black"
-                android:textSize="36dp"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/c_txtDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/robo_medium"
-                android:text="10 Aprile 2021"
-                android:textColor="@color/black"
-                android:textSize="12dp"
+                android:orientation="horizontal"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/c_txtName"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robo_black"
+                    android:text="Split"
+                    android:textColor="@color/red"
+                    android:textSize="36dp" />
+
+                <TextView
+                    android:id="@+id/c_txtDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robo_medium"
+                    android:layout_gravity="center_vertical"
+                    android:text="10 Aprile 2021"
+                    android:textColor="@color/red"
+                    android:textSize="12dp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/c_txtTotal"
@@ -58,20 +67,20 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/robo_black"
                 android:text="+$13,50"
-                android:textColor="@color/black"
+                android:textColor="@color/red"
                 android:textSize="36dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/c_txtWith"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/robo_bold"
                 android:text="with: "
-                android:textColor="@color/black"
+                android:textColor="@color/red"
                 android:textSize="24dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent" />
@@ -91,7 +100,7 @@
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/robo_italic"
                 android:text="Send to "
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="14dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
@@ -104,7 +113,7 @@
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/robo_bold"
                 android:text="Luca"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="14dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/c_sendreq" />
