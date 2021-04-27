@@ -12,4 +12,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- checkbox style -->
+    <style name="colored_checkbox" parent="Theme.MaterialComponents.Light">
+        <!-- selected checkbox color -->
+        <item name="colorAccent">@color/yellow</item>
+        <!-- default/unselected checkbox color -->
+        <item name="android:textColorSecondary">@color/yellow</item>
+    </style>
+
 </resources>

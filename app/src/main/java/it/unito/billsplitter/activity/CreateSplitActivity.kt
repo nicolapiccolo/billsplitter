@@ -4,28 +4,32 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import it.unito.billsplitter.R
+import kotlinx.android.synthetic.main.activity_title_split.*
+import kotlinx.android.synthetic.main.activity_total_split.*
 
 class CreateSplitActivity : AppCompatActivity() {
 
-    private lateinit var pages: IntArray
-    private var index:Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pages = intArrayOf(R.layout.activity_title_split,R.layout.activity_total_split,R.layout.activity_contacts_split)
-        setContentView(pages[index])
+        setContentView(R.layout.activity_title_split)
     }
 
-    fun Next(view: View){
-        if(index+1 < pages.size){
-            index+=1
-            setContentView(pages[index])
-        }
+    fun nextTitle(view: View){
+        if(edtInsertTitle.text.toString().equals(""))
+            Toast.makeText(this, "Title can't be empty!", Toast.LENGTH_SHORT).show()
+        else
+            setContentView(R.layout.activity_total_split)
+    }
+
+    fun nextTotal(view: View){
+        if (edtInsertTotal.text.toString().equals(""))
+            Toast.makeText(this, "Total can't be empty!", Toast.LENGTH_SHORT).show()
         else{
-            //TODO
+            intent = Intent(this, ContactActivity::class.java)
+            startActivity(intent)
         }
     }
-
 }
