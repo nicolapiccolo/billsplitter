@@ -33,7 +33,11 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
             Toast.makeText(baseContext, "Welcome back ${User.username}", Toast.LENGTH_LONG).show()
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-            recyclerView.setVisibility(View.GONE);
+
+            txtCredit.setVisibility(View.GONE)
+            txtDebt.setVisibility(View.GONE)
+
+            recyclerView.setVisibility(View.GONE)
             progressBar.setVisibility(View.VISIBLE)
 
             LoadDataAsyncTask(this).execute() //thread caricamento dati
@@ -51,8 +55,18 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
         adapter = RvAdapter(this, list)
         recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
+
+        recyclerView.setVisibility(View.VISIBLE);
+
     }
 
+    private fun setTotal(give: String, have: String){
+        txtCredit.text = have
+        txtDebt.text = give
+
+        txtCredit.setVisibility(View.VISIBLE)
+        txtDebt.setVisibility(View.VISIBLE)
+    }
 
     override fun giveProgress(progress: Int?) {
         if (progress != null) {
@@ -60,9 +74,9 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
         }
     }
 
-    override fun sendData(list: ArrayList<Split>) {
+    override fun sendData(list: ArrayList<Split>, give: String, have: String) {
         populateList(list)
-        recyclerView.setVisibility(View.VISIBLE);
+        setTotal(give,have)
     }
 }
 

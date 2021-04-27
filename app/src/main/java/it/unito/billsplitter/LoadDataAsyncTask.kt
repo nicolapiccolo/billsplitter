@@ -28,7 +28,7 @@ class LoadDataAsyncTask(context: Context) : AsyncTask<Void, Int, ArrayList<Split
 
     /** The system calls this to perform work in the UI thread and delivers the result from doInBackground() */
     override fun onPostExecute(result: ArrayList<Split>) {
-        listener?.sendData(result)
+        listener?.sendData(result,Model.instance.getGive(),Model.instance.getHave())
     }
 }
 
