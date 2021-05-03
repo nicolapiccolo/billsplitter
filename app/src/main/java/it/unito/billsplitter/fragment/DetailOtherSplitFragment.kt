@@ -11,7 +11,6 @@ import it.unito.billsplitter.R
 import it.unito.billsplitter.RvAdapterDetail
 import it.unito.billsplitter.activity.CellClickListener
 import it.unito.billsplitter.model.MySplit
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_other_split.*
 
 class DetailOtherSplitFragment : Fragment(), CellClickListener {

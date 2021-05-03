@@ -33,6 +33,12 @@ class Split(var name: String, var total: String, var date: String, var owner: St
 
         }
 
+        fun getFloat(n: String): Float {
+
+            val nn = n.split("€")[1].replace(",",".")
+
+            return nn.toFloat()
+        }
 
     }
 }
