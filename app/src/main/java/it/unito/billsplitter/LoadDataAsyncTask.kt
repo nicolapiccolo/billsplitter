@@ -15,7 +15,8 @@ class LoadDataAsyncTask(context: Context) : AsyncTask<Void, Int, ArrayList<Split
 
     /** The system calls this to perform work in a worker thread and delivers it the parameters given to AsyncTask.execute() */
     override fun doInBackground(vararg params: Void?): ArrayList<Split>? {
-        return Model.instance.getAllSplit()
+        if(Model.instance.dataList.isEmpty()) return Model.instance.getAllSplit()
+        else return Model.instance.dataList
     }
 
 

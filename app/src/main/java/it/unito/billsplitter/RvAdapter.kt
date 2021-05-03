@@ -35,14 +35,10 @@ class RvAdapter(private val cellClickListener: CellClickListener, private val da
 
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
 
-        Log.d("BIND", "first")
         val data = dataList.get(p1)
-        Log.d("BIND", "second")
-
-
 
         p0.itemView.setOnClickListener {
-            cellClickListener.onCellClickListener(data)
+            cellClickListener.onCellClickListener(data.obj)
         }
 
         p0.title?.text = data.name.capitalize()
