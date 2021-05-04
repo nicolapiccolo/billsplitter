@@ -1,5 +1,6 @@
 package it.unito.billsplitter.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -23,6 +24,7 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener {
     private lateinit var menu : Menu
     private var isMySplit: Boolean = false
     private var menuFragment: MenuClick? = null
+    private var split: ParseObject? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +36,11 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false);
 
-        val split : ParseObject? = intent.getParcelableExtra("split") as? ParseObject
+        split = (intent.getParcelableExtra("split") as? ParseObject)!!
 
         if(split != null){
 
-            isMySplit = Model.instance.isMySplit(split)
+            isMySplit = Model.instance.isMySplit(split!!)
 
             LoadFragmentAsyncTask(this).execute(split)
         }
@@ -46,6 +48,7 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         if (menu != null) {
             this.menu = menu
         }
@@ -59,12 +62,14 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener {
         return when (item.getItemId()) {
             R.id.action_modify -> {
                 //addSomething()
-                menuFragment?.modifySplit()
+                menuFragment?.modifySplit(split)
                 true
             }
             R.id.action_close -> {
                 //startSettings()
-                menuFragment?.closeSplit()
+                menuFragment?.closeSplit(split)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -118,7 +123,7 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener {
 }
 
 interface MenuClick{
-    fun closeSplit()
-    fun modifySplit()
+    fun closeSplit(s: ParseObject?)
+    fun modifySplit(s: ParseObject?)
 }
 

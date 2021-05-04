@@ -37,13 +37,26 @@ class Model private constructor()   {
 
             var split = Split("", "", "", "", null)
 
-            if(!mySplit.isEmpty()) {
-                if (!(splitObj.objectId in mySplit)) {
+            if (!splitObj.getBoolean("close")) {
+                if (!mySplit.isEmpty()) {
+                    if (!(splitObj.objectId in mySplit)) {
+
+                        val share = (-(it.get("share") as Double).toFloat())
+
+                        split.obj = splitObj
+                        split.name = getNameSplit(splitObj)
+                        split.total = Split.formatTotal(share)
+                        split.date = Split.formatDate(it.createdAt as Date)
+                        split.owner = getOwnerSplit(splitObj).toString()
 
 
-                    //getTotalofSplit(it)
+                        println("OW: " + split.owner)
 
-                    //println("other: " + splitObj.get("name"))
+                        total_give += share
+                        dataList.add(split)
+
+                    }
+                } else {
 
                     val share = (-(it.get("share") as Double).toFloat())
 
@@ -54,28 +67,10 @@ class Model private constructor()   {
                     split.owner = getOwnerSplit(splitObj).toString()
 
 
-                    println("OW: " + split.owner)
-
                     total_give += share
                     dataList.add(split)
-
                 }
             }
-            else{
-
-                val share = (-(it.get("share") as Double).toFloat())
-
-                split.obj = splitObj
-                split.name = getNameSplit(splitObj)
-                split.total = Split.formatTotal(share)
-                split.date = Split.formatDate(it.createdAt as Date)
-                split.owner = getOwnerSplit(splitObj).toString()
-
-
-                total_give += share
-                dataList.add(split)
-            }
-
         }
 
     }
@@ -97,7 +92,7 @@ class Model private constructor()   {
         var listId = ArrayList<String>()
         val query = ParseQuery.getQuery<ParseObject>("Split")
         query.whereEqualTo("id_user", User.getCurrentUser())
-
+        query.whereEqualTo("close",false)
 
 
         val queryList: List<ParseObject> = query.find()
@@ -259,6 +254,16 @@ class Model private constructor()   {
         return  ((paid * 100)/total).toInt()
     }
 
+
+    fun closeSplit(id_split: ParseObject){
+        val query =  ParseQuery.getQuery<ParseObject>("Split")
+        query.whereEqualTo("objectId", id_split.objectId)
+
+        val obj = query.find().get(0)
+
+        obj.put("close",true)
+        obj.save()
+    }
 
     companion object {
         @JvmStatic val instance = Model()

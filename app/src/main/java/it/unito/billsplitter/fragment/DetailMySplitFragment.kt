@@ -1,5 +1,6 @@
 package it.unito.billsplitter.fragment
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import it.unito.billsplitter.R
 import it.unito.billsplitter.RvAdapter
 import it.unito.billsplitter.RvAdapterDetail
 import it.unito.billsplitter.activity.CellClickListener
+import it.unito.billsplitter.activity.MainActivity
 import it.unito.billsplitter.activity.MenuClick
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
@@ -79,11 +81,14 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
 
     }
 
-    override fun closeSplit() {
+    override fun closeSplit(s: ParseObject?) {
+        if(s!=null){
+            Model.instance.closeSplit(s)
+        }
         println("CLOSE SPLIT")
     }
 
-    override fun modifySplit() {
+    override fun modifySplit(s: ParseObject?) {
         println("MODIFY SPLIT")
     }
 
