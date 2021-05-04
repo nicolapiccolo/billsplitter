@@ -81,11 +81,14 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
 
         txtCredit.setVisibility(View.VISIBLE)
         txtDebt.setVisibility(View.VISIBLE)
+        txtSlash.setVisibility(View.VISIBLE)
     }
 
     private fun hideView(){
         txtCredit.setVisibility(View.GONE)
         txtDebt.setVisibility(View.GONE)
+        txtSlash.setVisibility(View.GONE)
+
 
         recyclerView.setVisibility(View.GONE)
         progressBar.setVisibility(View.VISIBLE)
