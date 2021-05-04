@@ -42,6 +42,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
 
 
     testImplementation 'junit:junit:4.+'

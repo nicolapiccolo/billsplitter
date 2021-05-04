@@ -1,10 +1,13 @@
 package it.unito.billsplitter.activity
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.parse.ParseObject
 import it.unito.billsplitter.AsyncTaskListener
@@ -33,19 +36,23 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
             //Toast.makeText(baseContext, "Welcome back ${User.username}", Toast.LENGTH_LONG).show()
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-
-            txtCredit.setVisibility(View.GONE)
-            txtDebt.setVisibility(View.GONE)
-
-            recyclerView.setVisibility(View.GONE)
-            progressBar.setVisibility(View.VISIBLE)
-
-            LoadDataAsyncTask(this).execute() //thread caricamento dati
+            hideView()
+            LoadDataAsyncTask(this).execute(false) //thread caricamento dati
 
             btnCreate.setOnClickListener {
                 intent = Intent(this, CreateSplitActivity::class.java)
                 startActivity(intent)
             }
+
+            swiperefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.blue))
+            swiperefresh.setColorSchemeColors(Color.WHITE)
+
+            swiperefresh.setOnRefreshListener {
+                hideView()
+                LoadDataAsyncTask(this).execute(true)
+                swiperefresh.isRefreshing = false
+            }
+
         }
 
     }
@@ -55,7 +62,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
         //Toast.makeText(baseContext, "Card Click", Toast.LENGTH_LONG).show()
         intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("split", data)
-        startActivity(intent)
+        startActivityForResult(intent,DetailActivity.ID)
     }
 
 
@@ -66,7 +73,6 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
 
         progressBar.setVisibility(View.GONE)
         recyclerView.setVisibility(View.VISIBLE);
-
     }
 
     private fun setTotal(give: String, have: String){
@@ -75,6 +81,14 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
 
         txtCredit.setVisibility(View.VISIBLE)
         txtDebt.setVisibility(View.VISIBLE)
+    }
+
+    private fun hideView(){
+        txtCredit.setVisibility(View.GONE)
+        txtDebt.setVisibility(View.GONE)
+
+        recyclerView.setVisibility(View.GONE)
+        progressBar.setVisibility(View.VISIBLE)
     }
 
     override fun giveProgress(progress: Int?) {
@@ -86,6 +100,19 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
     override fun sendData(list: ArrayList<Split>, give: String, have: String) {
         populateList(list)
         setTotal(give,have)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Check that it is the SecondActivity with an OK result
+        if (requestCode == DetailActivity.ID) {
+            if (resultCode == Activity.RESULT_OK) {
+                println("AGGIORNA DATI")
+                hideView()
+                LoadDataAsyncTask(this).execute(true) //thread caricamento dati
+            }
+        }
     }
 }
 

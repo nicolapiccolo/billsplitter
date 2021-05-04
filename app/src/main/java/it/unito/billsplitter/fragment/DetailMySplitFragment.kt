@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.parse.ParseObject
 import it.unito.billsplitter.R
@@ -24,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_my_split.s_txtDate
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtName
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtTitle
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtTotal
-import kotlinx.android.synthetic.main.fragment_other_split.*
 
 
 class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
@@ -72,11 +72,6 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
     }
 
 
-
-    companion object {
-        fun newIstance():Fragment = DetailMySplitFragment()
-    }
-
     override fun onCellClickListener(data: ParseObject?) {
 
     }
@@ -90,6 +85,10 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
 
     override fun modifySplit(s: ParseObject?) {
         println("MODIFY SPLIT")
+    }
+
+    companion object {
+        fun newIstance():Fragment = DetailMySplitFragment()
     }
 
 

@@ -111,15 +111,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/card">
+            android:layout_weight="1">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/card">
 
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </FrameLayout>
 
