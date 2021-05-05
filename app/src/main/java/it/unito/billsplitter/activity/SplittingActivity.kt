@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseUser
+import it.unito.billsplitter.CreateDataAsyncTask
 import it.unito.billsplitter.R
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
@@ -40,7 +41,7 @@ class SplittingActivity: AppCompatActivity(){
         recyclerViewSplitting.adapter = SplittingAdapter(members,this, mysplit.total.toFloat())
 
         btnSend.setOnClickListener {
-            Model.instance.createSplit(mysplit,members)
+            CreateDataAsyncTask(this).execute(mysplit,members)
             setContentView(R.layout.activity_money_request)
         }
     }
@@ -60,6 +61,7 @@ class SplittingActivity: AppCompatActivity(){
     fun backHome(view: View){
         intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     class SplittingAdapter(items: ArrayList<SplitMember>, ctx: Context, total: Float ): RecyclerView.Adapter<SplittingAdapter.SplittingViewHolder>(){
