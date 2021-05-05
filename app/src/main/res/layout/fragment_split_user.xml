@@ -7,14 +7,30 @@
     android:layout_height="wrap_content"
     android:padding="12dp">
 
-    <ImageView
+
+    <RelativeLayout
         android:id="@+id/m_imgAccount"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_vertical"
-        android:background="@drawable/img_account"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/circle_icon" />
+
+        <TextView
+            android:id="@+id/icon_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/robo_regular"
+            android:text="M"
+            android:textSize="24dp" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/m_txtName"
@@ -22,10 +38,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="Mark "
+        android:gravity="center_vertical"
         android:fontFamily="@font/robo_regular"
         android:textSize="24dp"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/m_imgAccount"
+        app:layout_constraintBottom_toBottomOf="@+id/m_imgAccount"
         app:layout_constraintTop_toTopOf="@+id/m_imgAccount" />
 
     <TextView

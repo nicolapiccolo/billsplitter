@@ -11,7 +11,14 @@ import it.unito.billsplitter.R
 import it.unito.billsplitter.RvAdapterDetail
 import it.unito.billsplitter.activity.CellClickListener
 import it.unito.billsplitter.model.MySplit
+import kotlinx.android.synthetic.main.fragment_my_split.*
 import kotlinx.android.synthetic.main.fragment_other_split.*
+import kotlinx.android.synthetic.main.fragment_other_split.icon_text
+import kotlinx.android.synthetic.main.fragment_other_split.s_recyclerView
+import kotlinx.android.synthetic.main.fragment_other_split.s_txtDate
+import kotlinx.android.synthetic.main.fragment_other_split.s_txtName
+import kotlinx.android.synthetic.main.fragment_other_split.s_txtTitle
+import kotlinx.android.synthetic.main.fragment_other_split.s_txtTotal
 
 class DetailOtherSplitFragment : Fragment(), CellClickListener {
 
@@ -43,6 +50,7 @@ class DetailOtherSplitFragment : Fragment(), CellClickListener {
 
 
     private fun displaySplit(split: MySplit){
+        icon_text.text = split.owner.capitalize()[0].toString()
         s_txtName.text = split.owner
         s_txtTitle.text = split.name
         s_txtTotal.text = split.total
