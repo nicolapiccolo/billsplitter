@@ -1,21 +1,22 @@
 package it.unito.billsplitter
 
+import it.unito.billsplitter.R
 import android.content.Context
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
+import android.content.res.TypedArray
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import it.unito.billsplitter.activity.CellClickListener
-import it.unito.billsplitter.model.Split
 import it.unito.billsplitter.model.SplitMember
+
 
 class RvAdapterDetail(private val cellClickListener: CellClickListener, private val dataList: ArrayList<SplitMember>) : RecyclerView.Adapter<RvAdapterDetail.ViewHolder>() {
 
@@ -41,6 +42,7 @@ class RvAdapterDetail(private val cellClickListener: CellClickListener, private 
         if (data.owner){
             p0.name?.setTextColor(ContextCompat.getColor(context, R.color.darkgrey))
             p0.share?.setTextColor(ContextCompat.getColor(context, R.color.darkgrey))
+
         }
 
         else if(data.paid){
@@ -54,14 +56,37 @@ class RvAdapterDetail(private val cellClickListener: CellClickListener, private 
 
         p0.name?.text = data.name.capitalize()
         p0.share?.text = data.share
+        p0.img?.text = data.name[0].toString().capitalize()
 
+        setColor(getRandomMaterialColor())
+
+    }
+
+    private fun getRandomMaterialColor(typeColor: String = "400"): Int {
+        var returnColor: Int = Color.GRAY
+
+        val arrayId: Int = context.getResources().getIdentifier("mdcolor_$typeColor", "array", context.getPackageName())
+        if (arrayId != 0) {
+            val colors: TypedArray = context.getResources().obtainTypedArray(arrayId)
+            val index = (Math.random() * colors.length()).toInt()
+            returnColor = colors.getColor(index, Color.GRAY)
+            colors.recycle()
+        }
+        return returnColor
+    }
+
+    private fun setColor(color: Int){
+
+        val unwrappedDrawable: Drawable? = AppCompatResources.getDrawable(context, R.drawable.circle_icon)
+        val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable!!)
+        DrawableCompat.setTint(wrappedDrawable, color)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val name = itemView.findViewById<TextView>(R.id.m_txtName)
         val share = itemView.findViewById<TextView>(R.id.m_txtShare)
-        val img = itemView.findViewById<ImageView>(R.id.m_imgAccount)
+        val img = itemView.findViewById<TextView>(R.id.icon_text)
 
     }
 

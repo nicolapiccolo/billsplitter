@@ -3,11 +3,14 @@ package it.unito.billsplitter.activity
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.parse.ParseObject
 import it.unito.billsplitter.AsyncTaskListener
@@ -35,6 +38,8 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
 
             //Toast.makeText(baseContext, "Welcome back ${User.username}", Toast.LENGTH_LONG).show()
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+            icon_text.text = user.username.capitalize()[0].toString()
 
             hideView()
             LoadDataAsyncTask(this).execute(false) //thread caricamento dati

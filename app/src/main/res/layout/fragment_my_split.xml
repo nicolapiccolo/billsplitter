@@ -129,7 +129,8 @@
         android:textColor="@color/white"
         android:textSize="36dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/relativeLayout" />
+        app:layout_constraintTop_toTopOf="@+id/relativeLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/relativeLayout"/>
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
