@@ -274,7 +274,7 @@ class Model private constructor()   {
         return contacs
     }
 
-    fun createTransaction(m: SplitMember, id_split: ParseObject){
+    private fun createTransaction(m: SplitMember, id_split: ParseObject): Boolean{
         val member = ParseObject("Transaction")
         member.put("paid",m.paid)
         member.put("share",m.share.toFloat())
@@ -282,26 +282,23 @@ class Model private constructor()   {
         relation_user.add(m.user)
         val relation = member.getRelation<ParseObject>("id_split")
         relation.add(id_split)
-        member.saveInBackground()
+
+        member.save()
+        return true
     }
 
-    fun createSplit(split: MySplit, members: ArrayList<SplitMember>){
+    fun createSplit(split: MySplit, members: ArrayList<SplitMember>): Boolean{
         val mysplit = ParseObject("Split")
         mysplit.put("name", split.name)
         mysplit.put("total", split.total.toFloat())
         val relation = mysplit.getRelation<ParseUser>("id_user")
         relation.add(split.owner)
-        mysplit.saveInBackground({ e ->
-            if (e == null) {
-                members.forEach {
-                    createTransaction(it, mysplit)
-                }
-            } else {
-                //Something went wrong
-                println(e.message)
-            }
-        })
+        mysplit.save()
 
+        members.forEach {
+            createTransaction(it, mysplit)
+        }
+        return true
     }
 
     fun closeSplit(id_split: ParseObject){
