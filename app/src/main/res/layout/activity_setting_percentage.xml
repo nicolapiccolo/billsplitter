@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/lightgrey">
+    android:background="@color/lightgrey"
+    tools:context=".activity.SplittingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topLayout"
@@ -20,7 +21,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back_arrow"
-                android:onClick="Back"
                 app:tint="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/topLayout"
                 app:layout_constraintTop_toTopOf="@+id/topLayout"/>
@@ -91,7 +91,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewContacts"
+            android:id="@+id/recyclerViewSplitting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="24dp">
         <Button
-            android:id="@+id/btnNext"
+            android:id="@+id/btnSend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Send Request"

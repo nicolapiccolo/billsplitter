@@ -60,7 +60,7 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
 
 
     private fun displaySplit(split: MySplit){
-        s_txtName.text = split.owner
+        s_txtName.text = "You"
         s_txtTitle.text = split.name
         s_txtTotal.text = split.total
         s_txtDate.text = split.date

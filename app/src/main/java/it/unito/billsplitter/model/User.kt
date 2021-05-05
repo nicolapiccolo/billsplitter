@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 class User {
     companion object{
-
+        var phone :String = ""
         var username :String = ""
         var email :String = ""
         var id :String = ""
@@ -51,7 +51,5 @@ class User {
             email = user?.email.toString()
             return user
         }
-
-
     }
 }
