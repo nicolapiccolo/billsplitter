@@ -62,6 +62,7 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
 
 
     private fun displaySplit(split: MySplit){
+        icon_text.text = split.owner.capitalize()[0].toString()
         s_txtName.text = split.owner
         s_txtTitle.text = split.name
         s_txtTotal.text = split.total

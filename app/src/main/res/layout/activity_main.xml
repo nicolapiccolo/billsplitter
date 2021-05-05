@@ -46,7 +46,7 @@
                     android:id="@+id/icon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/circle_icon" />
+                    android:src="@drawable/circle_icon_stock" />
 
                 <TextView
                     android:id="@+id/icon_text"

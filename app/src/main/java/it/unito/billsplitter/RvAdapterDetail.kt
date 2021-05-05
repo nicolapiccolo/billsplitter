@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -39,15 +40,7 @@ class RvAdapterDetail(private val cellClickListener: CellClickListener, private 
 
         val data = dataList.get(p1)
 
-        if (data.owner){
-            p0.name?.setTextColor(ContextCompat.getColor(context, R.color.darkgrey))
-            p0.share?.setTextColor(ContextCompat.getColor(context, R.color.darkgrey))
 
-        }
-
-        else if(data.paid){
-            p0.share?.setTextColor(ContextCompat.getColor(context, R.color.green))
-        }
 
 
         p0.itemView.setOnClickListener {
@@ -58,7 +51,20 @@ class RvAdapterDetail(private val cellClickListener: CellClickListener, private 
         p0.share?.text = data.share
         p0.img?.text = data.name[0].toString().capitalize()
 
+        if (data.owner){
+            p0.name?.setTextColor(ContextCompat.getColor(context, R.color.darkgrey))
+            p0.share?.setTextColor(ContextCompat.getColor(context, R.color.darkgrey))
+            p0.icon?.setImageResource(R.drawable.circle_icon_stock)
+        }
+
+        else if(data.paid){
+            p0.share?.setTextColor(ContextCompat.getColor(context, R.color.green))
+            p0.icon?.setImageResource(R.drawable.img_account)
+            p0.img?.text = ""
+        }
+
         setColor(getRandomMaterialColor())
+
 
     }
 
@@ -87,7 +93,7 @@ class RvAdapterDetail(private val cellClickListener: CellClickListener, private 
         val name = itemView.findViewById<TextView>(R.id.m_txtName)
         val share = itemView.findViewById<TextView>(R.id.m_txtShare)
         val img = itemView.findViewById<TextView>(R.id.icon_text)
-
+        val icon = itemView.findViewById<ImageView>(R.id.icon)
     }
 
 
