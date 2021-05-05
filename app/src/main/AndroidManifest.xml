@@ -25,6 +25,7 @@
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.SlidingActivity" />
         <activity android:name=".activity.ContactActivity" />
+        <activity android:name=".activity.SplittingActivity" />
         <activity
             android:name=".activity.CreateSplitActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />

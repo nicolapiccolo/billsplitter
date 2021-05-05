@@ -12,6 +12,9 @@ import kotlinx.android.synthetic.main.activity_total_split.*
 
 class CreateSplitActivity : AppCompatActivity() {
 
+    var title: String=""
+    var total: String=""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_title_split)
@@ -20,8 +23,11 @@ class CreateSplitActivity : AppCompatActivity() {
     fun nextTitle(view: View){
         if(edtInsertTitle.text.toString().equals(""))
             Toast.makeText(this, "Title can't be empty!", Toast.LENGTH_SHORT).show()
-        else
+        else{
+            title=edtInsertTitle.text.toString()
             setContentView(R.layout.activity_total_split)
+        }
+
     }
 
     fun nextTotal(view: View){
@@ -29,6 +35,8 @@ class CreateSplitActivity : AppCompatActivity() {
             Toast.makeText(this, "Total can't be empty!", Toast.LENGTH_SHORT).show()
         else{
             intent = Intent(this, ContactActivity::class.java)
+            intent.putExtra("title",title)
+            intent.putExtra("total",edtInsertTotal.text.toString())
             startActivity(intent)
         }
     }

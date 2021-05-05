@@ -50,8 +50,10 @@ class DetailOtherSplitFragment : Fragment(), CellClickListener {
 
 
     private fun displaySplit(split: MySplit){
-        icon_text.text = split.owner.capitalize()[0].toString()
-        s_txtName.text = split.owner
+
+        s_txtName.text = split.owner.get("username").toString().capitalize()
+
+        icon_text.text = split.owner.get("username")capitalize()[0].toString()
         s_txtTitle.text = split.name
         s_txtTotal.text = split.total
         s_txtDate.text = split.date

@@ -45,7 +45,7 @@
             android:id="@+id/txtPercentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="30%"
+            android:text="100"
             android:fontFamily="@font/robo_bold"
             android:textSize="24dp"
             android:layout_marginLeft="15dp"
@@ -53,10 +53,32 @@
             card_view:layout_constraintStart_toEndOf="@+id/imgAccount"
             card_view:layout_constraintTop_toBottomOf="@+id/txtSubtitle"/>
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:fontFamily="@font/robo_bold"
+            android:textSize="24dp"
+            android:layout_marginLeft="2dp"
+            android:textColor="@color/black"
+            card_view:layout_constraintStart_toEndOf="@+id/txtPercentage"
+            card_view:layout_constraintTop_toBottomOf="@+id/txtSubtitle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="€"
+            android:fontFamily="@font/robo_bold"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:layout_marginRight="5dp"
+            card_view:layout_constraintEnd_toStartOf="@+id/txtPrice"
+            card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"
+            card_view:layout_constraintTop_toTopOf="@+id/topLayout" />
+        <TextView
             android:id="@+id/txtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="€22,20"
+            android:text="22,20"
             android:fontFamily="@font/robo_bold"
             android:textColor="@color/black"
             android:textSize="24dp"
@@ -75,24 +97,36 @@
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@+id/btnLocker"
+            card_view:layout_constraintEnd_toStartOf="@+id/lockerLayout"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintBottom_toBottomOf="parent">
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:progressTint="@color/yellow"
+                android:thumbTint="@color/yellow"
+                android:min="1"
+                android:max="100"/>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btnLocker"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lockerLayout"
             android:layout_width="65dp"
             android:layout_height="55dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/lock_button"
-            card_view:icon="@drawable/ic_password"
-            card_view:layout_constraintBottom_toBottomOf="@+id/bottomLayout"
-            card_view:layout_constraintEnd_toEndOf="@+id/bottomLayout"
-             />
+            card_view:layout_constraintBottom_toBottomOf="parent">
+            <ImageView
+                android:id="@+id/btnLocker"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_password"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

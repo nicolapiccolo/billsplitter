@@ -7,6 +7,7 @@ import it.unito.billsplitter.fragment.AsyncTaskFragmentListener
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.Split
+import it.unito.billsplitter.model.User
 
 
 class  LoadFragmentAsyncTask(context: Context) : AsyncTask<ParseObject, Int, MySplit>()
@@ -35,10 +36,9 @@ class  LoadFragmentAsyncTask(context: Context) : AsyncTask<ParseObject, Int, MyS
                 val total = Model.instance.getTotalSplit(split)
                 val date = Model.instance.getDateSplit(split)
 
-
                 var share = ""
                 var percentage = 0
-                if(owner.equals("You")){
+                if(owner.objectId.equals(User.getCurrentUser()?.objectId)){
                     val paid = Model.instance.getTotalPaidMySplit(split)
                     val have = Model.instance.getTotalHaveMySplit(split)
 

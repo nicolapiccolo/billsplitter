@@ -1,6 +1,10 @@
 package it.unito.billsplitter.model
 
-import com.parse.*
+import android.widget.Toast
+import com.parse.ParseObject
+import com.parse.ParseQuery
+import com.parse.ParseRelation
+import com.parse.ParseUser
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -178,19 +182,12 @@ class Model private constructor()   {
         return Split.formatDate(id_split.createdAt)
     }
 
-    fun getOwnerSplit(id_split: ParseObject): String {
-        var name = ""
+    fun getOwnerSplit(id_split: ParseObject): ParseUser {
         val query = ParseQuery.getQuery<ParseObject>("Split")
         query.whereEqualTo("objectId", id_split.objectId)
 
         var user = (query.find().get(0).get("id_user") as ParseRelation<*>).query.find().get(0)
-
-
-        if(user.objectId.equals(User.getCurrentUser()?.objectId)) name = "You"
-        else name = user.getString("username")?.capitalize()!!
-
-        println("ow:" + name)
-        return name
+        return user as ParseUser
     }
 
     fun getOwnerObjectSplit(id_split: ParseObject): String{
@@ -255,6 +252,63 @@ class Model private constructor()   {
     }
 
 
+    fun converFormatPhone(phone: String): String{
+        val (digits) = phone.partition { it.isDigit() }
+        return digits
+    }
+
+    fun contactContained(phone: String, contactList: ArrayList<Contact>): Boolean {
+        contactList.forEach {
+            if(converFormatPhone(it.number).equals(phone)){
+                return true
+            }
+        }
+        return false
+    }
+
+    fun joinContacts(contactList: ArrayList<Contact>): ArrayList<ParseUser>{
+        val query = ParseUser.getQuery()
+        val queryList: List<ParseUser> = query.find()
+        var contacs: ArrayList<ParseUser> = ArrayList()
+        queryList.forEach{
+            if (contactContained(it.get("phone").toString(),contactList)){
+                contacs.add(it)
+            }
+        }
+        return contacs
+    }
+
+    fun createTransaction(m: SplitMember, id_split: String){
+        val member = ParseObject("Transaction")
+        member.put("paid",m.paid)
+        member.put("share",m.share.toFloat())
+        member.put("id_user",m.user as ParseRelation<*>)
+        member.put("id_split",id_split)
+        member.saveInBackground()
+    }
+
+    fun createSplit(split: MySplit, members: ArrayList<SplitMember>){
+        val mysplit = ParseObject("Split")
+        mysplit.put("name", split.name)
+        mysplit.put("total", split.total.toFloat())
+        mysplit.put("id_user",split.owner as ParseRelation<*>)
+
+        mysplit.saveInBackground({ e ->
+            if (e == null) {
+                //Save was done
+            } else {
+                //Something went wrong
+                println(e.message)
+            }
+        })
+
+
+        /*val id_split = mysplit.objectId
+        members.forEach {
+            createTransaction(it, id_split)
+        }*/
+    }
+
     fun closeSplit(id_split: ParseObject){
         val query =  ParseQuery.getQuery<ParseObject>("Split")
         query.whereEqualTo("objectId", id_split.objectId)
@@ -264,7 +318,7 @@ class Model private constructor()   {
         obj.put("close",true)
         obj.save()
     }
-
+  
     companion object {
         @JvmStatic val instance = Model()
     }
