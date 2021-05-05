@@ -5,7 +5,9 @@ import android.os.AsyncTask
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.Split
 
-class LoadDataAsyncTask(context: Context) : AsyncTask<Void, Int, ArrayList<Split>>() {
+class LoadDataAsyncTask(context: Context) : AsyncTask<Boolean, Int, ArrayList<Split>>() {
+
+    //Boolean to force update
 
     private var listener: AsyncTaskListener? = null
 
@@ -14,9 +16,12 @@ class LoadDataAsyncTask(context: Context) : AsyncTask<Void, Int, ArrayList<Split
     }
 
     /** The system calls this to perform work in a worker thread and delivers it the parameters given to AsyncTask.execute() */
-    override fun doInBackground(vararg params: Void?): ArrayList<Split>? {
-        if(Model.instance.dataList.isEmpty()) return Model.instance.getAllSplit()
-        else return Model.instance.dataList
+    override fun doInBackground(vararg params: Boolean?): ArrayList<Split>? {
+        if(params[0] == true) return Model.instance.getAllSplit()
+        else{
+            if(Model.instance.dataList.isEmpty()) return Model.instance.getAllSplit()
+            else return Model.instance.dataList
+        }
     }
 
 

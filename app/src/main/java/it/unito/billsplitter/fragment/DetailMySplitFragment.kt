@@ -1,17 +1,20 @@
 package it.unito.billsplitter.fragment
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.parse.ParseObject
 import it.unito.billsplitter.R
 import it.unito.billsplitter.RvAdapter
 import it.unito.billsplitter.RvAdapterDetail
 import it.unito.billsplitter.activity.CellClickListener
+import it.unito.billsplitter.activity.MainActivity
 import it.unito.billsplitter.activity.MenuClick
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
@@ -22,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_my_split.s_txtDate
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtName
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtTitle
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtTotal
-import kotlinx.android.synthetic.main.fragment_other_split.*
 
 
 class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
@@ -60,7 +62,11 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
 
 
     private fun displaySplit(split: MySplit){
+
         s_txtName.text = "You"
+
+        icon_text.text = "Y"
+
         s_txtTitle.text = split.name
         s_txtTotal.text = split.total
         s_txtDate.text = split.date
@@ -70,21 +76,23 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
     }
 
 
-
-    companion object {
-        fun newIstance():Fragment = DetailMySplitFragment()
-    }
-
     override fun onCellClickListener(data: ParseObject?) {
 
     }
 
-    override fun closeSplit() {
+    override fun closeSplit(s: ParseObject?) {
+        if(s!=null){
+            Model.instance.closeSplit(s)
+        }
         println("CLOSE SPLIT")
     }
 
-    override fun modifySplit() {
+    override fun modifySplit(s: ParseObject?) {
         println("MODIFY SPLIT")
+    }
+
+    companion object {
+        fun newIstance():Fragment = DetailMySplitFragment()
     }
 
 
