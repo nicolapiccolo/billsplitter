@@ -1,6 +1,5 @@
 package it.unito.billsplitter.model
 
-import android.widget.Toast
 import com.parse.ParseObject
 import com.parse.ParseQuery
 import com.parse.ParseRelation
@@ -51,9 +50,7 @@ class Model private constructor()   {
                         split.name = getNameSplit(splitObj)
                         split.total = Split.formatTotal(share)
                         split.date = Split.formatDate(it.createdAt as Date)
-                        split.owner = getOwnerSplit(splitObj).toString()
-
-
+                        split.owner = getOwnerSplit(splitObj).username.toString()
                         println("OW: " + split.owner)
 
                         total_give += share
@@ -68,8 +65,7 @@ class Model private constructor()   {
                     split.name = getNameSplit(splitObj)
                     split.total = Split.formatTotal(share)
                     split.date = Split.formatDate(it.createdAt as Date)
-                    split.owner = getOwnerSplit(splitObj).toString()
-
+                    split.owner = getOwnerSplit(splitObj).username.toString()
 
                     total_give += share
                     dataList.add(split)
@@ -171,7 +167,7 @@ class Model private constructor()   {
 
 
     fun getTotalSplit(id_split: ParseObject): String{
-        return Split.formatTotal((id_split.get("total") as Double).toFloat(),false)
+        return Split.formatTotal((id_split.getNumber("total") as Number).toFloat(),false)
     }
 
     fun getNameSplit(id_split: ParseObject): String{
@@ -278,12 +274,14 @@ class Model private constructor()   {
         return contacs
     }
 
-    fun createTransaction(m: SplitMember, id_split: String){
+    fun createTransaction(m: SplitMember, id_split: ParseObject){
         val member = ParseObject("Transaction")
         member.put("paid",m.paid)
         member.put("share",m.share.toFloat())
-        member.put("id_user",m.user as ParseRelation<*>)
-        member.put("id_split",id_split)
+        val relation_user = member.getRelation<ParseUser>("id_user")
+        relation_user.add(m.user)
+        val relation = member.getRelation<ParseObject>("id_split")
+        relation.add(id_split)
         member.saveInBackground()
     }
 
@@ -291,22 +289,19 @@ class Model private constructor()   {
         val mysplit = ParseObject("Split")
         mysplit.put("name", split.name)
         mysplit.put("total", split.total.toFloat())
-        mysplit.put("id_user",split.owner as ParseRelation<*>)
-
+        val relation = mysplit.getRelation<ParseUser>("id_user")
+        relation.add(split.owner)
         mysplit.saveInBackground({ e ->
             if (e == null) {
-                //Save was done
+                members.forEach {
+                    createTransaction(it, mysplit)
+                }
             } else {
                 //Something went wrong
                 println(e.message)
             }
         })
 
-
-        /*val id_split = mysplit.objectId
-        members.forEach {
-            createTransaction(it, id_split)
-        }*/
     }
 
     fun closeSplit(id_split: ParseObject){
