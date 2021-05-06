@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
         }
         else{
             txtNoSplit.visibility = View.VISIBLE
+            progressBar.setVisibility(View.GONE)
         }
 
     }
