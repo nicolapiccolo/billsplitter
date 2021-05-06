@@ -10,16 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.parse.ParseObject
-import it.unito.billsplitter.LoadFragmentAsyncTask
+import it.unito.billsplitter.*
 import it.unito.billsplitter.fragment.AsyncTaskFragmentListener
 import it.unito.billsplitter.fragment.DetailMySplitFragment
 import it.unito.billsplitter.fragment.DetailOtherSplitFragment
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import kotlinx.android.synthetic.main.activity_detail.*
-import it.unito.billsplitter.R
-import it.unito.billsplitter.UpdateDataAsyncTask
-import it.unito.billsplitter.UpdateTaskListener
 
 
 class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTaskListener {
@@ -74,14 +71,18 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
             }
             R.id.action_close -> {
                 //startSettings()
-                confirmDialog()
+                confirmDialogClose()
+                true
+            }
+            R.id.action_delete -> {
+                confirmDialogDelete()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun confirmDialog(){
+    private fun confirmDialogClose(){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Closing Split")
         builder.setMessage("Are you sure to close this split? ")
@@ -89,6 +90,23 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->
             showProgressBar(true)
             UpdateDataAsyncTask(this).execute(split)
+        }
+
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+
+        }
+
+        builder.show()
+    }
+
+    private fun confirmDialogDelete(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Deleting Split")
+        builder.setMessage("Are you sure to delete this split? ")
+
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            showProgressBar(true)
+            DeleteDataAsyncTask(this).execute(split)
         }
 
         builder.setNegativeButton(android.R.string.no) { dialog, which ->

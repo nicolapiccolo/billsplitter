@@ -25,6 +25,7 @@ class Model private constructor()   {
 
         val query = ParseQuery.getQuery<ParseObject>("Transaction")
         query.whereEqualTo("id_user", User.getCurrentUser())
+        query.addDescendingOrder("createdAt")
 
         val queryList: List<ParseObject> = query.find()
 
@@ -93,6 +94,8 @@ class Model private constructor()   {
         val query = ParseQuery.getQuery<ParseObject>("Split")
         query.whereEqualTo("id_user", User.getCurrentUser())
         query.whereEqualTo("close",false)
+        query.addDescendingOrder("createdAt")
+
 
 
         val queryList: List<ParseObject> = query.find()
@@ -309,6 +312,29 @@ class Model private constructor()   {
 
         obj.put("close",true)
         obj.save()
+    }
+
+    fun deleteTransaction(id_split: ParseObject): Boolean{
+        val query =  ParseQuery.getQuery<ParseObject>("Transaction")
+        query.whereEqualTo("id_split",id_split)
+
+        val queryList: List<ParseObject> = query.find()
+
+        queryList.forEach{
+            it.delete()
+        }
+
+        return true
+    }
+
+    fun deleteSplit(id_split: ParseObject):Boolean{
+        val query =  ParseQuery.getQuery<ParseObject>("Split")
+        query.whereEqualTo("objectId", id_split.objectId)
+
+        val obj = query.find().get(0)
+        obj.delete()
+
+        return true
     }
   
     companion object {
