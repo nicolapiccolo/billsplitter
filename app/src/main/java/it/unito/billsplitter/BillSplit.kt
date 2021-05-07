@@ -2,6 +2,10 @@ package it.unito.billsplitter
 
 import android.app.Application
 import com.parse.Parse
+import com.parse.ParseInstallation
+
+
+
 
 
 
@@ -16,5 +20,11 @@ class BillSplit: Application() {
                 .server("https://parseapi.back4app.com")
                 .build()
         )
+
+        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
+
+        val installation = ParseInstallation.getCurrentInstallation()
+        installation.put("GCMSenderId", "1001564553157")
+        installation.saveInBackground()
     }
 }
