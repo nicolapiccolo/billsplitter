@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
 
             btnCreate.setOnClickListener {
                 intent = Intent(this, CreateSplitActivity::class.java)
-                startActivity(intent)
+                startActivityForResult(intent,CreateSplitActivity.ID)
             }
 
             swiperefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.blue))
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
         //Toast.makeText(baseContext, "Card Click", Toast.LENGTH_LONG).show()
         intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("split", data)
-        startActivityForResult(intent,DetailActivity.ID)
+        startActivityForResult(intent,3)
     }
 
 
@@ -106,15 +106,22 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
     }
 
     override fun sendData(list: ArrayList<Split>, give: String, have: String) {
-        populateList(list)
-        setTotal(give,have)
+        if(!list.isEmpty()){
+            populateList(list)
+            setTotal(give,have)
+        }
+        else{
+            txtNoSplit.visibility = View.VISIBLE
+            progressBar.setVisibility(View.GONE)
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Check that it is the SecondActivity with an OK result
-        if (requestCode == DetailActivity.ID) {
+        if (requestCode == DetailActivity.ID || requestCode == CreateSplitActivity.ID || requestCode == 3) {
             if (resultCode == Activity.RESULT_OK) {
                 println("AGGIORNA DATI")
                 hideView()
