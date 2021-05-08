@@ -22,9 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BillSplitter">
 
-        <meta-data android:name="com.parse.push.gcm_sender_id"
-            android:value="id:1001564553157" />
-
         <service
             android:name="com.parse.fcm.ParseFirebaseMessagingService">
             <intent-filter>
@@ -32,7 +29,8 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver" android:exported="false">
+        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.OPEN" />
@@ -40,7 +38,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.DetailActivity">
+        <activity android:name=".activity.DetailActivity"
             android:parentActivityName="activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
