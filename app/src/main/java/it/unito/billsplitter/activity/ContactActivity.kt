@@ -19,18 +19,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.Parse
 import com.parse.ParseUser
+import it.unito.billsplitter.LoadContactAsyncTask
+import it.unito.billsplitter.LoadContactTaskListener
 import it.unito.billsplitter.R
+import it.unito.billsplitter.RvAdapter
 import it.unito.billsplitter.model.Contact
+import it.unito.billsplitter.model.Split
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_contacts_split.*
+import kotlinx.android.synthetic.main.activity_contacts_split.progressBar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.contact_card.*
 import kotlinx.android.synthetic.main.contact_card.view.*
 import kotlinx.android.synthetic.main.contact_card.view.imgAccount
 import kotlinx.android.synthetic.main.splitting_card.view.*
 import kotlin.collections.ArrayList
 
-class ContactActivity : AppCompatActivity() {
+class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
 
+    private lateinit var selectedContacts : ArrayList<ParseUser>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts_split)
@@ -40,7 +47,7 @@ class ContactActivity : AppCompatActivity() {
         val total = getIntent().getStringExtra("total")
 
         //We need to verify permission
-        val selectedContacts : ArrayList<ParseUser> = ArrayList()
+        selectedContacts = ArrayList()
         val contactList : ArrayList<Contact> = ArrayList()
         val contacts = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ECLAIR) {
             contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,null,null,null)
@@ -53,22 +60,25 @@ class ContactActivity : AppCompatActivity() {
             val obj = Contact(name,number)
             contactList.add(obj)
         }
-        val contact: ArrayList<ParseUser> = Model.instance.joinContacts(contactList)
-        recyclerViewContacts.adapter = ContactAdapter(contact,this, selectedContacts)
-        contacts.close()
+
+        hideView()
+        LoadContactAsyncTask(this).execute(contactList)
 
         btnAdd.setOnClickListener {
            if (selectedContacts.isEmpty())
                Toast.makeText(this, "Friends list can't be empty!", Toast.LENGTH_SHORT).show()
-            else{
+           else{
                selectedContacts.add(User.getCurrentUser()!!)
-               println("ero lillo "+selectedContacts[2].get("username"))
                intent = Intent(this, SplittingActivity::class.java)
                intent.putParcelableArrayListExtra("selectedContacts",selectedContacts)
                intent.putExtra("title",title)
                intent.putExtra("total",total)
                startActivity(intent)
            }
+        }
+
+        btnBack.setOnClickListener{
+            finish()
         }
     }
 
@@ -103,10 +113,8 @@ class ContactActivity : AppCompatActivity() {
         }
 
         fun isEqual(x: ParseUser, y: ParseUser): Boolean{
-            if(x.objectId!!.equals(y.objectId))
-                return true
-            else
-                return false
+            if(x.objectId!!.equals(y.objectId)) return true
+            else return false
         }
 
         fun remove(x: ParseUser, list: ArrayList<ParseUser>){
@@ -128,5 +136,29 @@ class ContactActivity : AppCompatActivity() {
             val checkBox_select:CheckBox = itemView.checkBox_select
         }
     }
-    
+
+    private fun hideView(){
+        recyclerViewContacts.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun populateList(contact: ArrayList<ParseUser>){
+        val adapter = ContactAdapter(contact,this, this.selectedContacts)
+        recyclerViewContacts.adapter = adapter
+        adapter.notifyDataSetChanged()
+
+        progressBar.setVisibility(View.GONE)
+        recyclerViewContacts.setVisibility(View.VISIBLE);
+    }
+
+    override fun giveProgress(progress: Int?) {
+        if (progress != null) {
+            progressBar.setProgress(progress)
+        }
+    }
+
+    override fun sendData(list: ArrayList<ParseUser>) {
+        populateList(list)
+    }
+
 }

@@ -14,18 +14,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseUser
 import it.unito.billsplitter.CreateDataAsyncTask
+import it.unito.billsplitter.CreateTaskListener
 import it.unito.billsplitter.R
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
 import it.unito.billsplitter.model.User
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_setting_percentage.*
+import kotlinx.android.synthetic.main.activity_setting_percentage.progressBar
 import kotlinx.android.synthetic.main.splitting_card.view.*
 import kotlin.collections.ArrayList
 
 
 
-class SplittingActivity: AppCompatActivity(){
+class SplittingActivity: AppCompatActivity(),CreateTaskListener{
+
+    companion object{
+        const val ID = 3
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting_percentage)
@@ -40,9 +48,11 @@ class SplittingActivity: AppCompatActivity(){
         totalPrice.setText(mysplit.total)
         recyclerViewSplitting.adapter = SplittingAdapter(members,this, mysplit.total.toFloat())
 
+
         btnSend.setOnClickListener {
+            recyclerViewSplitting.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
             CreateDataAsyncTask(this).execute(mysplit,members)
-            setContentView(R.layout.activity_money_request)
         }
     }
 
@@ -60,9 +70,11 @@ class SplittingActivity: AppCompatActivity(){
 
     fun backHome(view: View){
         intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("RESULT",SplittingActivity.ID)
+        setResult(RESULT_OK, intent);
         startActivity(intent)
-        finish()
     }
+
 
     class SplittingAdapter(items: ArrayList<SplitMember>, ctx: Context, total: Float ): RecyclerView.Adapter<SplittingAdapter.SplittingViewHolder>(){
 
@@ -158,5 +170,15 @@ class SplittingActivity: AppCompatActivity(){
             val loker = v.btnLocker
             var state: Boolean = false
         }
+    }
+
+    override fun giveProgress(progress: Int?) {
+        if (progress != null) {
+            progressBar.setProgress(progress)
+        }
+    }
+
+    override fun sendData(result: Boolean) {
+        setContentView(R.layout.activity_money_request)
     }
 }
