@@ -1,9 +1,7 @@
 package it.unito.billsplitter.model
 
-import com.parse.ParseObject
-import com.parse.ParseQuery
-import com.parse.ParseRelation
-import com.parse.ParseUser
+import android.widget.Toast
+import com.parse.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -314,7 +312,18 @@ class Model private constructor()   {
         obj.save()
     }
 
-    fun deleteTransaction(id_split: ParseObject): Boolean{
+
+    fun changePassword(newpassword: String){
+        val currentUser = ParseUser.getCurrentUser()
+        if (currentUser != null) {
+            // Other attributes than "email" will remain unchanged!
+            currentUser.put("username", newpassword)
+
+            // Saves the object.
+            currentUser.saveInBackground ()
+        }
+
+      fun deleteTransaction(id_split: ParseObject): Boolean{
         val query =  ParseQuery.getQuery<ParseObject>("Transaction")
         query.whereEqualTo("id_split",id_split)
 
@@ -335,6 +344,7 @@ class Model private constructor()   {
         obj.delete()
 
         return true
+
     }
   
     companion object {

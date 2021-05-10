@@ -3,28 +3,24 @@ package it.unito.billsplitter.activity
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.provider.SyncStateContract.Helpers.update
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.parse.ParseObject
-import it.unito.billsplitter.AsyncTaskListener
-import it.unito.billsplitter.LoadDataAsyncTask
-import it.unito.billsplitter.R
-import it.unito.billsplitter.RvAdapter
+import it.unito.billsplitter.*
 import it.unito.billsplitter.model.Split
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
+class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, UpdateTaskListener {
 
     private lateinit var adapter: RvAdapter
+    private lateinit var bottomSheet: ProfileBottomSheetActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +52,10 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
                 hideView()
                 LoadDataAsyncTask(this).execute(true)
                 swiperefresh.isRefreshing = false
+            }
+            bottomSheet = ProfileBottomSheetActivity()
+            icon.setOnClickListener{
+                bottomSheet.show(supportFragmentManager, "BottomSheetDialog")
             }
 
         }
@@ -103,6 +103,10 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener {
         if (progress != null) {
             progressBar.setProgress(progress)
         }
+    }
+
+    override fun sendData(result: Boolean) {
+        bottomSheet.updateContext()
     }
 
     override fun sendData(list: ArrayList<Split>, give: String, have: String) {
