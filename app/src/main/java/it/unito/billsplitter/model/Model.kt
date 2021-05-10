@@ -43,7 +43,7 @@ class Model private constructor()   {
                 if (!mySplit.isEmpty()) {
                     if (!(splitObj.objectId in mySplit)) {
 
-                        val share = (-(it.get("share") as Double).toFloat())
+                        val share = -it.getNumber("share")?.toFloat()!!
 
                         split.obj = splitObj
                         split.name = getNameSplit(splitObj)
@@ -58,7 +58,7 @@ class Model private constructor()   {
                     }
                 } else {
 
-                    val share = (-(it.get("share") as Double).toFloat())
+                    val share = -it.getNumber("share")?.toFloat()!!
 
                     split.obj = splitObj
                     split.name = getNameSplit(splitObj)
@@ -131,7 +131,7 @@ class Model private constructor()   {
         val queryList: List<ParseObject> = query.find()
 
         queryList.forEach{
-            total = total + (it.getDouble("share")).toFloat()
+            total += it.getNumber("share")?.toFloat()!!
         }
 
         return total
@@ -146,7 +146,7 @@ class Model private constructor()   {
         val queryList: List<ParseObject> = query.find()
 
         queryList.forEach{
-            total = total + (it.getDouble("share")).toFloat()
+            total += it.getNumber("share")?.toFloat()!!
         }
 
         return total
@@ -160,7 +160,7 @@ class Model private constructor()   {
         val queryList: List<ParseObject> = query.find()
 
         queryList.forEach{
-            total = total + (it.getDouble("share")).toFloat()
+            total += it.getNumber("share")?.toFloat()!!
         }
 
         return total
@@ -199,7 +199,7 @@ class Model private constructor()   {
         query.whereEqualTo("id_split", id_split)
         query.whereEqualTo("id_user", User.getCurrentUser())
 
-        return Split.formatTotal(query.find().get(0).getDouble("share").toFloat(),false)
+        return Split.formatTotal(query.find().get(0).getNumber("share")?.toFloat()!!,false)
     }
 
     fun getListMember(id_split: ParseObject): ArrayList<SplitMember>{
@@ -215,7 +215,7 @@ class Model private constructor()   {
         println("OWNER ID: " + ownerId)
         queryList.forEach{
             val paid: Boolean = it.getBoolean("paid")
-            val share: Float = it.getDouble("share").toFloat()
+            val share: Float = it.getNumber("share")?.toFloat()!!
 
             var username: String = ""
             var owner = false

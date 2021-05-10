@@ -42,7 +42,7 @@ class NotificationReceiver: ParsePushBroadcastReceiver() {
         createNotificationChannel(context)
         var builder = NotificationCompat.Builder(context!!, "AA")
             .setSmallIcon(R.drawable.logo)
-            .setContentTitle("Parse Notification")
+            .setContentTitle(title)
             .setContentText(alert)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
