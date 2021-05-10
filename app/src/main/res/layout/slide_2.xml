@@ -18,7 +18,7 @@
         android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome to BillSplit!"
+        android:text="Add expense easily"
         android:gravity="center"
         android:fontFamily="@font/robo_bold"
         android:textColor="@color/blue"
@@ -27,7 +27,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Here you can keep track of shared expenses, balances, and who owes who"
+        android:text="Quickly add expenses on the go before you forget who paid"
         android:gravity="center"
         android:fontFamily="@font/robo_regular"
         android:textColor="@color/blue"

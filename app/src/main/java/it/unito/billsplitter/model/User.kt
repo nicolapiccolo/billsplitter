@@ -51,5 +51,9 @@ class User {
             email = user?.email.toString()
             return user
         }
+
+        fun logOut(){
+            ParseUser.logOut()
+        }
     }
 }
