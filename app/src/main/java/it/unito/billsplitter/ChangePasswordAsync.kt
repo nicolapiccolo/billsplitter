@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import com.parse.ParseObject
 import it.unito.billsplitter.model.Model
 
+
 class ChangePasswordAsync(context: Context): AsyncTask<String, Int, Boolean>(){
     private var listener: UpdateTaskListener? = null
 

@@ -313,15 +313,16 @@ class Model private constructor()   {
     }
 
 
-    fun changePassword(newpassword: String){
+    fun changePassword(newpassword: String) {
         val currentUser = ParseUser.getCurrentUser()
         if (currentUser != null) {
             // Other attributes than "email" will remain unchanged!
             currentUser.put("username", newpassword)
 
             // Saves the object.
-            currentUser.saveInBackground ()
+            currentUser.saveInBackground()
         }
+    }
 
       fun deleteTransaction(id_split: ParseObject): Boolean{
         val query =  ParseQuery.getQuery<ParseObject>("Transaction")
