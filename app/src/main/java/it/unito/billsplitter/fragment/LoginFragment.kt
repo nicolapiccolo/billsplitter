@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.parse.ParseException
+import com.parse.ParseInstallation
 import com.parse.ParseUser
 import it.unito.billsplitter.R
 import it.unito.billsplitter.activity.LandingActivity
@@ -40,6 +41,10 @@ class LoginFragment : Fragment() {
                 ParseUser.logInInBackground(txtEmail.text.toString(), txtPassword.text.toString()) { user: ParseUser?, e: ParseException? ->
                     if (user != null) {
                         // Hooray! The user is logged in.
+                        val installation = ParseInstallation.getCurrentInstallation()
+                        installation.put("user", ParseUser.getCurrentUser())
+                        installation.saveInBackground()
+
                         Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(context, MainActivity::class.java)
                         startActivity(intent)
