@@ -1,30 +1,28 @@
 package it.unito.billsplitter.fragment
 
-import android.content.Intent
-import android.os.AsyncTask
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.app.AlertDialog
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.parse.FunctionCallback
+import com.parse.ParseCloud
+import com.parse.ParseException
 import com.parse.ParseObject
 import it.unito.billsplitter.R
-import it.unito.billsplitter.RvAdapter
 import it.unito.billsplitter.RvAdapterDetail
 import it.unito.billsplitter.activity.CellClickListener
-import it.unito.billsplitter.activity.MainActivity
 import it.unito.billsplitter.activity.MenuClick
-import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
+import it.unito.billsplitter.model.SplitMember
+import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.fragment_my_split.*
-import it.unito.billsplitter.model.Split
-import kotlinx.android.synthetic.main.fragment_my_split.s_recyclerView
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtDate
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtName
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtTitle
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtTotal
 
 
 class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
@@ -47,6 +45,9 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
 
         displaySplit(mySplit)
 
+        s_btnSend.setOnClickListener{
+            sendNotification(mySplit.memberList)
+        }
 
 
         //val split: ParseObject = arguments?.getParcelable("split")!! //ParseObject cliccato
@@ -76,14 +77,34 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
     }
 
 
+    private fun sendNotification(member: ArrayList<SplitMember>){
+
+        var list: ArrayList<String> = ArrayList<String>()
+
+        member.forEach{
+            if(!it.user.objectId.equals(User.getCurrentUser()?.objectId) && !it.paid) list.add(it.user.objectId)
+        }
+
+        val map = HashMap<String, ArrayList<String>>()
+        map["userList"] = list
+        // here you can send parameters to your cloud code functions
+        // such parameters can be the channel name, array of users to send a push to and more...
+
+        ParseCloud.callFunctionInBackground("test", map, FunctionCallback<Any?> { `object`, e ->
+            // handle callback
+            if (e == null)
+                println(`object`)
+            else
+                println(e.message)
+        })
+    }
+
+
     override fun onCellClickListener(data: ParseObject?) {
 
     }
 
     override fun closeSplit(s: ParseObject?) {
-        if(s!=null){
-            Model.instance.closeSplit(s)
-        }
         println("CLOSE SPLIT")
     }
 
@@ -94,7 +115,6 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
     companion object {
         fun newIstance():Fragment = DetailMySplitFragment()
     }
-
 
 }
 

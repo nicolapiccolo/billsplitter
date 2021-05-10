@@ -44,7 +44,6 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
         if(split != null){
 
             isMySplit = Model.instance.isMySplit(split!!)
-
             LoadFragmentAsyncTask(this).execute(split)
         }
     }

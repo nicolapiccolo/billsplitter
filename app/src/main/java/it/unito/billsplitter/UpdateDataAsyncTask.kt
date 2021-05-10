@@ -18,7 +18,6 @@ class UpdateDataAsyncTask(context: Context): AsyncTask<ParseObject, Int, Boolean
         // This is called on the UI thread when you call
         // publishProgress() from doInBackground()
     }
-
     /** The system calls this to perform work in the UI thread and delivers the result from doInBackground() */
     override fun onPostExecute(result: Boolean) {
         listener?.sendData(result)
