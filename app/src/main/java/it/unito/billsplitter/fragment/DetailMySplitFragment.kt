@@ -21,7 +21,7 @@ import it.unito.billsplitter.activity.CellClickListener
 import it.unito.billsplitter.activity.MenuClick
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
-import it.unito.billsplitter.model.User
+import it.unito.billsplitter.model.Model
 import kotlinx.android.synthetic.main.fragment_my_split.*
 
 
@@ -33,6 +33,7 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val mySplit: MySplit = (arguments?.getSerializable("split") as MySplit?)!!
+        val id_split: String = (arguments?.getString("id_split"))!!
 
         println("MS: " + mySplit.name)
         println("MS: " + mySplit.memberList)
@@ -46,7 +47,7 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
         displaySplit(mySplit)
 
         s_btnSend.setOnClickListener{
-            sendNotification(mySplit.memberList)
+            sendNotification(mySplit.memberList,id_split)
         }
 
 
@@ -77,28 +78,9 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
     }
 
 
-    private fun sendNotification(member: ArrayList<SplitMember>){
-
-        var list: ArrayList<String> = ArrayList<String>()
-
-        member.forEach{
-            if(!it.user.objectId.equals(User.getCurrentUser()?.objectId) && !it.paid) list.add(it.user.objectId)
-        }
-
-        val map = HashMap<String, ArrayList<String>>()
-        map["userList"] = list
-        // here you can send parameters to your cloud code functions
-        // such parameters can be the channel name, array of users to send a push to and more...
-
-        ParseCloud.callFunctionInBackground("test", map, FunctionCallback<Any?> { `object`, e ->
-            // handle callback
-            if (e == null)
-                println(`object`)
-            else
-                println(e.message)
-        })
+    private fun sendNotification(member: ArrayList<SplitMember>, id_split: String){
+        Model.instance.sendPaymentNotification(member,id_split)
     }
-
 
     override fun onCellClickListener(data: ParseObject?) {
 
