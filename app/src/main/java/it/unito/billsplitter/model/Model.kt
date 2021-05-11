@@ -19,6 +19,14 @@ class Model private constructor()   {
 
 
 
+    fun getSplit(id_split: String): ParseObject? {
+        println("ID: "+ id_split)
+        val query = ParseQuery.getQuery<ParseObject>("Split")
+        query.whereEqualTo("objectId", id_split)
+
+        return query.find().get(0)
+    }
+
     fun getOtherSplit(mySplit: List<String>) {
 
         val query = ParseQuery.getQuery<ParseObject>("Transaction")
@@ -345,7 +353,28 @@ class Model private constructor()   {
         obj.delete()
 
         return true
+    }
 
+    fun sendPaymentNotification(member: ArrayList<SplitMember>, id_split: String){
+        var list: ArrayList<String> = ArrayList<String>()
+
+        member.forEach{
+            if(!it.user.objectId.equals(User.getCurrentUser()?.objectId) && !it.paid) list.add(it.user.objectId)
+        }
+
+        val map = HashMap<String, Any>()
+        map["userList"] = list
+        map["id_split"] = id_split
+        // here you can send parameters to your cloud code functions
+        // such parameters can be the channel name, array of users to send a push to and more...
+
+        ParseCloud.callFunctionInBackground("test", map, FunctionCallback<Any?> { `object`, e ->
+            // handle callback
+            if (e == null)
+                println(`object`)
+            else
+                println(e.message)
+        })
     }
   
     companion object {
