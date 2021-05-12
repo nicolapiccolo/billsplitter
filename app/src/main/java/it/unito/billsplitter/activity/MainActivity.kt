@@ -38,7 +38,12 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
             icon_text.text = user.username.capitalize()[0].toString()
 
             hideView()
-            LoadDataAsyncTask(this).execute(false) //thread caricamento dati
+
+            val intentExtra = intent.getStringExtra("RESULT")
+            println("EE : " +intentExtra)
+
+            if(intentExtra != null) LoadDataAsyncTask(this).execute(true)  //thread caricamento dati
+            else LoadDataAsyncTask(this).execute(false) //non ricarico i dati
 
             btnCreate.setOnClickListener {
                 intent = Intent(this, CreateSplitActivity::class.java)

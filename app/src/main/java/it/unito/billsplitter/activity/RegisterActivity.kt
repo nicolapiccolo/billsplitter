@@ -13,6 +13,13 @@ import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
+
+    companion object{
+        const val ID = 1
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -32,6 +39,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("RESULT",RegisterActivity.ID.toString())
                 startActivity(intent)
             }
             else{

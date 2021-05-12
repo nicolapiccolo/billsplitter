@@ -15,9 +15,7 @@ import com.parse.ParseException
 import com.parse.ParseInstallation
 import com.parse.ParseUser
 import it.unito.billsplitter.R
-import it.unito.billsplitter.activity.LandingActivity
-import it.unito.billsplitter.activity.MainActivity
-import it.unito.billsplitter.activity.RegisterActivity
+import it.unito.billsplitter.activity.*
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_forgot_password.view.*
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -25,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 
 
 class LoginFragment : Fragment() {
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,6 +44,7 @@ class LoginFragment : Fragment() {
 
                         Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(context, MainActivity::class.java)
+                        intent.putExtra("RESULT", LoginActivity.ID.toString())
                         startActivity(intent)
                     } else {
                         // Login failed. Look at the ParseException to see what happened.

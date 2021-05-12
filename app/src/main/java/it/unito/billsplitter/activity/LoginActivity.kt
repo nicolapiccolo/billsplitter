@@ -11,6 +11,12 @@ import it.unito.billsplitter.model.User
 
 
 class LoginActivity : AppCompatActivity(),LoginFragment.OnFirstPageFragmentInteractionListener {
+
+    companion object{
+        const val ID = 2
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
