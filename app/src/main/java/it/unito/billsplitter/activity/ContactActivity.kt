@@ -1,63 +1,76 @@
 package it.unito.billsplitter.activity
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.provider.BlockedNumberContract
 import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
-import it.unito.billsplitter.model.Model
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.parse.Parse
 import com.parse.ParseUser
 import it.unito.billsplitter.LoadContactAsyncTask
 import it.unito.billsplitter.LoadContactTaskListener
 import it.unito.billsplitter.R
-import it.unito.billsplitter.RvAdapter
 import it.unito.billsplitter.model.Contact
-import it.unito.billsplitter.model.Split
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_contacts_split.*
-import kotlinx.android.synthetic.main.activity_contacts_split.progressBar
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.contact_card.*
 import kotlinx.android.synthetic.main.contact_card.view.*
-import kotlinx.android.synthetic.main.contact_card.view.imgAccount
-import kotlinx.android.synthetic.main.splitting_card.view.*
-import kotlin.collections.ArrayList
 
 class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
 
-    private lateinit var selectedContacts : ArrayList<ParseUser>
+    private lateinit var selectedContacts: ArrayList<ParseUser>
+    private var title: String = ""
+    private var total: String = ""
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        title = getIntent().getStringExtra("title").toString()
+        total = getIntent().getStringExtra("total").toString()
+
         setContentView(R.layout.activity_contacts_split)
         recyclerViewContacts.layoutManager = LinearLayoutManager(this)
-
-        val title = getIntent().getStringExtra("title")
-        val total = getIntent().getStringExtra("total")
-
         //We need to verify permission
-        selectedContacts = ArrayList()
-        val contactList : ArrayList<Contact> = ArrayList()
-        val contacts = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ECLAIR) {
-            contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,null,null,null)
-        } else {
-            TODO("VERSION.SDK_INT < ECLAIR")
+
+        checkPermission()
+
+        btnBack.setOnClickListener {
+            finish()
         }
-        while (contacts!!.moveToNext()){
-            val name = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-            val number = contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-            val obj = Contact(name,number)
+    }
+
+    private fun setView(){
+        selectedContacts = ArrayList()
+        val contactList: ArrayList<Contact> = ArrayList()
+        val contacts =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ECLAIR) {
+                contentResolver.query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            } else {
+                TODO("VERSION.SDK_INT < ECLAIR")
+            }
+        while (contacts!!.moveToNext()) {
+            val name =
+                contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+            val number =
+                contacts.getString(contacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            val obj = Contact(name, number)
             contactList.add(obj)
         }
 
@@ -65,22 +78,59 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
         LoadContactAsyncTask(this).execute(contactList)
 
         btnAdd.setOnClickListener {
-           if (selectedContacts.isEmpty())
-               Toast.makeText(this, "Friends list can't be empty!", Toast.LENGTH_SHORT).show()
-           else{
-               selectedContacts.add(User.getCurrentUser()!!)
-               intent = Intent(this, SplittingActivity::class.java)
-               intent.putParcelableArrayListExtra("selectedContacts",selectedContacts)
-               intent.putExtra("title",title)
-               intent.putExtra("total",total)
-               startActivity(intent)
-           }
-        }
+            if (selectedContacts.isEmpty())
+                Toast.makeText(this, "Friends list can't be empty!", Toast.LENGTH_SHORT).show()
+            else {
+                selectedContacts.add(User.getCurrentUser()!!)
+                intent = Intent(this, SplittingActivity::class.java)
+                intent.putParcelableArrayListExtra("selectedContacts", selectedContacts)
+                intent.putExtra("title", title)
+                intent.putExtra("total", total)
+                startActivity(intent)
+            }
 
-        btnBack.setOnClickListener{
-            finish()
         }
     }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            Toast.makeText(baseContext, "You must accept to continue", Toast.LENGTH_LONG).show()
+            requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),100)
+        } else {
+            println("GIA' ACCETTATA")
+            setView()
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            100 -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    setView()
+                } else {
+                    Toast.makeText(baseContext, "You must accept to continue", Toast.LENGTH_LONG).show()
+                    requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),100)
+                }
+                return
+            }
+
+            // Add other 'when' lines to check for other
+            // permissions this app might request.
+            else -> {
+                // Ignore all other requests.
+            }
+        }
+    }
+
 
     class ContactAdapter(items : List<ParseUser>,ctx: Context, selectedContacts: ArrayList<ParseUser>) : RecyclerView.Adapter<ContactAdapter.ViewHolder>(){
 

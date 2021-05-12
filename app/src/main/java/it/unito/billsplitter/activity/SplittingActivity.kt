@@ -70,8 +70,7 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
 
     fun backHome(view: View){
         intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("RESULT",SplittingActivity.ID)
-        setResult(RESULT_OK, intent);
+        intent.putExtra("RESULT",SplittingActivity.ID.toString())
         startActivity(intent)
     }
 
