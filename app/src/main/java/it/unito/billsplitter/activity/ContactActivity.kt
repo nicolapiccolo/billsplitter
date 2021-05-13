@@ -1,20 +1,37 @@
 package it.unito.billsplitter.activity
 
+
+import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.graphics.drawable.Drawable
+
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.textservice.TextServicesManager
 import android.widget.CheckBox
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.get
+import it.unito.billsplitter.model.Model
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseUser
@@ -25,6 +42,16 @@ import it.unito.billsplitter.model.Contact
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_contacts_split.*
 import kotlinx.android.synthetic.main.contact_card.view.*
+
+
+import kotlinx.android.synthetic.main.splitting_card.view.*
+import kotlin.collections.ArrayList
+
+class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
+
+    private lateinit var selectedContacts : ArrayList<ParseUser>
+    @SuppressLint("ServiceCast")
+
 
 class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
 
@@ -92,6 +119,32 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
         }
     }
 
+        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        search_view.setSearchableInfo(manager.getSearchableInfo(componentName))
+        val ctx = this
+        search_view.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.toLowerCase() as CharSequence
+                val searchedContacs : ArrayList<Contact> = ArrayList()
+                contactList.forEach {
+                    val number = Contact.converFormatPhone(it.number)
+                    if(it.name.toLowerCase().contains(newText) || number.startsWith(newText)){
+                        searchedContacs.add(it)
+                    }
+                }
+                LoadContactAsyncTask(ctx).execute(searchedContacs)
+                return false
+            }
+
+        })
+        btnBack.setOnClickListener{
+            finish()
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun checkPermission() {
@@ -104,6 +157,7 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
         } else {
             println("GIA' ACCETTATA")
             setView()
+
         }
 
     }
@@ -143,13 +197,9 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.name.text = list[position].get("username").toString()
+            holder.name.text = list[position].get("username").toString().capitalize()
             holder.number.text = list[position].get("phone").toString()
-            /*if(list[position].image != null)
-                holder.profile.setImageBitmap(list[position].image)
-            else
-                holder.profile.setImageDrawable(ContextCompat.getDrawable(context,R.mipmap.ic_launcher_round))*/
-
+            holder.icon_text.text = list[position].get("username").toString().capitalize()[0].toString()
             holder.checkBox_select.setOnCheckedChangeListener {buttonView, isChecked ->
                 val contact = list[position]
                 //contact.image=list[position].image
@@ -182,7 +232,8 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
         class ViewHolder(v: View) : RecyclerView.ViewHolder(v){
             val name = v.txtContactName!!
             val number = v.txtContactNumber!!
-            val profile = v.imgAccount!!
+            val icon = v.icon!!
+            val icon_text = v.icon_text!!
             val checkBox_select:CheckBox = itemView.checkBox_select
         }
     }

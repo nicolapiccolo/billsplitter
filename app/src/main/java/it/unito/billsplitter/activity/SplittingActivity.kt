@@ -3,6 +3,8 @@ package it.unito.billsplitter.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +18,11 @@ import com.parse.ParseUser
 import it.unito.billsplitter.CreateDataAsyncTask
 import it.unito.billsplitter.CreateTaskListener
 import it.unito.billsplitter.R
-import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
 import it.unito.billsplitter.model.User
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_setting_percentage.*
-import kotlinx.android.synthetic.main.activity_setting_percentage.progressBar
 import kotlinx.android.synthetic.main.splitting_card.view.*
-import kotlin.collections.ArrayList
-
 
 
 class SplittingActivity: AppCompatActivity(),CreateTaskListener{
@@ -42,9 +39,8 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
         val title = getIntent().getStringExtra("title").toString()
         val total = getIntent().getStringExtra("total")?.toFloat()
         val contacts = this.intent.getParcelableArrayListExtra<ParseUser>("selectedContacts")
-        println(title+" "+total)
         val members = setMembers(contacts,total!!.toFloat())
-        val mysplit = MySplit(title.toString(),total.toString(),"","",User.getCurrentUser()!!, members)
+        val mysplit = MySplit(title,total.toString(),"","",User.getCurrentUser()!!, members)
         totalPrice.setText(mysplit.total)
         recyclerViewSplitting.adapter = SplittingAdapter(members,this, mysplit.total.toFloat())
 
@@ -107,13 +103,32 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
             return rem/c
         }
 
+        private fun getPercentage(share: Float):Int{
+            val perc = (share*100)/total
+            return perc.toInt()
+        }
+
+        private fun getShare(percentage: Int): Float{
+            return (total*percentage)/100
+        }
+
+        private fun remainingSeek(seekbarList: ArrayList<SeekBar>, position: Int):Int{
+            var c=0
+            for (i in 0..seekbarList.size-1){
+                if(i!=position && seekbarList[i].isEnabled)
+                    c++
+            }
+            return c
+        }
+
         private fun updateSeekBar(seekbarList: ArrayList<SeekBar>, position: Int){
             val remain = remaining(position, seekbarList)
-            if (remain>0) {
-                for (i in 0..seekbarList.size - 1) {
-                    if (i != position && seekbarList[i].isEnabled) {
-                        seekbarList[i].setProgress(remain)
-                    }
+            if (remain<=0) {
+                seekbarList[position].setProgress(100-remainingSeek(seekbarList, position)-lockedPerc)
+            }
+            for (i in 0..seekbarList.size - 1) {
+                if (i != position && seekbarList[i].isEnabled) {
+                    seekbarList[i].setProgress(remain)
                 }
             }
         }
@@ -125,12 +140,20 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
             }
         }
 
+        private fun updateFromEditText(seekbarList: ArrayList<SeekBar>, txtPrices: ArrayList<TextView>, position: Int){
+            for (i in 0..seekbarList.size - 1) {
+                if(i!=position && seekbarList[i].isEnabled){
+                    txtPrices[i].text = getShare(seekbarList[i].progress).toString()
+                }
+            }
+        }
+
         override fun onBindViewHolder(holder: SplittingViewHolder, position: Int){
             if (list[position].owner)
                 holder.name.text = "you pay for"
             else
                 holder.name.text = list[position].name+" pay for"
-            holder.price.text = list[position].share
+            holder.price.setText(list[position].share)
             holder.seekBar.setProgress((100/list.size))
             holder.percentage.text = (100/list.size).toString()
             txtPrices.add(holder.price)
@@ -149,24 +172,43 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
                 //unlock
                 if(holder.state) {
                     holder.state = false
+                    holder.price.setEnabled(true)
                     holder.loker.setBackgroundResource(R.drawable.ic_password)
                     holder.seekBar.setEnabled(true)
                     lockedPerc-=holder.seekBar.progress
                 }else{
                     //lock
                     holder.state = true
+                    holder.price.setEnabled(false)
                     holder.loker.setBackgroundResource(R.drawable.ic_lock)
                     holder.seekBar.setEnabled(false)
                     lockedPerc+=holder.seekBar.progress
                 }
             }
+
+            holder.price.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable) {}
+                override fun beforeTextChanged(s: CharSequence, start: Int,
+                                               count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int,
+                                           before: Int, count: Int) {
+                    val share = getPercentage((s.toString()).toFloat())
+                    println(share)
+                    holder.seekBar.setProgress(share)
+                    updateSeekBar(seekbarList, position)
+                }
+            })
+
         }
+
 
         class SplittingViewHolder(v: View): RecyclerView.ViewHolder(v){
             val image = v.imgAccount!!
             val name = v.txtSubtitle!!
             val percentage = v.txtPercentage!!
-            val price = v.txtPrice!!
+            var price = v.edtPrice!!
             val seekBar = v.seekBar
             val loker = v.btnLocker
             var state: Boolean = false

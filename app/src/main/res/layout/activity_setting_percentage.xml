@@ -104,15 +104,10 @@
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:indeterminateTint="@color/blue"
                 android:layout_gravity="center" />
-
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swiperefresh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewSplitting"
@@ -121,8 +116,6 @@
                     android:scrollbars="vertical"
                     android:scrollbarSize="0dp"
                     tools:listitem="@layout/splitting_card" />
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </FrameLayout>
 

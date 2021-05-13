@@ -210,6 +210,32 @@ class Model private constructor()   {
         return Split.formatTotal(query.find().get(0).getNumber("share")?.toFloat()!!,false)
     }
 
+    fun getMyHistory(): ArrayList<String>{
+        var history = ArrayList<String>()
+        val query = ParseQuery.getQuery<ParseObject>("Split")
+        query.whereEqualTo("id_user", User.getCurrentUser())
+        query.whereEqualTo("close",true)
+        query.addDescendingOrder("createdAt")
+        val queryList: List<ParseObject> = query.find()
+        queryList.forEach {
+            val total = "+€"+(it.getDouble("total")).toFloat()
+            val hist = getNameSplit(it)+"_"+Split.formatDate(it.createdAt as Date)+"_"+total
+            history.add(hist)
+        }
+        val q = ParseQuery.getQuery<ParseObject>("Transaction")
+        q.whereEqualTo("id_user", User.getCurrentUser())
+        q.whereEqualTo("paid",true)
+        q.addDescendingOrder("createdAt")
+        val qList: List<ParseObject> = q.find()
+        qList.forEach {
+            val share = "-€"+(it.getDouble("share")).toFloat()
+            val splitObj = (it.get("id_split") as ParseRelation<*>).query.find().get(0)
+            val h = getNameSplit(splitObj)+"_"+Split.formatDate(it.createdAt as Date)+"_"+share
+            history.add(h)
+        }
+        return history
+    }
+
     fun getListMember(id_split: ParseObject): ArrayList<SplitMember>{
 
         val query = ParseQuery.getQuery<ParseObject>("Transaction")
@@ -256,15 +282,9 @@ class Model private constructor()   {
         return  ((paid * 100)/total).toInt()
     }
 
-
-    fun converFormatPhone(phone: String): String{
-        val (digits) = phone.partition { it.isDigit() }
-        return digits
-    }
-
     fun contactContained(phone: String, contactList: ArrayList<Contact>): Boolean {
         contactList.forEach {
-            if(converFormatPhone(it.number).equals(phone)){
+            if(Contact.converFormatPhone(it.number).equals(phone)){
                 return true
             }
         }

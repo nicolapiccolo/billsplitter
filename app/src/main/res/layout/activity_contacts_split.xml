@@ -52,20 +52,9 @@
         app:layout_constraintStart_toStartOf="@+id/topLayout"
         app:layout_constraintTop_toBottomOf="@+id/txtAddFriends" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="All Contacts"
-        android:fontFamily="@font/robo_bold"
-        android:layout_marginTop="20dp"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/centerLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -74,7 +63,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topLayout"
             app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
-            android:padding="24dp">
+            android:paddingTop="24dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
+
+            <TextView
+                android:id="@+id/txtAllContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="All Contacts"
+                android:fontFamily="@font/robo_bold"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="@+id/centerLayout"
+                app:layout_constraintTop_toTopOf="@+id/centerLayout"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -82,16 +83,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminateTint="@color/blue"
-                android:layout_gravity="center" />
+                app:layout_constraintStart_toStartOf="@+id/centerLayout"
+                app:layout_constraintEnd_toEndOf="@+id/centerLayout"
+                app:layout_constraintTop_toTopOf="@+id/centerLayout"
+                app:layout_constraintBottom_toBottomOf="@+id/centerLayout"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewContacts"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:scrollbars="vertical"
-                tools:listitem="@layout/contact_card" />
+                tools:listitem="@layout/contact_card"
+                app:layout_constraintStart_toStartOf="@+id/centerLayout"
+                app:layout_constraintTop_toBottomOf="@+id/txtAllContacts"/>
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomLayout"
