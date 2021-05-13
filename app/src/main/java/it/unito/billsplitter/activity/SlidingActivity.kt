@@ -27,6 +27,9 @@ class SlidingActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        println("SLIDING ACTIVITY")
+
         setContentView(R.layout.activity_sliding)
 
         if(!isFirstTimeAppStart()){
@@ -44,6 +47,7 @@ class SlidingActivity : AppCompatActivity(){
             else{
                 setAppStartStatus(false)
                 startActivity(Intent(this, LandingActivity::class.java))
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 finish()
             }
         }
@@ -51,6 +55,7 @@ class SlidingActivity : AppCompatActivity(){
         btnSkip.setOnClickListener{
             setAppStartStatus(false)
             startActivity(Intent(this, LandingActivity::class.java))
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             finish()
         }
 

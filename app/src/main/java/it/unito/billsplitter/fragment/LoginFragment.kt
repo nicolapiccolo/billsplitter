@@ -12,11 +12,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.parse.ParseException
+import com.parse.ParseInstallation
 import com.parse.ParseUser
 import it.unito.billsplitter.R
-import it.unito.billsplitter.activity.LandingActivity
-import it.unito.billsplitter.activity.MainActivity
-import it.unito.billsplitter.activity.RegisterActivity
+import it.unito.billsplitter.activity.*
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_forgot_password.view.*
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_login.view.*
 
 
 class LoginFragment : Fragment() {
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,9 +38,16 @@ class LoginFragment : Fragment() {
                 ParseUser.logInInBackground(txtEmail.text.toString(), txtPassword.text.toString()) { user: ParseUser?, e: ParseException? ->
                     if (user != null) {
                         // Hooray! The user is logged in.
+                        val installation = ParseInstallation.getCurrentInstallation()
+                        installation.put("user", ParseUser.getCurrentUser())
+                        installation.saveInBackground()
+
                         Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(context, MainActivity::class.java)
+                        intent.putExtra("RESULT", LoginActivity.ID.toString())
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
+                        activity?.finish()
                     } else {
                         // Login failed. Look at the ParseException to see what happened.
                         Toast.makeText(context, e?.message, Toast.LENGTH_SHORT).show()

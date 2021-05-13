@@ -44,7 +44,6 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
         if(split != null){
 
             isMySplit = Model.instance.isMySplit(split!!)
-
             LoadFragmentAsyncTask(this).execute(split)
         }
     }
@@ -125,6 +124,7 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
     private fun setFragment(mySplit: MySplit){
         val bundle = Bundle()
         bundle.putSerializable("split", mySplit)
+        bundle.putString("id_split",split?.objectId)
 
         showMenu(isMySplit)
 

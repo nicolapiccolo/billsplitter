@@ -22,6 +22,14 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(getIntent().getBooleanExtra("Exit", false)) {
+            finish();
+            return; // add this to prevent from doing unnecessary stuffs
+        }
+
+        println("MAIN ACTIVITY")
+
         val user = User.getCurrentUser()
         if (user==null) {
             intent = Intent(this, SlidingActivity::class.java)
@@ -36,8 +44,18 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
             icon_text.text = user.username.capitalize()[0].toString()
 
             hideView()
+          
             LoadDataAsyncTask(this).execute(false) //thread caricamento dati
             LoadHistAsyncTask(this).execute(true)
+
+
+            val intentExtra = intent.getStringExtra("RESULT")
+            println("EE : " +intentExtra)
+
+            if(intentExtra != null) LoadDataAsyncTask(this).execute(true)  //thread caricamento dati
+            else LoadDataAsyncTask(this).execute(false) //non ricarico i dati
+
+
             btnCreate.setOnClickListener {
                 intent = Intent(this, CreateSplitActivity::class.java)
                 startActivityForResult(intent,CreateSplitActivity.ID)

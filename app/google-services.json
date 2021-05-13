@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1001564553157",
+    "project_id": "billsplit-d3841",
+    "storage_bucket": "billsplit-d3841.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001564553157:android:01ae9fa428442610d195ac",
+        "android_client_info": {
+          "package_name": "it.unito.billsplitter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001564553157-gdheo56877vi5fqh9qs3g37cl5g1gqe9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmS_cW2FuZE9zCsUoM41Fmyc-57kCYR58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001564553157-gdheo56877vi5fqh9qs3g37cl5g1gqe9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

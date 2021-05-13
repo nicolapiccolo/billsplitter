@@ -66,9 +66,10 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
 
     fun backHome(view: View){
         intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("RESULT",SplittingActivity.ID)
-        setResult(RESULT_OK, intent);
+        intent.putExtra("RESULT",SplittingActivity.ID.toString())
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+        finish()
     }
 
 
