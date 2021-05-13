@@ -10,6 +10,8 @@ class BillSplit: Application() {
     override fun onCreate() {
         super.onCreate()
 
+        println("BILL SPLID")
+
         Parse.initialize(
                 Parse.Configuration.Builder(this)
                         .applicationId("EO3Ee2rVBwYsL6PZnKdxA3IwXiPLb2vC4G9NyFMU")
