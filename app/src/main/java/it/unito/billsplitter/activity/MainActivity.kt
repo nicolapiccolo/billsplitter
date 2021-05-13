@@ -4,12 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.update
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.parse.ParseObject
 import it.unito.billsplitter.*
 import it.unito.billsplitter.model.Split
@@ -17,7 +15,7 @@ import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, UpdateTaskListener {
+class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, UpdateTaskListener, AsyncHistoryTaskListener {
 
     private lateinit var adapter: RvAdapter
     private lateinit var bottomSheet: ProfileBottomSheetActivity
@@ -34,12 +32,12 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
 
             //Toast.makeText(baseContext, "Welcome back ${User.username}", Toast.LENGTH_LONG).show()
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
+            recyclerHistoryView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             icon_text.text = user.username.capitalize()[0].toString()
 
             hideView()
             LoadDataAsyncTask(this).execute(false) //thread caricamento dati
-
+            LoadHistAsyncTask(this).execute(true)
             btnCreate.setOnClickListener {
                 intent = Intent(this, CreateSplitActivity::class.java)
                 startActivityForResult(intent,CreateSplitActivity.ID)
@@ -51,6 +49,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
             swiperefresh.setOnRefreshListener {
                 hideView()
                 LoadDataAsyncTask(this).execute(true)
+                LoadHistAsyncTask(this).execute(true)
                 swiperefresh.isRefreshing = false
             }
             bottomSheet = ProfileBottomSheetActivity()
@@ -77,7 +76,15 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
         adapter.notifyDataSetChanged()
 
         progressBar.setVisibility(View.GONE)
-        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE)
+
+    }
+
+    private fun populateHist(list: ArrayList<String>){
+        val ad = RvAdapterHistory(list)
+        recyclerHistoryView.adapter = ad
+        txtViewHystory.setVisibility(View.VISIBLE)
+        recyclerHistoryView.setVisibility(View.VISIBLE)
     }
 
     private fun setTotal(give: String, have: String){
@@ -93,8 +100,9 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
         txtCredit.setVisibility(View.GONE)
         txtDebt.setVisibility(View.GONE)
         txtSlash.setVisibility(View.GONE)
-
-
+        txtViewHystory.setVisibility(View.GONE)
+        txtNoHistory.visibility = View.GONE
+        recyclerHistoryView.setVisibility(View.GONE)
         recyclerView.setVisibility(View.GONE)
         progressBar.setVisibility(View.VISIBLE)
     }
@@ -107,6 +115,18 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
 
     override fun sendData(result: Boolean) {
         bottomSheet.updateContext()
+    }
+
+    override fun sendData(list: ArrayList<String>) {
+        if (!list.isEmpty()){
+            txtNoHistory.visibility = View.GONE
+            populateHist(list)
+        }
+        else{
+            txtViewHystory.setVisibility(View.VISIBLE)
+            txtNoHistory.visibility = View.VISIBLE
+        }
+
     }
 
     override fun sendData(list: ArrayList<Split>, give: String, have: String) {

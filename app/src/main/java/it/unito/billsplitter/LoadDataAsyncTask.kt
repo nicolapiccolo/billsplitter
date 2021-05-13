@@ -24,7 +24,6 @@ class LoadDataAsyncTask(context: Context) : AsyncTask<Boolean, Int, ArrayList<Sp
         }
     }
 
-
     override fun onProgressUpdate(vararg values: Int?) {
         listener?.giveProgress(values[0])
         // This is called on the UI thread when you call

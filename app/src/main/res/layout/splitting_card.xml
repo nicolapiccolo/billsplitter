@@ -71,13 +71,14 @@
             android:textColor="@color/black"
             android:textSize="24dp"
             android:layout_marginRight="5dp"
-            card_view:layout_constraintEnd_toStartOf="@+id/txtPrice"
+            card_view:layout_constraintEnd_toStartOf="@+id/edtPrice"
             card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"
             card_view:layout_constraintTop_toTopOf="@+id/topLayout" />
-        <TextView
-            android:id="@+id/txtPrice"
+        <EditText
+            android:id="@+id/edtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
             android:text="22,20"
             android:fontFamily="@font/robo_bold"
             android:textColor="@color/black"

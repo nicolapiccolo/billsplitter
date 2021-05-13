@@ -68,7 +68,7 @@ class RvAdapterDetail(private val cellClickListener: CellClickListener, private 
 
     }
 
-    private fun getRandomMaterialColor(typeColor: String = "400"): Int {
+    private fun getRandomMaterialColor(typeColor: String = "300"): Int {
         var returnColor: Int = Color.GRAY
 
         val arrayId: Int = context.getResources().getIdentifier("mdcolor_$typeColor", "array", context.getPackageName())
