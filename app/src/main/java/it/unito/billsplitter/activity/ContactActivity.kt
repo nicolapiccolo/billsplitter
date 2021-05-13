@@ -9,8 +9,6 @@ import android.content.ServiceConnection
 import android.graphics.drawable.Drawable
 
 import android.Manifest
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 
@@ -47,11 +45,6 @@ import kotlinx.android.synthetic.main.contact_card.view.*
 import kotlinx.android.synthetic.main.splitting_card.view.*
 import kotlin.collections.ArrayList
 
-class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
-
-    private lateinit var selectedContacts : ArrayList<ParseUser>
-    @SuppressLint("ServiceCast")
-
 
 class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
 
@@ -77,7 +70,7 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
         }
     }
 
-    private fun setView(){
+    private fun setView() {
         selectedContacts = ArrayList()
         val contactList: ArrayList<Contact> = ArrayList()
         val contacts =
@@ -117,12 +110,11 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
             }
 
         }
-    }
 
         val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         search_view.setSearchableInfo(manager.getSearchableInfo(componentName))
         val ctx = this
-        search_view.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 return true
@@ -130,10 +122,10 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.toLowerCase() as CharSequence
-                val searchedContacs : ArrayList<Contact> = ArrayList()
+                val searchedContacs: ArrayList<Contact> = ArrayList()
                 contactList.forEach {
                     val number = Contact.converFormatPhone(it.number)
-                    if(it.name.toLowerCase().contains(newText) || number.startsWith(newText)){
+                    if (it.name.toLowerCase().contains(newText) || number.startsWith(newText)) {
                         searchedContacs.add(it)
                     }
                 }
@@ -142,8 +134,11 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
             }
 
         })
-        btnBack.setOnClickListener{
+        btnBack.setOnClickListener {
             finish()
+        }
+    }
+
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -263,3 +258,4 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
     }
 
 }
+
