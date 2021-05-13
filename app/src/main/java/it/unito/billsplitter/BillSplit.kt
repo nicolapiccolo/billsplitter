@@ -10,7 +10,6 @@ class BillSplit: Application() {
     override fun onCreate() {
         super.onCreate()
 
-
         Parse.initialize(
                 Parse.Configuration.Builder(this)
                         .applicationId("EO3Ee2rVBwYsL6PZnKdxA3IwXiPLb2vC4G9NyFMU")
@@ -23,7 +22,5 @@ class BillSplit: Application() {
         Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
 
         ParseInstallation.getCurrentInstallation().save()
-
-
     }
 }

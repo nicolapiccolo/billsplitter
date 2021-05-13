@@ -90,6 +90,7 @@
             android:fontFamily="@font/robo_regular"
             android:hint="  Insert Password"
             android:inputType="textPassword"
+            android:textSize="18dp"
             app:layout_constraintBottom_toTopOf="@+id/btnForgotPassword"
             app:layout_constraintStart_toStartOf="parent" />
 

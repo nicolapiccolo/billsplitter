@@ -12,6 +12,10 @@ class LandingActivity : AppCompatActivity(){
         setContentView(R.layout.activity_landing)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
     fun Login(view : View){
         intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
