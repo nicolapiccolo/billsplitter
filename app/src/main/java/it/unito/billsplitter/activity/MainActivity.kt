@@ -4,12 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.update
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.parse.ParseObject
 import it.unito.billsplitter.*
 import it.unito.billsplitter.model.Split
@@ -24,6 +22,14 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(getIntent().getBooleanExtra("Exit", false)) {
+            finish();
+            return; // add this to prevent from doing unnecessary stuffs
+        }
+
+        println("MAIN ACTIVITY")
+
         val user = User.getCurrentUser()
         if (user==null) {
             intent = Intent(this, SlidingActivity::class.java)

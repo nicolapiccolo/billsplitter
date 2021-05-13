@@ -45,7 +45,9 @@ class LoginFragment : Fragment() {
                         Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(context, MainActivity::class.java)
                         intent.putExtra("RESULT", LoginActivity.ID.toString())
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
+                        activity?.finish()
                     } else {
                         // Login failed. Look at the ParseException to see what happened.
                         Toast.makeText(context, e?.message, Toast.LENGTH_SHORT).show()

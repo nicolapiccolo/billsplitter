@@ -10,6 +10,7 @@ class BillSplit: Application() {
     override fun onCreate() {
         super.onCreate()
 
+        println("BILL SPLID")
 
         Parse.initialize(
                 Parse.Configuration.Builder(this)
@@ -23,7 +24,5 @@ class BillSplit: Application() {
         Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
 
         ParseInstallation.getCurrentInstallation().save()
-
-
     }
 }

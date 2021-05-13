@@ -43,10 +43,13 @@ class ProfileBottomSheetActivity: BottomSheetDialogFragment(){
         btnChangePassword.setOnClickListener {
             changePasswordDialog(context!!)
         }
+
         btnLogOut.setOnClickListener {
             User.logOut()
             val intent = Intent(context, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            activity?.finish()
         }
     }
 
