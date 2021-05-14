@@ -21,15 +21,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imgAccount"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            <ImageView
+                android:id="@+id/iconContact"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/circle_icon"
+                card_view:layout_constraintStart_toStartOf="@+id/topLayout"
+                card_view:layout_constraintTop_toTopOf="@+id/topLayout"
+                card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"/>
+
+            <TextView
+                android:id="@+id/icon_textC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/robo_regular"
+                card_view:layout_constraintStart_toStartOf="@+id/iconContact"
+                card_view:layout_constraintEnd_toEndOf="@+id/iconContact"
+                card_view:layout_constraintTop_toTopOf="@+id/iconContact"
+                card_view:layout_constraintBottom_toBottomOf="@+id/iconContact"
+                android:text="M"
+                android:textSize="24dp" />
+
 
         <TextView
             android:id="@+id/txtSubtitle"
@@ -39,8 +55,8 @@
             android:fontFamily="@font/robo_italic"
             android:textSize="14dp"
             android:layout_marginLeft="15dp"
-            card_view:layout_constraintStart_toEndOf="@+id/imgAccount"
-            card_view:layout_constraintTop_toTopOf="@+id/imgAccount"/>
+            card_view:layout_constraintStart_toEndOf="@+id/iconContact"
+            card_view:layout_constraintTop_toTopOf="@+id/iconContact"/>
         <TextView
             android:id="@+id/txtPercentage"
             android:layout_width="wrap_content"
@@ -50,7 +66,7 @@
             android:textSize="24dp"
             android:layout_marginLeft="15dp"
             android:textColor="@color/black"
-            card_view:layout_constraintStart_toEndOf="@+id/imgAccount"
+            card_view:layout_constraintStart_toEndOf="@+id/iconContact"
             card_view:layout_constraintTop_toBottomOf="@+id/txtSubtitle"/>
         <TextView
             android:layout_width="wrap_content"
@@ -71,11 +87,11 @@
             android:textColor="@color/black"
             android:textSize="24dp"
             android:layout_marginRight="5dp"
-            card_view:layout_constraintEnd_toStartOf="@+id/edtPrice"
+            card_view:layout_constraintEnd_toStartOf="@+id/txtPrice"
             card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"
             card_view:layout_constraintTop_toTopOf="@+id/topLayout" />
         <EditText
-            android:id="@+id/edtPrice"
+            android:id="@+id/txtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
