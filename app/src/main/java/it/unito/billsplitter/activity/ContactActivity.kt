@@ -72,6 +72,7 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
 
     private fun setView() {
         selectedContacts = ArrayList()
+        selectedContacts.add(User.getCurrentUser()!!)
         val contactList: ArrayList<Contact> = ArrayList()
         val contacts =
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ECLAIR) {
@@ -98,10 +99,10 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
         LoadContactAsyncTask(this).execute(contactList)
 
         btnAdd.setOnClickListener {
-            if (selectedContacts.isEmpty())
+            if (selectedContacts.size==1)
                 Toast.makeText(this, "Friends list can't be empty!", Toast.LENGTH_SHORT).show()
             else {
-                selectedContacts.add(User.getCurrentUser()!!)
+
                 intent = Intent(this, SplittingActivity::class.java)
                 intent.putParcelableArrayListExtra("selectedContacts", selectedContacts)
                 intent.putExtra("title", title)
@@ -150,9 +151,7 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
             Toast.makeText(baseContext, "You must accept to continue", Toast.LENGTH_LONG).show()
             requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),100)
         } else {
-            println("GIA' ACCETTATA")
             setView()
-
         }
 
     }
@@ -195,6 +194,7 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
             holder.name.text = list[position].get("username").toString().capitalize()
             holder.number.text = list[position].get("phone").toString()
             holder.icon_text.text = list[position].get("username").toString().capitalize()[0].toString()
+            Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
             holder.checkBox_select.setOnCheckedChangeListener {buttonView, isChecked ->
                 val contact = list[position]
                 //contact.image=list[position].image
