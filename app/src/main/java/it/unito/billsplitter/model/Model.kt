@@ -375,6 +375,20 @@ class Model private constructor()   {
         return true
     }
 
+    fun setPaid(id_split: ParseObject,id_user: ParseUser, value: Boolean): Boolean{
+        val query =  ParseQuery.getQuery<ParseObject>("Transaction")
+        query.whereEqualTo("id_split", id_split)
+        query.whereEqualTo("id_user" , id_user)
+
+        val obj = query.find().get(0)
+        if(obj!=null){
+            obj.put("paid",value)
+            obj.save()
+            return true
+        }
+        else return false
+    }
+
     fun sendPaymentNotification(member: ArrayList<SplitMember>, id_split: String){
         var list: ArrayList<String> = ArrayList<String>()
 

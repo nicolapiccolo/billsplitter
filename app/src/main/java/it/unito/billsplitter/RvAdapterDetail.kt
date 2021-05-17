@@ -15,12 +15,13 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
+import it.unito.billsplitter.activity.CellClickListenerDetail
 import it.unito.billsplitter.activity.CellClickListener
 import it.unito.billsplitter.model.Contact
 import it.unito.billsplitter.model.SplitMember
 
 
-class RvAdapterDetail(private val cellClickListener: CellClickListener, private val dataList: ArrayList<SplitMember>) : RecyclerView.Adapter<RvAdapterDetail.ViewHolder>() {
+class RvAdapterDetail(private val cellClickListener: CellClickListenerDetail, private val dataList: ArrayList<SplitMember>) : RecyclerView.Adapter<RvAdapterDetail.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -40,9 +41,14 @@ class RvAdapterDetail(private val cellClickListener: CellClickListener, private 
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
 
         val data = dataList.get(p1)
-        p0.itemView.setOnClickListener {
-            //cellClickListener.onCellClickListener(data)
-        }
+
+
+        if(!data.owner){
+            p0.itemView.setOnLongClickListener {
+                cellClickListener.onCellClickListener(data)
+                true
+            }
+
 
         p0.name?.text = data.name.capitalize()
         p0.share?.text = data.share

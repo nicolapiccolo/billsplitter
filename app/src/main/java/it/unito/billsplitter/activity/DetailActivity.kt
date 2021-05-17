@@ -11,15 +11,16 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.parse.ParseObject
 import it.unito.billsplitter.*
-import it.unito.billsplitter.fragment.AsyncTaskFragmentListener
 import it.unito.billsplitter.fragment.DetailMySplitFragment
 import it.unito.billsplitter.fragment.DetailOtherSplitFragment
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
+import it.unito.billsplitter.AsyncTaskFragmentListener
+import it.unito.billsplitter.model.SplitMember
 import kotlinx.android.synthetic.main.activity_detail.*
 
 
-class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTaskListener {
+class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTaskListener, UpdatePayListener {
 
     companion object{
         const val ID = 1
@@ -123,7 +124,7 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
 
     private fun setFragment(mySplit: MySplit){
         val bundle = Bundle()
-        bundle.putSerializable("split", mySplit)
+        bundle.putParcelable("split", mySplit)
         bundle.putString("id_split",split?.objectId)
 
         showMenu(isMySplit)
@@ -167,6 +168,12 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
         }
     }
 
+    override fun sendResult(result: Boolean) {
+        println("RELOAD")
+        finish();
+        startActivity(getIntent());
+    }
+
     override fun sendData(result: Boolean) {
         val intent = Intent()
         setResult(RESULT_OK, intent);
@@ -181,5 +188,9 @@ class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTas
 interface MenuClick{
     fun closeSplit(s: ParseObject?)
     fun modifySplit(s: ParseObject?)
+}
+
+interface CellClickListenerDetail {
+    fun onCellClickListener(data: SplitMember?)
 }
 

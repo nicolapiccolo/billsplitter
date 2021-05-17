@@ -3,5 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="SENDER_ID">1001564553157</string>
+    <string name="yes">"Yes"</string>
+    <string name="no">"No"</string>
+    <string name="titlePaid">"Confirming Payment"</string>
+    <string name="titleNotPaid">Undo Payment</string>
+    <string name="contentPaid">Do you want to confirm the payment?</string>
+    <string name="contentNotPaid">do you want to undo the payment?</string>
+
 
 </resources>

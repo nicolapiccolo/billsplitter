@@ -1,39 +1,56 @@
 package it.unito.billsplitter.fragment
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.Auth
 import com.parse.FunctionCallback
 import com.parse.ParseCloud
 import com.parse.ParseException
 import com.parse.ParseObject
-import it.unito.billsplitter.R
-import it.unito.billsplitter.RvAdapterDetail
+import it.unito.billsplitter.*
 import it.unito.billsplitter.activity.CellClickListener
+import it.unito.billsplitter.activity.CellClickListenerDetail
 import it.unito.billsplitter.activity.MenuClick
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
 import it.unito.billsplitter.model.Model
 import kotlinx.android.synthetic.main.fragment_my_split.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
-class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
+class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,UpdateTaskListener {
+
+    private lateinit var id_split: String
+    private lateinit var split: ParseObject
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val mySplit: MySplit = (arguments?.getSerializable("split") as MySplit?)!!
-        val id_split: String = (arguments?.getString("id_split"))!!
+        val mySplit: MySplit = (arguments?.getParcelable("split") as MySplit?)!!
+        id_split = (arguments?.getString("id_split"))!!
+
+        runBlocking {
+            val job = launch(Dispatchers.Default) {
+                split = Model.instance.getSplit(id_split)!!
+            }
+        }
 
         println("MS: " + mySplit.name)
         println("MS: " + mySplit.memberList)
@@ -82,10 +99,6 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
         Model.instance.sendPaymentNotification(member,id_split)
     }
 
-    override fun onCellClickListener(data: ParseObject?) {
-
-    }
-
     override fun closeSplit(s: ParseObject?) {
         println("CLOSE SPLIT")
     }
@@ -98,9 +111,48 @@ class DetailMySplitFragment : Fragment(), CellClickListener, MenuClick {
         fun newIstance():Fragment = DetailMySplitFragment()
     }
 
-}
+    override fun onCellClickListener(data: SplitMember?) {
+        Toast.makeText(context, "Long Click to: ${data?.name}, is ${data?.paid}", Toast.LENGTH_LONG).show()
 
-interface AsyncTaskFragmentListener {
-    fun giveProgress(progress: Int?)
-    fun sendData(mySplit: MySplit)
+        if (data!=null) confirmDialogPaid(data)
+    }
+
+    private fun confirmDialogPaid(data: SplitMember) {
+        val name = data.name.capitalize()
+        val user = data.user
+        val paid : Boolean = data.paid
+
+
+        val builder = AlertDialog.Builder(context)
+        if(!paid){
+            builder.setTitle(R.string.titlePaid)
+            builder.setMessage(R.string.contentPaid)
+        }
+        else{
+            builder.setTitle(R.string.titleNotPaid)
+            builder.setMessage(R.string.contentNotPaid)
+        }
+
+        builder.setPositiveButton(R.string.yes) { dialog, which ->
+            //showProgressBar(true)
+            //UpdateDataAsyncTask(this).execute(split)
+
+            Toast.makeText(context, "Confirming payment to: ${name}", Toast.LENGTH_SHORT).show()
+            UpdatePayAsyncTask(requireContext(),!paid).execute(split,user)
+        }
+
+        builder.setNegativeButton(R.string.no) { dialog, which ->
+        }
+
+        builder.show()
+    }
+
+    override fun giveProgress(progress: Int?) {
+        println("give progress")
+    }
+
+    override fun sendData(result: Boolean) {
+        if (result) println("update DONE")
+        else println("update NOT DONE")
+    }
 }
