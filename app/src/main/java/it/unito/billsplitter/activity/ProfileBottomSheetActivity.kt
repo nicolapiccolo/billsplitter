@@ -12,17 +12,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.parse.ParseException
-import com.parse.ParseUser
 import it.unito.billsplitter.ChangePasswordAsync
 import it.unito.billsplitter.R
-import it.unito.billsplitter.UpdateDataAsyncTask
-import it.unito.billsplitter.UpdateTaskListener
-import it.unito.billsplitter.fragment.AsyncTaskFragmentListener
-import it.unito.billsplitter.model.Model
-import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.User
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.change_password_dialog.*
 import kotlinx.android.synthetic.main.change_password_dialog.view.*
 import kotlinx.android.synthetic.main.profile_bottomsheet_fragment.*
