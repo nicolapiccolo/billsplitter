@@ -16,5 +16,6 @@
     <color name="grey">#DBDBDB</color>
     <color name="red">#EE3B3E</color>
     <color name="green">#47C397</color>
-    <color name="icon_stock">#2baf2b</color>
+    <color name="icon_stock">#42bd41</color>
+    <color name="icon_paid">#91a7ff</color>
 </resources>

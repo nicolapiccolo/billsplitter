@@ -16,6 +16,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import it.unito.billsplitter.activity.CellClickListenerDetail
+import it.unito.billsplitter.activity.CellClickListener
+import it.unito.billsplitter.model.Contact
 import it.unito.billsplitter.model.SplitMember
 
 
@@ -40,12 +42,12 @@ class RvAdapterDetail(private val cellClickListener: CellClickListenerDetail, pr
 
         val data = dataList.get(p1)
 
+
         if(!data.owner){
             p0.itemView.setOnLongClickListener {
                 cellClickListener.onCellClickListener(data)
                 true
             }
-        }
 
 
         p0.name?.text = data.name.capitalize()
@@ -64,29 +66,7 @@ class RvAdapterDetail(private val cellClickListener: CellClickListenerDetail, pr
             p0.img?.text = ""
         }
 
-        setColor(getRandomMaterialColor())
-
-
-    }
-
-    private fun getRandomMaterialColor(typeColor: String = "300"): Int {
-        var returnColor: Int = Color.GRAY
-
-        val arrayId: Int = context.getResources().getIdentifier("mdcolor_$typeColor", "array", context.getPackageName())
-        if (arrayId != 0) {
-            val colors: TypedArray = context.getResources().obtainTypedArray(arrayId)
-            val index = (Math.random() * colors.length()).toInt()
-            returnColor = colors.getColor(index, Color.GRAY)
-            colors.recycle()
-        }
-        return returnColor
-    }
-
-    private fun setColor(color: Int){
-
-        val unwrappedDrawable: Drawable? = AppCompatResources.getDrawable(context, R.drawable.circle_icon)
-        val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable!!)
-        DrawableCompat.setTint(wrappedDrawable, color)
+        Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
