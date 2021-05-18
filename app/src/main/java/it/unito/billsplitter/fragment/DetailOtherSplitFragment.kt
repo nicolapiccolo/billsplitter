@@ -10,19 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.paypal.android.sdk.payments.*
-import com.paypal.checkout.approve.OnApprove
-import com.paypal.checkout.cancel.OnCancel
-import com.paypal.checkout.createorder.CreateOrder
-import com.paypal.checkout.createorder.CurrencyCode
-import com.paypal.checkout.createorder.OrderIntent
-import com.paypal.checkout.createorder.UserAction
-import com.paypal.checkout.error.OnError
-import com.paypal.checkout.order.Amount
-import com.paypal.checkout.order.AppContext
-import com.paypal.checkout.order.Order
-import com.paypal.checkout.order.PurchaseUnit
-import it.unito.billsplitter.Config
 import it.unito.billsplitter.R
 import it.unito.billsplitter.RvAdapterDetail
 import it.unito.billsplitter.activity.CellClickListenerDetail
@@ -46,10 +33,6 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail {
         }
     }
 
-    val config: PayPalConfiguration = PayPalConfiguration()
-        .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
-        .clientId(Config.PAYPAL_CLIENT_ID)
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     }
@@ -68,51 +51,15 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail {
 
         displaySplit(mySplit)
 
-        s_btnSend.setup(
-            createOrder = CreateOrder { createOrderActions ->
-                val order = Order(
-                    intent = OrderIntent.CAPTURE,
-                    appContext = AppContext(
-                        userAction = UserAction.PAY_NOW
-                    ),
-                    purchaseUnitList = listOf(
-                        PurchaseUnit(
-                            amount = Amount(
-                                currencyCode = CurrencyCode.EUR,
-                                value = "0.10"
-                            )
-                        )
-                    )
-                )
 
-                createOrderActions.create(order)
-            },
-            onApprove = OnApprove { approval ->
-                approval.orderActions.capture { captureOrderResult ->
-                    Log.i("CaptureOrder", "CaptureOrderResult: $captureOrderResult")
-                }
-            },
-            onCancel = OnCancel {
-                Log.d("OnCancel", "Buyer canceled the PayPal experience.")
-            },
-            onError = OnError { errorInfo ->
-                Log.d("OnError", "Error: $errorInfo")
-            }
-
-
-        )
     }
 
     override fun onDestroy() {
-        activity?.stopService(Intent(context,PayPalService::class.java))
         super.onDestroy()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
         return inflater.inflate(R.layout.fragment_other_split, container, false)
-        val intent: Intent = Intent(context,PayPalService::class.java)
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config)
-        activity?.startService(intent)
     }
 
 
