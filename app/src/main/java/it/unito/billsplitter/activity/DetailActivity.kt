@@ -24,7 +24,10 @@ class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTask
 
     companion object{
         const val ID = 1
+        var modified: Boolean = false
     }
+
+    //private var modified: Boolean = false
     private lateinit var menu : Menu
     private var isMySplit: Boolean = false
     private var menuFragment: MenuClick? = null
@@ -34,6 +37,8 @@ class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTask
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+         //per capire quando l'utente ha modificato lo split
+        
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.detail_toolbar) as Toolbar
 
         setSupportActionBar(toolbar)
@@ -63,7 +68,20 @@ class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTask
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         return when (item.getItemId()) {
-            R.id.action_modify -> {
+             android.R.id.home -> {
+                 println("HOME: " + modified)
+                 val intent = Intent()
+                 if(modified) {
+                     setResult(RESULT_OK, intent)
+                 }
+                 else {
+                     setResult(RESULT_CANCELED, intent)
+                 }
+                 finish()
+                 true
+             }
+
+             R.id.action_modify -> {
                 //addSomething()
                 showProgressBar(true)
                 menuFragment?.modifySplit(split)
@@ -170,8 +188,10 @@ class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTask
 
     override fun sendResult(result: Boolean) {
         println("RELOAD")
-        finish();
-        startActivity(getIntent());
+        recreate()
+        //finish();
+        //startActivity(getIntent());
+        DetailActivity.modified = true
     }
 
     override fun sendData(result: Boolean) {

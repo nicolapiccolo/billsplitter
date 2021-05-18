@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.parse.ParseObject
 import com.paypal.android.sdk.payments.*
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
@@ -26,10 +25,7 @@ import com.paypal.checkout.order.PurchaseUnit
 import it.unito.billsplitter.Config
 import it.unito.billsplitter.R
 import it.unito.billsplitter.RvAdapterDetail
-import it.unito.billsplitter.activity.CellClickListener
 import it.unito.billsplitter.activity.CellClickListenerDetail
-import it.unito.billsplitter.activity.MainActivity
-import it.unito.billsplitter.activity.PaymentDetails
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
 import kotlinx.android.synthetic.main.fragment_other_split.*
@@ -45,8 +41,6 @@ import java.math.BigDecimal
 class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail {
 
     companion object {
-        val PAYPAL_REQUEST_CODE = 7171
-
         fun newIstance(): Fragment{
             return DetailOtherSplitFragment()
         }
@@ -132,40 +126,6 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail {
         s_txtDate.text = split.date
         s_txtShare.text = split.share
     }
-
-    private fun processPayment(amount: String){
-        val payPalPayment: PayPalPayment = PayPalPayment(BigDecimal(0.1),"EUR","Donate",PayPalPayment.PAYMENT_INTENT_SALE)
-        val intent = Intent(context, PaymentActivity::class.java)
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config)
-        intent.putExtra(PaymentActivity.EXTRA_PAYMENT,payPalPayment)
-        startActivityForResult(intent, PAYPAL_REQUEST_CODE)
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == PAYPAL_REQUEST_CODE){
-            if(resultCode == RESULT_OK) {
-                val confirmation: PaymentConfirmation? = data?.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
-                if(confirmation != null){
-                    try{
-                        val paymentDetails: String = confirmation.toJSONObject().toString(4)
-                        startActivity(Intent(context, PaymentDetails::class.java)
-                            .putExtra("PaymentDetails",paymentDetails)
-                            .putExtra("PaymentAmount",0.1))
-
-
-                    }catch(e: JSONException){
-                        println(e.message)
-                    }
-                }
-            }
-            else if(resultCode == Activity.RESULT_CANCELED)
-                println("CANCEL")
-        }
-        else if(resultCode ==   PaymentActivity.RESULT_EXTRAS_INVALID)
-            println("INVALID")
-    }
-
 
     override fun onCellClickListener(data: SplitMember?) {
         println("Not yet implemented")

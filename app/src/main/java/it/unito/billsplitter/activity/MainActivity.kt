@@ -84,7 +84,8 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
         //Toast.makeText(baseContext, "Card Click", Toast.LENGTH_LONG).show()
         intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("split", data)
-        startActivityForResult(intent,3)
+        startActivityForResult(intent,DetailActivity.ID)
+        DetailActivity.modified = false
     }
 
 
@@ -163,11 +164,16 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
         super.onActivityResult(requestCode, resultCode, data)
 
         // Check that it is the SecondActivity with an OK result
+        println("${requestCode} + ${resultCode}")
         if (requestCode == DetailActivity.ID || requestCode == CreateSplitActivity.ID || requestCode == 3) {
             if (resultCode == Activity.RESULT_OK) {
                 println("AGGIORNA DATI")
                 hideView()
                 LoadDataAsyncTask(this).execute(true) //thread caricamento dati
+                LoadHistAsyncTask(this).execute(true) //thread caricamento history
+            }
+            else{
+                println("NON AGGIORNARE")
             }
         }
     }

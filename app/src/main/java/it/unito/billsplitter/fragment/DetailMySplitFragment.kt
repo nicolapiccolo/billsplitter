@@ -22,6 +22,7 @@ import com.parse.ParseObject
 import it.unito.billsplitter.*
 import it.unito.billsplitter.activity.CellClickListener
 import it.unito.billsplitter.activity.CellClickListenerDetail
+import it.unito.billsplitter.activity.DetailActivity
 import it.unito.billsplitter.activity.MenuClick
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
@@ -152,7 +153,9 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
     }
 
     override fun sendData(result: Boolean) {
-        if (result) println("update DONE")
+        if (result){
+            println("update DONE")
+        }
         else println("update NOT DONE")
     }
 }
