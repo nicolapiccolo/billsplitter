@@ -391,6 +391,19 @@ class Model private constructor()   {
         else return false
     }
 
+    fun setDate(id_split: ParseObject) :Boolean{
+        val query =  ParseQuery.getQuery<ParseObject>("Split")
+        query.whereEqualTo("objectId", id_split.objectId)
+
+        val obj = query.find().get(0)
+        if(obj!=null){
+            obj.put("notify", Date())
+            obj.save()
+            return true
+        }
+        else return false
+    }
+
     fun sendPaymentNotification(member: ArrayList<SplitMember>, id_split: String){
         var list: ArrayList<String> = ArrayList<String>()
 
