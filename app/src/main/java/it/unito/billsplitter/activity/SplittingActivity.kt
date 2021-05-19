@@ -2,18 +2,21 @@ package it.unito.billsplitter.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseUser
@@ -78,6 +81,7 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
         private var list = items
         private var context = ctx
         //true for seekbar, false for edittext
+        private var focus:Boolean = false
         private var seekbarList:ArrayList<SeekBar> = ArrayList()
         private var txtPrices: ArrayList<EditText> = ArrayList()
         private var lockedPerc: Int = 0
@@ -91,17 +95,23 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
             return list.size
         }
 
-        private fun remaining(position: Int,seekbarList: ArrayList<SeekBar>): Int{
-            var rem: Int=100; var c:Int=0
+        private fun remainingPercentage(position: Int,seekbarList: ArrayList<SeekBar>): Int{
+            var rem: Int=100
             for (i in 0..seekbarList.size-1){
                 if(i==position || !seekbarList[i].isEnabled)
                     rem -=seekbarList[i].progress
-                else
-                    c++
             }
-            if(c==0)
-                c=1
-            return rem/c
+            return rem
+        }
+
+        private fun remainingShare(position: Int, txtPrices: ArrayList<EditText>):Float{
+            var rem: Float= total
+            for (i in 0..txtPrices.size-1){
+                if(i==position || !txtPrices[i].isEnabled)
+                    rem -= Split.getFormatFoat(txtPrices[i].text.toString())
+
+            }
+            return rem
         }
 
         private fun getPercentage(share: Float):Int{
@@ -123,13 +133,21 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
         }
 
         private fun updateSeekBar(seekbarList: ArrayList<SeekBar>, position: Int){
-            val remain = remaining(position, seekbarList)
-            if (remain<=0) {
-                seekbarList[position].setProgress(100-remainingSeek(seekbarList, position)-lockedPerc)
+            var remain = remainingPercentage(position, seekbarList)
+            val c = remainingSeek(seekbarList,position)
+            if(c==0){
+                seekbarList[position].setProgress(100-lockedPerc)
             }
-            for (i in 0..seekbarList.size - 1) {
-                if (i != position && seekbarList[i].isEnabled) {
-                    seekbarList[i].setProgress(remain)
+            else{
+                remain/=c
+                println(remain)
+                if (remain<=0) {
+                    seekbarList[position].setProgress(100-c-lockedPerc)
+                }
+                for (i in 0..seekbarList.size - 1) {
+                    if (i != position && seekbarList[i].isEnabled) {
+                        seekbarList[i].setProgress(remain)
+                    }
                 }
             }
         }
@@ -137,14 +155,32 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
         private fun updateShare(seekbarList: ArrayList<SeekBar>, txtPrices: ArrayList<EditText>){
             for (i in 0..seekbarList.size - 1) {
                 list[i].share = ((total*seekbarList[i].progress)/100).toString()
-                txtPrices[i].setText(Split.getFormatFoat(list[i].share))
+                txtPrices[i].setText((Split.getFormatFoat(list[i].share)).toString())
             }
         }
 
         private fun updateFromEditText(seekbarList: ArrayList<SeekBar>, txtPrices: ArrayList<EditText>, position: Int){
-            for (i in 0..seekbarList.size - 1) {
-                if(i!=position && seekbarList[i].isEnabled){
-                    txtPrices[i].setText(Split.getFormatFoat(getShare(seekbarList[i].progress).toString()))
+            var remain = remainingShare(position, txtPrices)
+            val c = remainingSeek(seekbarList,position)
+            if(c==0){
+                txtPrices[position].setText((getShare(100-lockedPerc)).toString())
+            }
+            else{
+                remain = remain/c
+                if (remain<=0){
+                    txtPrices[position].setText((getShare(100-c-lockedPerc)).toString())
+                    for (i in 0..seekbarList.size - 1) {
+                        if(i!=position && seekbarList[i].isEnabled){
+                            txtPrices[i].setText((getShare(seekbarList[i].progress)).toString())
+                        }
+                    }
+                }
+                else{
+                    for (i in 0..seekbarList.size - 1) {
+                        if(i!=position && seekbarList[i].isEnabled){
+                            txtPrices[i].setText(remain.toString())
+                        }
+                    }
                 }
             }
         }
@@ -160,7 +196,7 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
                 holder.icon_text.text = list[position].name[0].toString().capitalize()
             }
             Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
-            holder.price.setText(Split.getFormatFoat(list[position].share))
+            holder.price.setText((Split.getFormatFoat(list[position].share)).toString())
             holder.seekBar.setProgress((100/list.size))
             holder.percentage.text = (100/list.size).toString()
             txtPrices.add(holder.price)
@@ -168,10 +204,15 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
             holder.seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     holder.percentage.text = progress.toString()
-                    holder.price.setText(Split.getFormatFoat(((total*progress)/100).toString()))
+                    if(focus){
+                        holder.price.setText((Split.getFormatFoat(((total*progress)/100).toString())).toString())
+                        focus=!focus
+                    }
 
                 }
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    focus = true
+                }
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
                     updateSeekBar(seekbarList,position)
                     updateShare(seekbarList, txtPrices)
@@ -183,12 +224,14 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
                     holder.state = false
                     holder.loker.setBackgroundResource(R.drawable.ic_password)
                     holder.seekBar.setEnabled(true)
+                    holder.price.setEnabled(true)
                     lockedPerc-=holder.seekBar.progress
                 }else{
                     //lock
                     holder.state = true
                     holder.loker.setBackgroundResource(R.drawable.ic_lock)
                     holder.seekBar.setEnabled(false)
+                    holder.price.setEnabled(false)
                     lockedPerc+=holder.seekBar.progress
                 }
             }
@@ -198,16 +241,10 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
                 override fun onFocusChange(view: View, hasFocus: Boolean) {
                     if (!hasFocus) {
                         val share = getPercentage(holder.price.text.toString().toFloat())
-                        if (share<=(100-remainingSeek(seekbarList, position))){
                             holder.seekBar.setProgress(share)
                             updateSeekBar(seekbarList,position)
                             updateFromEditText(seekbarList,txtPrices,position)
-                        }
-                        else {
                             holder.price.setText( getShare(holder.seekBar.progress).toString())
-                        }
-                    } else {
-
                     }
                 }
             })
@@ -224,6 +261,23 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
             val loker = v.btnLocker
             var state: Boolean = false
         }
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm: InputMethodManager =
+                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 
     override fun giveProgress(progress: Int?) {
