@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
 
         val user = User.getCurrentUser()
         if (user==null) {
-            intent = Intent(this, SlidingActivity::class.java)
+            val intent = Intent(this, SlidingActivity::class.java)
             startActivity(intent)
         }
         else{
@@ -43,18 +43,22 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
             recyclerHistoryView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             icon_text.text = user.username.capitalize()[0].toString()
 
-            hideView()
-          
-            LoadDataAsyncTask(this).execute(false) //thread caricamento dati
-            LoadHistAsyncTask(this).execute(true)
-
-
             val intentExtra = intent.getStringExtra("RESULT")
-            println("EE : " +intentExtra)
+            println("Extra : " +intentExtra)
 
-            if(intentExtra != null) LoadDataAsyncTask(this).execute(true)  //thread caricamento dati
-            else LoadDataAsyncTask(this).execute(false) //non ricarico i dati
+            hideView()
 
+            if(intentExtra != null) {
+                println("RICARICO I DATI")
+                LoadDataAsyncTask(this).execute(true)
+                LoadHistAsyncTask(this).execute(true)
+            }
+            else {
+                println("NON RICARICO I DATI")
+                LoadDataAsyncTask(this).execute(false) //non ricarico i dati
+                LoadHistAsyncTask(this).execute(true)
+
+            }
 
             btnCreate.setOnClickListener {
                 intent = Intent(this, CreateSplitActivity::class.java)
@@ -70,6 +74,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
                 LoadHistAsyncTask(this).execute(true)
                 swiperefresh.isRefreshing = false
             }
+
             bottomSheet = ProfileBottomSheetActivity()
             icon.setOnClickListener{
                 bottomSheet.show(supportFragmentManager, "BottomSheetDialog")

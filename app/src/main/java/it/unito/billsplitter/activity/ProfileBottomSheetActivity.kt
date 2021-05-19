@@ -33,15 +33,15 @@ class ProfileBottomSheetActivity: BottomSheetDialogFragment(){
         txtPhone.text = User.getCurrentUser()?.get("phone").toString()
         icon_text.text = username[0].toString()
         btnChangePassword.setOnClickListener {
-            changePasswordDialog(context!!)
+            changePasswordDialog(requireContext())
         }
 
         btnLogOut.setOnClickListener {
             User.logOut()
-            val intent = Intent(context, MainActivity::class.java)
+            activity?.finish()
+            val intent = Intent(context, SlidingActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-            activity?.finish()
         }
     }
 
