@@ -40,8 +40,9 @@ class Split(var name: String, var total: String, var date: String, var owner: St
             return nn.toFloat()
         }
 
-        fun getFormatFoat(n: String): String{
-            return "${"%.2f".format(n.toFloat())}"
+        fun getFormatFoat(n: String): Float{
+            val number = "${"%.2f".format(n.toFloat())}".replace(",",".")
+            return number.toFloat()
         }
 
     }
