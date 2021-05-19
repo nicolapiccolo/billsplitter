@@ -1,36 +1,31 @@
 package it.unito.billsplitter.fragment
 
 import android.app.AlertDialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.content.IntentSender
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.auth.api.Auth
-import com.parse.FunctionCallback
-import com.parse.ParseCloud
-import com.parse.ParseException
+import com.google.android.material.snackbar.Snackbar
 import com.parse.ParseObject
-import it.unito.billsplitter.*
-import it.unito.billsplitter.activity.CellClickListener
+import it.unito.billsplitter.R
+import it.unito.billsplitter.RvAdapterDetail
+import it.unito.billsplitter.UpdatePayAsyncTask
+import it.unito.billsplitter.UpdateTaskListener
 import it.unito.billsplitter.activity.CellClickListenerDetail
-import it.unito.billsplitter.activity.DetailActivity
 import it.unito.billsplitter.activity.MenuClick
+import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
-import it.unito.billsplitter.model.Model
+import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.fragment_my_split.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 
 class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,UpdateTaskListener {
@@ -47,11 +42,7 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
         val mySplit: MySplit = (arguments?.getParcelable("split") as MySplit?)!!
         id_split = (arguments?.getString("id_split"))!!
 
-        runBlocking {
-            val job = launch(Dispatchers.Default) {
-                split = Model.instance.getSplit(id_split)!!
-            }
-        }
+        getSplit()
 
         println("MS: " + mySplit.name)
         println("MS: " + mySplit.memberList)
@@ -70,7 +61,7 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
 
 
         //val split: ParseObject = arguments?.getParcelable("split")!! //ParseObject cliccato
-       //displaySplit(split)
+        //displaySplit(split)
 
     }
 
@@ -79,6 +70,13 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
        return inflater.inflate(R.layout.fragment_my_split, container, false)
     }
 
+    private fun getSplit(){
+        runBlocking {
+            val job = launch(Dispatchers.Default) {
+                split = Model.instance.getSplit(id_split)!!
+            }
+        }
+    }
 
 
     private fun displaySplit(split: MySplit){
@@ -97,7 +95,12 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
 
 
     private fun sendNotification(member: ArrayList<SplitMember>, id_split: String){
-        Model.instance.sendPaymentNotification(member,id_split)
+        if(shouldSend()){
+            Model.instance.sendPaymentNotification(member,id_split)
+            showSnackBar(getString(R.string.notificationSend))
+        }
+        else
+            showSnackBar(getString(R.string.notificationAlreadySend))
     }
 
     override fun closeSplit(s: ParseObject?) {
@@ -110,6 +113,7 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
 
     companion object {
         fun newIstance():Fragment = DetailMySplitFragment()
+        const val NUMBER_MILLISECONDS_BETWEEN_UPDATES = (1000L * 60L * 10L)
     }
 
     override fun onCellClickListener(data: SplitMember?) {
@@ -147,6 +151,52 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
 
         builder.show()
     }
+
+    private fun showSnackBar(message : String){
+        Snackbar.make(s_btnSend, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun saveLastUpdateTime() {
+        s_btnSend.isEnabled = false
+        runBlocking {
+            val job = launch {
+                Model.instance.setDate(split)
+                getSplit()
+            }
+            job.join() // wait until child coroutine completes
+            println("-- Done --")
+            s_btnSend.isEnabled = true
+
+        }
+    }
+
+    private fun getLastUpdate(): Long? {
+       if (split != null){
+           val date = split.getDate("notify")
+           if (date!=null) return date.time
+           else return -1
+       }
+       else return -1
+    }
+
+
+    private fun shouldSend(): Boolean{
+        val lastUpdate: Long? = getLastUpdate()
+        println(lastUpdate)
+        val now : Long = Date().time
+
+        if(lastUpdate == -1L){
+            saveLastUpdateTime()
+            return true
+        }
+        else if((now - lastUpdate!!) > NUMBER_MILLISECONDS_BETWEEN_UPDATES){
+            saveLastUpdateTime()
+            return true
+        }
+        else
+            return false
+    }
+
 
     override fun giveProgress(progress: Int?) {
         println("give progress")

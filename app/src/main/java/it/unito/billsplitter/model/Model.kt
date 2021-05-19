@@ -327,6 +327,8 @@ class Model private constructor()   {
         members.forEach {
             createTransaction(it, mysplit)
         }
+
+        sendNewSplitNotification(members,mysplit.objectId)
         return true
     }
 
@@ -389,6 +391,19 @@ class Model private constructor()   {
         else return false
     }
 
+    fun setDate(id_split: ParseObject) :Boolean{
+        val query =  ParseQuery.getQuery<ParseObject>("Split")
+        query.whereEqualTo("objectId", id_split.objectId)
+
+        val obj = query.find().get(0)
+        if(obj!=null){
+            obj.put("notify", Date())
+            obj.save()
+            return true
+        }
+        else return false
+    }
+
     fun sendPaymentNotification(member: ArrayList<SplitMember>, id_split: String){
         var list: ArrayList<String> = ArrayList<String>()
 
@@ -410,7 +425,33 @@ class Model private constructor()   {
                 println(e.message)
         })
     }
-  
+
+
+    fun sendNewSplitNotification(member: ArrayList<SplitMember>, id_split: String){
+        var list: ArrayList<String> = ArrayList<String>()
+
+        member.forEach{
+            if(!it.user.objectId.equals(User.getCurrentUser()?.objectId) && !it.paid) list.add(it.user.objectId)
+        }
+
+        val map = HashMap<String, Any>()
+        map["userList"] = list
+        map["id_split"] = id_split
+        // here you can send parameters to your cloud code functions
+        // such parameters can be the channel name, array of users to send a push to and more...
+
+        ParseCloud.callFunctionInBackground("test2", map, FunctionCallback<Any?> { `object`, e ->
+            // handle callback
+            if (e == null)
+                println(`object`)
+            else
+                println(e.message)
+        })
+    }
+
+
+
+
     companion object {
         @JvmStatic val instance = Model()
     }

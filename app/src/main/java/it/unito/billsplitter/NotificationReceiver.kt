@@ -71,6 +71,7 @@ class NotificationReceiver: ParsePushBroadcastReceiver() {
                 .setContentText(alert)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true)
 
 
         with(NotificationManagerCompat.from(context!!)) {
