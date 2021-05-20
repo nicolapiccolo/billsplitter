@@ -22,6 +22,14 @@ import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.fragment_my_split.*
+import kotlinx.android.synthetic.main.fragment_my_split.icon_text
+import kotlinx.android.synthetic.main.fragment_my_split.s_btnSend
+import kotlinx.android.synthetic.main.fragment_my_split.s_recyclerView
+import kotlinx.android.synthetic.main.fragment_my_split.s_txtDate
+import kotlinx.android.synthetic.main.fragment_my_split.s_txtName
+import kotlinx.android.synthetic.main.fragment_my_split.s_txtTitle
+import kotlinx.android.synthetic.main.fragment_my_split.s_txtTotal
+import kotlinx.android.synthetic.main.fragment_other_split.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -81,11 +89,18 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,Upd
 
     private fun displaySplit(split: MySplit){
 
+        s_txtTitle.measure(0, 0)
+        val height: Int = s_txtTitle.getMeasuredWidth()
+
+        println("H: " + height)
+        println("T: " + split.name.length)
+
         s_txtName.text = "You"
 
         icon_text.text = "Y"
 
-        s_txtTitle.text = split.name
+        val name = split.name.replace(" ", "\n")
+        s_txtTitle.text = name
         s_txtTotal.text = split.total
         s_txtDate.text = split.date
         s_txtGet.text = split.share

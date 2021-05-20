@@ -112,14 +112,17 @@
 
     <TextView
         android:id="@+id/s_txtTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="24dp"
-        android:text="Cinema"
         android:fontFamily="@font/robo_medium"
-        android:textSize="20dp"
+        android:singleLine="false"
+        android:ellipsize="end"
+        android:text="Cinema"
         android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/s_txtDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -153,14 +156,14 @@
         android:id="@+id/s_txtShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="40dp"
-        android:text="€ 10,25"
         android:fontFamily="@font/robo_bold"
-        android:textSize="36dp"
+        android:text="€ 10,25"
         android:textColor="@color/white"
+        android:textSize="36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/s_txtDate" />
+        app:layout_constraintTop_toTopOf="@+id/textView11" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
