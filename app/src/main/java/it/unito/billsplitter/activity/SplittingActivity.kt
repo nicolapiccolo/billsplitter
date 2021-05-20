@@ -140,7 +140,6 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
             }
             else{
                 remain/=c
-                println(remain)
                 if (remain<=0) {
                     seekbarList[position].setProgress(100-c-lockedPerc)
                 }
@@ -156,6 +155,14 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
             for (i in 0..seekbarList.size - 1) {
                 list[i].share = ((total*seekbarList[i].progress)/100).toString()
                 txtPrices[i].setText((Split.getFormatFoat(list[i].share)).toString())
+            }
+        }
+
+        private fun updateBars(txtPrices: ArrayList<EditText>, seekbarList: ArrayList<SeekBar>){
+            for (i in 0..txtPrices.size - 1) {
+                list[i].share = txtPrices[i].text.toString()
+                seekbarList[i].setProgress(getPercentage(list[i].share.toFloat()))
+                println(txtPrices[i].text)
             }
         }
 
@@ -208,7 +215,6 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
                         holder.price.setText((Split.getFormatFoat(((total*progress)/100).toString())).toString())
                         focus=!focus
                     }
-
                 }
                 override fun onStartTrackingTouch(seekBar: SeekBar) {
                     focus = true
@@ -242,9 +248,8 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
                     if (!hasFocus) {
                         val share = getPercentage(holder.price.text.toString().toFloat())
                             holder.seekBar.setProgress(share)
-                            updateSeekBar(seekbarList,position)
                             updateFromEditText(seekbarList,txtPrices,position)
-                            holder.price.setText( getShare(holder.seekBar.progress).toString())
+                            updateBars(txtPrices, seekbarList)
                     }
                 }
             })
