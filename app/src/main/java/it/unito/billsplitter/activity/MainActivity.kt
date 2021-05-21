@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -124,6 +125,7 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
         txtCredit.setVisibility(View.GONE)
         txtDebt.setVisibility(View.GONE)
         txtSlash.setVisibility(View.GONE)
+        txtNoSplit.setVisibility(View.GONE)
         txtViewHystory.setVisibility(View.GONE)
         txtNoHistory.visibility = View.GONE
         recyclerHistoryView.setVisibility(View.GONE)
@@ -159,7 +161,14 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
             setTotal(give,have)
         }
         else{
+            adapter = RvAdapter(this, list)
+            recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+            recyclerView.setVisibility(View.VISIBLE)
             txtNoSplit.visibility = View.VISIBLE
+            val params: ViewGroup.LayoutParams = recyclerView.getLayoutParams()
+            params.height = 1000
+            recyclerView.setLayoutParams(params)
             progressBar.setVisibility(View.GONE)
         }
 

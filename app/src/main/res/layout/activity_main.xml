@@ -122,21 +122,6 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
         app:layout_constraintTop_toBottomOf="@+id/topLayout">
 
-
-        <TextView
-            android:id="@+id/txtNoSplit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="No pending split! Create One!"
-            android:fontFamily="@font/robo_regular"
-            android:textColor="@color/black"
-            android:textSize="14dp"
-            app:layout_constraintStart_toStartOf="@+id/centerLayout"
-            app:layout_constraintEnd_toEndOf="@+id/centerLayout"
-            app:layout_constraintTop_toTopOf="@+id/centerLayout"
-            app:layout_constraintBottom_toBottomOf="@+id/centerLayout"/>
-
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
@@ -174,10 +159,23 @@
                         tools:listitem="@layout/card">
                     </androidx.recyclerview.widget.RecyclerView>
                     <TextView
+                        android:id="@+id/txtNoSplit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:text="No pending split! Create One!"
+                        android:fontFamily="@font/robo_regular"
+                        android:textColor="@color/black"
+                        android:textSize="14dp"
+                        app:layout_constraintStart_toStartOf="@+id/swipeLayout"
+                        app:layout_constraintEnd_toEndOf="@+id/swipeLayout"
+                        app:layout_constraintTop_toTopOf="@+id/recyclerView"
+                        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"/>
+                    <TextView
                         android:id="@+id/txtViewHystory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
+                        android:layout_marginStart="32dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginBottom="24dp"
                         android:fontFamily="@font/robo_regular"
