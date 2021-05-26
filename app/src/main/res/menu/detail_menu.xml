@@ -4,13 +4,14 @@
         android:id="@+id/detail_menu_group">
         <item
             android:id="@+id/action_modify"
-            android:title="Modify percentage">
-        </item>
+            android:title="Modify Percentages"></item>
         <item
+            android:icon="@drawable/ic_password"
             android:id="@+id/action_close"
             android:title="Close the Split">
         </item>
         <item
+            android:icon="@drawable/ic_password"
             android:id="@+id/action_delete"
             android:title="Delete the Split">
         </item>

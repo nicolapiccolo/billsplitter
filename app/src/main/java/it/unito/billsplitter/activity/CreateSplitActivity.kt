@@ -10,12 +10,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import it.unito.billsplitter.R
 import kotlinx.android.synthetic.main.activity_title_split.*
-import kotlinx.android.synthetic.main.activity_total_split.*
 
 class CreateSplitActivity : AppCompatActivity() {
 
-    var title: String=""
-    var total: String=""
+    private var title: String=""
+    private var total: String=""
 
 
     private var isTitle = true
@@ -27,20 +26,25 @@ class CreateSplitActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_title_split)
         setTitle()
     }
 
     private fun setTitle(){
-        setContentView(R.layout.activity_title_split)
-
+        txt.setText("Enter the Bill Title")
+        edtInsertTitle.visibility=View.VISIBLE
+        edtInsertTotal.visibility = View.GONE
         isTitle = true
         toolbar = findViewById<Toolbar>(R.id.title_toolbar) as Toolbar
         setActionBar(toolbar!!)
+
     }
     private fun setTotal(){
-        setContentView(R.layout.activity_total_split)
+        txt.setText("Enter the Bill Total")
+        edtInsertTitle.visibility=View.GONE
+        edtInsertTotal.visibility = View.VISIBLE
         isTitle = false
-        toolbar = findViewById<Toolbar>(R.id.total_toolbar) as Toolbar
+        toolbar = findViewById<Toolbar>(R.id.title_toolbar) as Toolbar
         setActionBar(toolbar!!)
     }
 
@@ -51,7 +55,6 @@ class CreateSplitActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        println("ITEM")
         when (item.itemId) {
             android.R.id.home -> {
                 //val resId:Int = resources.getIdentifier("action_bar_container", "id", "android")
@@ -70,24 +73,25 @@ class CreateSplitActivity : AppCompatActivity() {
 
 
 
-    fun nextTitle(view: View){
-        if(edtInsertTitle.text.toString().equals(""))
-            Toast.makeText(this, "Title can't be empty!", Toast.LENGTH_SHORT).show()
-        else{
-            title=edtInsertTitle.text.toString()
-            setTotal()
+    fun nextBtn(view: View){
+        if (isTitle){
+            if(edtInsertTitle.text.toString().equals(""))
+                Toast.makeText(this, "Title can't be empty!", Toast.LENGTH_SHORT).show()
+            else{
+                title=edtInsertTitle.text.toString()
+                setTotal()
+            }
         }
-
+        else{
+            if (edtInsertTotal.text.toString().equals(""))
+                Toast.makeText(this, "Total can't be empty!", Toast.LENGTH_SHORT).show()
+            else{
+                intent = Intent(this, ContactActivity::class.java)
+                intent.putExtra("title", title)
+                intent.putExtra("total", edtInsertTotal.text.toString())
+                startActivity(intent)
+            }
+        }
     }
 
-    fun nextTotal(view: View){
-        if (edtInsertTotal.text.toString().equals(""))
-            Toast.makeText(this, "Total can't be empty!", Toast.LENGTH_SHORT).show()
-        else{
-            intent = Intent(this, ContactActivity::class.java)
-            intent.putExtra("title", title)
-            intent.putExtra("total", edtInsertTotal.text.toString())
-            startActivity(intent)
-        }
-    }
 }
