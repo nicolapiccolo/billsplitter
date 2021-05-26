@@ -2,7 +2,10 @@ package it.unito.billsplitter.activity
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,6 +21,10 @@ import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.AsyncTaskFragmentListener
 import it.unito.billsplitter.model.SplitMember
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.change_password_dialog.view.*
+import kotlinx.android.synthetic.main.confirm_action_dialog.*
+import kotlinx.android.synthetic.main.dialog_phone.*
+import kotlinx.android.synthetic.main.dialog_phone.btnSend
 
 
 class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTaskListener, UpdatePayListener {
@@ -101,37 +108,46 @@ class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTask
     }
 
     private fun confirmDialogClose(){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Closing Split")
-        builder.setMessage("Are you sure to close this split? ")
-
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+        val mDialogView = LayoutInflater.from(this!!).inflate(R.layout.confirm_action_dialog, null)
+        //AlertDialogBuilder
+        val mBuilder = android.app.AlertDialog.Builder(this!!)
+                .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+        mAlertDialog.txtConfirmTitle.setText("Closing Split")
+        mAlertDialog.txtDialogMessage.setText("Are you sure to close this split? ")
+        mAlertDialog.btnSend.setOnClickListener {
             showProgressBar(true)
             UpdateDataAsyncTask(this).execute(split)
+            mAlertDialog.dismiss()
         }
-
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-
+        mDialogView.btnCancel.setOnClickListener {
+            mAlertDialog.dismiss()
         }
-
-        builder.show()
     }
 
     private fun confirmDialogDelete(){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Deleting Split")
-        builder.setMessage("Are you sure to delete this split? ")
-
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+        val mDialogView = LayoutInflater.from(this!!).inflate(R.layout.confirm_action_dialog, null)
+        //AlertDialogBuilder
+        val mBuilder = android.app.AlertDialog.Builder(this!!)
+                .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+        mAlertDialog.txtConfirmTitle.setText("Deleting Split")
+        mAlertDialog.txtDialogMessage.setText("Are you sure to delete this split? ")
+        mAlertDialog.btnSend.setOnClickListener {
             showProgressBar(true)
             DeleteDataAsyncTask(this).execute(split)
+            mAlertDialog.dismiss()
+        }
+        mDialogView.btnCancel.setOnClickListener {
+            mAlertDialog.dismiss()
         }
 
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-
-        }
-
-        builder.show()
     }
 
     private fun showMenu(show: Boolean){

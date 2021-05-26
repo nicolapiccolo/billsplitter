@@ -194,7 +194,7 @@ class ContactActivity : AppCompatActivity(), LoadContactTaskListener {
             holder.name.text = list[position].get("username").toString().capitalize()
             holder.number.text = list[position].get("phone").toString()
             holder.icon_text.text = list[position].get("username").toString().capitalize()[0].toString()
-            Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
+            Contact.setColor(Contact.getRandomMaterialColor("400",context),context)
             holder.checkBox_select.setOnCheckedChangeListener {buttonView, isChecked ->
                 val contact = list[position]
                 //contact.image=list[position].image
