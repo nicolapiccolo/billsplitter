@@ -1,22 +1,35 @@
 package it.unito.billsplitter.activity
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.parse.ParseObject
 import it.unito.billsplitter.*
+import it.unito.billsplitter.model.PayPalAccount
 import it.unito.billsplitter.model.Split
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.change_password_dialog.*
+import kotlinx.android.synthetic.main.change_password_dialog.d_btnSend
+import kotlinx.android.synthetic.main.change_password_dialog.d_newPasswordConfirm
+import kotlinx.android.synthetic.main.change_password_dialog.view.*
+import kotlinx.android.synthetic.main.change_password_dialog.view.d_btnCancel
+import kotlinx.android.synthetic.main.login_paypal_dialog.*
+import kotlinx.android.synthetic.main.login_paypal_dialog.view.*
 
 
-class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, UpdateTaskListener, AsyncHistoryTaskListener {
+class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, UpdateTaskListener, AsyncHistoryTaskListener,LoadPayPalListener {
 
     private lateinit var adapter: RvAdapter
     private lateinit var bottomSheet: ProfileBottomSheetActivity
@@ -32,12 +45,15 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
         println("MAIN ACTIVITY")
 
         val user = User.getCurrentUser()
+
         if (user==null) {
             val intent = Intent(this, SlidingActivity::class.java)
             startActivity(intent)
         }
         else{
             setContentView(R.layout.activity_main)
+
+
 
             //Toast.makeText(baseContext, "Welcome back ${User.username}", Toast.LENGTH_LONG).show()
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -62,8 +78,17 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
             }
 
             btnCreate.setOnClickListener {
-                intent = Intent(this, CreateSplitActivity::class.java)
-                startActivityForResult(intent,CreateSplitActivity.ID)
+                println(User.email)
+                println(User.username)
+                //check se ha paypal collegato
+                if (User.isLinked()){
+                    intent = Intent(this, CreateSplitActivity::class.java)
+                    startActivityForResult(intent,CreateSplitActivity.ID)
+                }
+                else{
+                    Toast.makeText(baseContext, "Link PayPal", Toast.LENGTH_LONG).show()
+                    payPalDialog(this)
+                }
             }
 
             swiperefresh.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.blue))
@@ -77,8 +102,10 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
             }
 
             bottomSheet = ProfileBottomSheetActivity()
+
             icon.setOnClickListener{
-                bottomSheet.show(supportFragmentManager, "BottomSheetDialog")
+                if(!bottomSheet.isAdded())
+                    bottomSheet.show(supportFragmentManager, "BottomSheetDialog")
             }
 
         }
@@ -133,10 +160,53 @@ class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, Up
         progressBar.setVisibility(View.VISIBLE)
     }
 
+    private fun payPalDialog(ctx: Context){
+        val mDialogView = LayoutInflater.from(ctx).inflate(R.layout.login_paypal_dialog, null)
+        //AlertDialogBuilder
+        val mBuilder = AlertDialog.Builder(ctx)
+            .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
+
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        mAlertDialog.d_btnLogin.setOnClickListener {
+            if(!mDialogView.d_txtEmail.text.equals("") && !mDialogView.d_txtPassword.text.equals("")){
+
+                    val email = mDialogView.d_txtEmail.text.toString()
+                    val password = mDialogView.d_txtPassword.text.toString()
+
+                    val account = PayPalAccount(email,password)
+                    //showProgressBar(true)
+                    LoadPayPalAsyncTask(ctx).execute(account)
+
+                    if(User.isPayPalLinked){
+                        mAlertDialog.dismiss()
+                        intent = Intent(this, CreateSplitActivity::class.java)
+                        startActivityForResult(intent,CreateSplitActivity.ID)
+                    }
+            }
+            else
+                Toast.makeText(ctx, "Fields can't be empty!", Toast.LENGTH_SHORT).show()
+
+        }
+        mDialogView.d_btnCancel.setOnClickListener {
+            mAlertDialog.dismiss()
+        }
+    }
+
     override fun giveProgress(progress: Int?) {
         if (progress != null) {
             progressBar.setProgress(progress)
         }
+    }
+
+    override fun sendResult(result: Boolean) {
+        if (result){
+            Toast.makeText(this, "PayPal Linked Successfully", Toast.LENGTH_SHORT).show()
+        }
+        else Toast.makeText(this, "Incorrect Credentials! Please Retry", Toast.LENGTH_SHORT).show()
     }
 
     override fun sendData(result: Boolean) {

@@ -16,7 +16,6 @@ import com.parse.ParseInstallation
 import com.parse.ParseUser
 import it.unito.billsplitter.R
 import it.unito.billsplitter.activity.*
-import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_forgot_password.view.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
@@ -75,7 +74,7 @@ class LoginFragment : Fragment() {
             mAlertDialog.apply {
                 window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             }
-            mDialogView.btnSend.setOnClickListener {
+            mDialogView.d_btnSend.setOnClickListener {
                 mAlertDialog.dismiss()
                 ParseUser.requestPasswordResetInBackground(mDialogView.txtRestoreEmail.toString()) {e: ParseException? ->
                     if(e == null){
@@ -87,7 +86,7 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
-            mDialogView.btnCancel.setOnClickListener {
+            mDialogView.d_btnCancel.setOnClickListener {
                 mAlertDialog.dismiss()
             }
 

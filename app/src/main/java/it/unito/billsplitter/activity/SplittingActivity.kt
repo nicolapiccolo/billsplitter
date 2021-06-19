@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -15,7 +14,6 @@ import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,7 +46,7 @@ class SplittingActivity: AppCompatActivity(),CreateTaskListener{
         recyclerViewSplitting.adapter = SplittingAdapter(members,this, mysplit.total.toFloat())
 
 
-        btnSend.setOnClickListener {
+        d_btnSend.setOnClickListener {
             recyclerViewSplitting.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
             CreateDataAsyncTask(this).execute(mysplit,members)

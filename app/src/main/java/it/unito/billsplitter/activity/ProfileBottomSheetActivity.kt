@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import it.unito.billsplitter.ChangePasswordAsync
 import it.unito.billsplitter.R
@@ -63,11 +62,11 @@ class ProfileBottomSheetActivity: BottomSheetDialogFragment(){
         mAlertDialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-        mAlertDialog.btnSend.setOnClickListener {
-            if(!mDialogView.edtNewPassword.text.equals("") && !mDialogView.edtConfirmPassword.text.equals("")){
-                if(mDialogView.edtNewPassword.text.toString().equals(mDialogView.edtConfirmPassword.text.toString())){
+        mAlertDialog.d_btnSend.setOnClickListener {
+            if(!mDialogView.d_newPassword.text.equals("") && !mDialogView.d_newPasswordConfirm.text.equals("")){
+                if(mDialogView.d_newPassword.text.toString().equals(mDialogView.d_newPasswordConfirm.text.toString())){
                     showProgressBar(true)
-                    ChangePasswordAsync(ctx).execute(mDialogView.edtNewPassword.text.toString())
+                    ChangePasswordAsync(ctx).execute(mDialogView.d_newPassword.text.toString())
                     mAlertDialog.dismiss()
                 }
                 else
@@ -77,7 +76,7 @@ class ProfileBottomSheetActivity: BottomSheetDialogFragment(){
                 Toast.makeText(ctx, "Fields can't be empty!", Toast.LENGTH_SHORT).show()
 
         }
-        mDialogView.btnCancel.setOnClickListener {
+        mDialogView.d_btnCancel.setOnClickListener {
             mAlertDialog.dismiss()
         }
     }

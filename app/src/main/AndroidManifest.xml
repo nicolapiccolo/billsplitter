@@ -20,7 +20,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BillSplitter">
-        <activity android:name=".activity.PaymentDetails"></activity>
 
         <service android:name="com.parse.fcm.ParseFirebaseMessagingService">
             <intent-filter>
