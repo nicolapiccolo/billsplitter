@@ -1,4 +1,4 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 interface AsyncHistoryTaskListener {
     fun giveProgress(progress: Int?)

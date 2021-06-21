@@ -16,20 +16,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.parse.ParseObject
 import it.unito.billsplitter.*
+import it.unito.billsplitter.controller.*
 import it.unito.billsplitter.model.PayPalAccount
 import it.unito.billsplitter.model.Split
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.change_password_dialog.*
-import kotlinx.android.synthetic.main.change_password_dialog.d_btnSend
-import kotlinx.android.synthetic.main.change_password_dialog.d_newPasswordConfirm
-import kotlinx.android.synthetic.main.change_password_dialog.view.*
 import kotlinx.android.synthetic.main.change_password_dialog.view.d_btnCancel
 import kotlinx.android.synthetic.main.login_paypal_dialog.*
 import kotlinx.android.synthetic.main.login_paypal_dialog.view.*
 
 
-class MainActivity : AppCompatActivity(),CellClickListener,AsyncTaskListener, UpdateTaskListener, AsyncHistoryTaskListener,LoadPayPalListener {
+class MainActivity : AppCompatActivity(),CellClickListener, AsyncTaskListener, UpdateTaskListener,
+    AsyncHistoryTaskListener, LoadPayPalListener {
 
     private lateinit var adapter: RvAdapter
     private lateinit var bottomSheet: ProfileBottomSheetActivity

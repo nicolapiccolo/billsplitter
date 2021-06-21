@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import it.unito.billsplitter.ChangePasswordAsync
+import it.unito.billsplitter.controller.ChangePasswordAsync
 import it.unito.billsplitter.R
 import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.change_password_dialog.*

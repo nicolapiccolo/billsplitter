@@ -1,16 +1,16 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 import android.content.Context
 import android.os.AsyncTask
-import com.parse.ParseObject
 import it.unito.billsplitter.model.Model
-import it.unito.billsplitter.model.Split
+import it.unito.billsplitter.model.MySplit
+import it.unito.billsplitter.model.SplitMember
 
-class UpdateDataAsyncTask(context: Context): AsyncTask<ParseObject, Int, Boolean>(){
-    private var listener: UpdateTaskListener? = null
+class CreateDataAsyncTask(context: Context): AsyncTask<Any, Int, Boolean>(){
+    private var listener: CreateTaskListener? = null
 
     init {
-        listener = context as UpdateTaskListener
+        listener = context as CreateTaskListener
     }
 
     override fun onProgressUpdate(vararg values: Int?) {
@@ -18,18 +18,17 @@ class UpdateDataAsyncTask(context: Context): AsyncTask<ParseObject, Int, Boolean
         // This is called on the UI thread when you call
         // publishProgress() from doInBackground()
     }
+
     /** The system calls this to perform work in the UI thread and delivers the result from doInBackground() */
     override fun onPostExecute(result: Boolean) {
         listener?.sendData(result)
     }
 
-    override fun doInBackground(vararg params: ParseObject?): Boolean {
+    override fun doInBackground(vararg params: Any?): Boolean {
         val split = params[0]
+        val member = params[1]
 
-        if(split!=null){
-            Model.instance.closeSplit(split)
-            return true
-        }
+        if(split!=null && member!=null) return Model.instance.createSplit(split as MySplit, member as ArrayList<SplitMember>)
         else return false
     }
 }

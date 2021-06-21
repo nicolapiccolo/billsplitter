@@ -28,7 +28,7 @@
         </service>
 
         <receiver
-            android:name=".NotificationReceiver"
+            android:name=".controller.NotificationReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />

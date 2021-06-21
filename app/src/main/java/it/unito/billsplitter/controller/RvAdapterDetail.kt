@@ -1,10 +1,7 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 import it.unito.billsplitter.R
 import android.content.Context
-import android.content.res.TypedArray
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View

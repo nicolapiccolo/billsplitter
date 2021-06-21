@@ -18,15 +18,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseUser
-import it.unito.billsplitter.CreateDataAsyncTask
-import it.unito.billsplitter.CreateTaskListener
+import it.unito.billsplitter.controller.CreateDataAsyncTask
+import it.unito.billsplitter.controller.CreateTaskListener
 import it.unito.billsplitter.R
 import it.unito.billsplitter.model.*
 import kotlinx.android.synthetic.main.activity_setting_percentage.*
 import kotlinx.android.synthetic.main.splitting_card.view.*
 
 
-class SplittingActivity: AppCompatActivity(),CreateTaskListener{
+class SplittingActivity: AppCompatActivity(), CreateTaskListener {
 
     companion object{
         const val ID = 3

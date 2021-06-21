@@ -11,16 +11,17 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.parse.ParseObject
 import it.unito.billsplitter.*
+import it.unito.billsplitter.controller.*
 import it.unito.billsplitter.fragment.DetailMySplitFragment
 import it.unito.billsplitter.fragment.DetailOtherSplitFragment
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
-import it.unito.billsplitter.AsyncTaskFragmentListener
 import it.unito.billsplitter.model.SplitMember
 import kotlinx.android.synthetic.main.activity_detail.*
 
 
-class DetailActivity : AppCompatActivity(),AsyncTaskFragmentListener, UpdateTaskListener, UpdatePayListener {
+class DetailActivity : AppCompatActivity(), AsyncTaskFragmentListener, UpdateTaskListener,
+    UpdatePayListener {
 
     companion object{
         const val ID = 1

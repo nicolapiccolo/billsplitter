@@ -1,12 +1,9 @@
 package it.unito.billsplitter.activity
 
 
-import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
-import android.graphics.drawable.Drawable
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -17,24 +14,18 @@ import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.textservice.TextServicesManager
 import android.widget.CheckBox
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.view.get
-import it.unito.billsplitter.model.Model
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.parse.ParseUser
-import it.unito.billsplitter.LoadContactAsyncTask
-import it.unito.billsplitter.LoadContactTaskListener
+import it.unito.billsplitter.controller.LoadContactAsyncTask
+import it.unito.billsplitter.controller.LoadContactTaskListener
 import it.unito.billsplitter.R
 import it.unito.billsplitter.model.Contact
 import it.unito.billsplitter.model.User
@@ -42,7 +33,6 @@ import kotlinx.android.synthetic.main.activity_contacts_split.*
 import kotlinx.android.synthetic.main.contact_card.view.*
 
 
-import kotlinx.android.synthetic.main.splitting_card.view.*
 import kotlin.collections.ArrayList
 
 

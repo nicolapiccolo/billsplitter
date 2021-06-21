@@ -1,4 +1,4 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 interface UpdatePayListener {
     fun giveProgress(progress: Int?)

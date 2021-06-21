@@ -1,8 +1,7 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 import android.content.Context
 import android.os.AsyncTask
-import com.parse.ParseObject
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.PayPalAccount
 

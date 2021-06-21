@@ -1,4 +1,4 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 import com.parse.ParseObject
 

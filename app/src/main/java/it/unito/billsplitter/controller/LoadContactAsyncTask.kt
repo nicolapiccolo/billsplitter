@@ -1,11 +1,10 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 import android.content.Context
 import android.os.AsyncTask
 import com.parse.ParseUser
 import it.unito.billsplitter.model.Contact
 import it.unito.billsplitter.model.Model
-import it.unito.billsplitter.model.Split
 
 class LoadContactAsyncTask(context: Context) : AsyncTask<ArrayList<Contact>, Int, ArrayList<ParseUser>>() {
 

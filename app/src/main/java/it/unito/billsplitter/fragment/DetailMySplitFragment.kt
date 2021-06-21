@@ -1,7 +1,6 @@
 package it.unito.billsplitter.fragment
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.parse.ParseObject
 import it.unito.billsplitter.R
-import it.unito.billsplitter.RvAdapterDetail
-import it.unito.billsplitter.UpdatePayAsyncTask
-import it.unito.billsplitter.UpdateTaskListener
+import it.unito.billsplitter.controller.RvAdapterDetail
+import it.unito.billsplitter.controller.UpdatePayAsyncTask
+import it.unito.billsplitter.controller.UpdateTaskListener
 import it.unito.billsplitter.activity.CellClickListenerDetail
 import it.unito.billsplitter.activity.MenuClick
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
-import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.fragment_my_split.*
 import kotlinx.android.synthetic.main.fragment_my_split.icon_text
 import kotlinx.android.synthetic.main.fragment_my_split.s_btnSend
@@ -29,14 +27,13 @@ import kotlinx.android.synthetic.main.fragment_my_split.s_txtDate
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtName
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtTitle
 import kotlinx.android.synthetic.main.fragment_my_split.s_txtTotal
-import kotlinx.android.synthetic.main.fragment_other_split.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
 
-class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick,UpdateTaskListener {
+class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick, UpdateTaskListener {
 
     private lateinit var id_split: String
     private lateinit var split: ParseObject

@@ -1,4 +1,4 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 import android.content.Context
 import android.text.SpannableString
@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import it.unito.billsplitter.R
 import it.unito.billsplitter.activity.CellClickListener
 import it.unito.billsplitter.model.Split
 
@@ -76,7 +77,9 @@ class RvAdapter(private val cellClickListener: CellClickListener, private val da
             p0.owner.setTextColor(color_green)
 
             p0.layout.background = ContextCompat.getDrawable(context, R.drawable.ic_card_green)
-            p0.inner_layout.background = ContextCompat.getDrawable(context, R.drawable.inner_layout_card_green)
+            p0.inner_layout.background = ContextCompat.getDrawable(context,
+                R.drawable.inner_layout_card_green
+            )
 
 
         }

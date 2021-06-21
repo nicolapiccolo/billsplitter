@@ -1,16 +1,16 @@
-package it.unito.billsplitter
+package it.unito.billsplitter.controller
 
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.parse.ParseObject
 import com.parse.ParsePushBroadcastReceiver
+import it.unito.billsplitter.R
 import it.unito.billsplitter.activity.DetailActivity
 import it.unito.billsplitter.model.Model
 import org.json.JSONException

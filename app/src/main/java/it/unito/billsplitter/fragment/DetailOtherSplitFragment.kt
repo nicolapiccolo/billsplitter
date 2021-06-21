@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.unito.billsplitter.R
-import it.unito.billsplitter.RvAdapterDetail
+import it.unito.billsplitter.controller.RvAdapterDetail
 import it.unito.billsplitter.activity.CellClickListenerDetail
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
-import kotlinx.android.synthetic.main.fragment_my_split.*
 import kotlinx.android.synthetic.main.fragment_other_split.*
 import kotlinx.android.synthetic.main.fragment_other_split.icon_text
 import kotlinx.android.synthetic.main.fragment_other_split.s_recyclerView
