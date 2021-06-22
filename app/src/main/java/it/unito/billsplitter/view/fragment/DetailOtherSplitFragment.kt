@@ -82,7 +82,8 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail, LoadPayPal
         val name = split.name.replace(" ", "\n")
         s_txtTitle.text = name
 
-        println("N: " + name)
+
+        println("Nff: " + name)
         val owner = split.owner.getString("username")?.capitalize()
         s_txtName.text = owner
         icon_text.text = owner!![0].toString()
