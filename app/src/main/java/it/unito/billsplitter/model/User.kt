@@ -1,13 +1,7 @@
 package it.unito.billsplitter.model
 
-import android.content.Intent
-import android.widget.Toast
-import bolts.Task
-import com.parse.ParseException
 import com.parse.ParseObject
 import com.parse.ParseUser
-import it.unito.billsplitter.activity.MainActivity
-import kotlinx.android.synthetic.main.fragment_login.*
 
 class User {
     companion object{

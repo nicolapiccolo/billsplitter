@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.PaymentDetails">
+    tools:context=".view.activity.PaymentDetails">
 
     <TextView
         android:id="@+id/txtId"

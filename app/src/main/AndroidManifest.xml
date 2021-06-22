@@ -28,7 +28,7 @@
         </service>
 
         <receiver
-            android:name=".controller.NotificationReceiver"
+            android:name=".controller.notification.NotificationReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -38,28 +38,28 @@
         </receiver>
 
         <activity
-            android:name=".activity.DetailActivity"
-            android:parentActivityName=".activity.MainActivity">
+            android:name="it.unito.billsplitter.view.activity.DetailActivity"
+            android:parentActivityName="it.unito.billsplitter.view.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="it.unito.billsplitter.activity.MainActivity" />
+                android:value="it.unito.billsplitter.view.activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.LandingActivity" />
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.SlidingActivity" />
-        <activity android:name=".activity.ContactActivity" />
+        <activity android:name="it.unito.billsplitter.view.activity.LoginActivity" />
+        <activity android:name="it.unito.billsplitter.view.activity.LandingActivity" />
+        <activity android:name="it.unito.billsplitter.view.activity.RegisterActivity" />
+        <activity android:name="it.unito.billsplitter.view.activity.SlidingActivity" />
+        <activity android:name="it.unito.billsplitter.view.activity.ContactActivity" />
         <activity
-            android:name=".activity.SplittingActivity"
-            android:parentActivityName="activity.MainActivity">
+            android:name="it.unito.billsplitter.view.activity.SplittingActivity"
+            android:parentActivityName="it.unito.billsplitter.view.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="it.unito.billsplitter.activity.MainActivity" />
+                android:value="it.unito.billsplitter.view.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.CreateSplitActivity"
+            android:name="it.unito.billsplitter.view.activity.CreateSplitActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
-        <activity android:name=".activity.MainActivity">
+        <activity android:name="it.unito.billsplitter.view.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
