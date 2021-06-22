@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -22,6 +25,11 @@ import com.parse.ParseUser
 import it.unito.billsplitter.R
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.dialog_phone.*
+import kotlinx.android.synthetic.main.change_password_dialog.*
+import kotlinx.android.synthetic.main.change_password_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_phone.*
+import kotlinx.android.synthetic.main.dialog_phone.btnSend
+import kotlinx.android.synthetic.main.dialog_phone.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -44,11 +52,10 @@ class RegisterActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
 
     private fun getPhoneNumber(){
         var mGoogleApiClient = GoogleApiClient.Builder(this)
-        .addConnectionCallbacks(this)
-        .addOnConnectionFailedListener(this)
-        .addApi(Auth.CREDENTIALS_API)
-        .build()
-
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .addApi(Auth.CREDENTIALS_API)
+            .build()
 
         val hintRequest = HintRequest.Builder()
             .setPhoneNumberIdentifierSupported(true)
@@ -88,20 +95,23 @@ class RegisterActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
         }
     }
 
-    private fun createEd(ctx: Context): AlertDialog.Builder? {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(ctx)
-        builder.setView(R.layout.dialog_phone)
-        builder.setPositiveButton("Salva", DialogInterface.OnClickListener { dialog, id ->
-            phone = editTextPhone.toString()
-        })
-        builder.setNegativeButton("Cancella",
-            DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-        return builder
-    }
 
     private fun showDialog(){
-        val dialog = createEd(this)!!.create()
-        dialog.show()
+        val mDialogView = LayoutInflater.from(this!!).inflate(R.layout.dialog_phone, null)
+        //AlertDialogBuilder
+        val mBuilder = android.app.AlertDialog.Builder(this!!)
+            .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+        mAlertDialog.btnSend.setOnClickListener {
+            phone = mAlertDialog.editTextPhone.toString()
+            mAlertDialog.dismiss()
+        }
+        mDialogView.btnCancel.setOnClickListener {
+            mAlertDialog.dismiss()
+        }
     }
 
     fun Register(view : View){

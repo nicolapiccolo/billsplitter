@@ -2,7 +2,10 @@ package it.unito.billsplitter.view.activity
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,10 +26,11 @@ import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.confirm_action_dialog.*
+import kotlinx.android.synthetic.main.confirm_action_dialog.view.*
 
 
-class DetailActivity : AppCompatActivity(), LoadFragmentListener, UpdateDataListener,
-    UpdatePayListener {
+class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListener, UpdatePayListener {
 
     companion object{
         const val ID = 1
@@ -43,8 +47,8 @@ class DetailActivity : AppCompatActivity(), LoadFragmentListener, UpdateDataList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-         //per capire quando l'utente ha modificato lo split
-        
+        //per capire quando l'utente ha modificato lo split
+
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.detail_toolbar) as Toolbar
 
         setSupportActionBar(toolbar)
@@ -74,20 +78,20 @@ class DetailActivity : AppCompatActivity(), LoadFragmentListener, UpdateDataList
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         return when (item.getItemId()) {
-             android.R.id.home -> {
-                 println("HOME: " + modified)
-                 val intent = Intent()
-                 if(modified) {
-                     setResult(RESULT_OK, intent)
-                 }
-                 else {
-                     setResult(RESULT_CANCELED, intent)
-                 }
-                 finish()
-                 true
-             }
+            android.R.id.home -> {
+                println("HOME: " + modified)
+                val intent = Intent()
+                if(modified) {
+                    setResult(RESULT_OK, intent)
+                }
+                else {
+                    setResult(RESULT_CANCELED, intent)
+                }
+                finish()
+                true
+            }
 
-             R.id.action_modify -> {
+            R.id.action_modify -> {
                 //addSomething()
                 showProgressBar(true)
                 menuFragment?.modifySplit(split)
@@ -107,37 +111,46 @@ class DetailActivity : AppCompatActivity(), LoadFragmentListener, UpdateDataList
     }
 
     private fun confirmDialogClose(){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Closing Split")
-        builder.setMessage("Are you sure to close this split? ")
-
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+        val mDialogView = LayoutInflater.from(this!!).inflate(R.layout.confirm_action_dialog, null)
+        //AlertDialogBuilder
+        val mBuilder = android.app.AlertDialog.Builder(this!!)
+            .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+        mAlertDialog.txtConfirmTitle.setText("Closing Split")
+        mAlertDialog.txtDialogMessage.setText("Are you sure to close this split? ")
+        mAlertDialog.btnSend.setOnClickListener {
             showProgressBar(true)
             UpdateDataAsyncTask(this).execute(split)
+            mAlertDialog.dismiss()
         }
-
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-
+        mDialogView.btnCancel.setOnClickListener {
+            mAlertDialog.dismiss()
         }
-
-        builder.show()
     }
 
     private fun confirmDialogDelete(){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Deleting Split")
-        builder.setMessage("Are you sure to delete this split? ")
-
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+        val mDialogView = LayoutInflater.from(this!!).inflate(R.layout.confirm_action_dialog, null)
+        //AlertDialogBuilder
+        val mBuilder = android.app.AlertDialog.Builder(this!!)
+            .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+        mAlertDialog.txtConfirmTitle.setText("Deleting Split")
+        mAlertDialog.txtDialogMessage.setText("Are you sure to delete this split? ")
+        mAlertDialog.btnSend.setOnClickListener {
             showProgressBar(true)
             DeleteDataAsyncTask(this).execute(split)
+            mAlertDialog.dismiss()
+        }
+        mDialogView.btnCancel.setOnClickListener {
+            mAlertDialog.dismiss()
         }
 
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-
-        }
-
-        builder.show()
     }
 
     private fun showMenu(show: Boolean){
@@ -219,4 +232,3 @@ interface MenuClick{
 interface CellClickListenerDetail {
     fun onCellClickListener(data: SplitMember?)
 }
-

@@ -1,9 +1,12 @@
 package it.unito.billsplitter.view.activity
 
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.graphics.drawable.Drawable
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -14,12 +17,18 @@ import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.textservice.TextServicesManager
 import android.widget.CheckBox
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.get
+import it.unito.billsplitter.model.Model
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +42,7 @@ import kotlinx.android.synthetic.main.activity_contacts_split.*
 import kotlinx.android.synthetic.main.contact_card.view.*
 
 
+import kotlinx.android.synthetic.main.splitting_card.view.*
 import kotlin.collections.ArrayList
 
 
@@ -184,7 +194,7 @@ class ContactActivity : AppCompatActivity(), LoadContactListener {
             holder.name.text = list[position].get("username").toString().capitalize()
             holder.number.text = list[position].get("phone").toString()
             holder.icon_text.text = list[position].get("username").toString().capitalize()[0].toString()
-            Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
+            Contact.setColor(Contact.getRandomMaterialColor("400",context),context)
             holder.checkBox_select.setOnCheckedChangeListener {buttonView, isChecked ->
                 val contact = list[position]
                 //contact.image=list[position].image
@@ -248,4 +258,3 @@ class ContactActivity : AppCompatActivity(), LoadContactListener {
     }
 
 }
-
