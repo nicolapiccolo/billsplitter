@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/ic_card"
+    card_view:cardCornerRadius="15dp"
+    card_view:cardElevation="0dp"
+    card_view:cardPreventCornerOverlap="true"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iconContact"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/circle_icon"
+                card_view:layout_constraintStart_toStartOf="@+id/topLayout"
+                card_view:layout_constraintTop_toTopOf="@+id/topLayout"
+                card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"/>
+
+            <TextView
+                android:id="@+id/icon_textC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/robo_regular"
+                card_view:layout_constraintStart_toStartOf="@+id/iconContact"
+                card_view:layout_constraintEnd_toEndOf="@+id/iconContact"
+                card_view:layout_constraintTop_toTopOf="@+id/iconContact"
+                card_view:layout_constraintBottom_toBottomOf="@+id/iconContact"
+                android:text="M"
+                android:textSize="24dp" />
+
+
+        <TextView
+            android:id="@+id/txtSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You pay for"
+            android:fontFamily="@font/robo_italic"
+            android:textSize="14dp"
+            android:layout_marginLeft="15dp"
+            card_view:layout_constraintStart_toEndOf="@+id/iconContact"
+            card_view:layout_constraintTop_toTopOf="@+id/iconContact"/>
+        <TextView
+            android:id="@+id/txtPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:fontFamily="@font/robo_bold"
+            android:textSize="24dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            card_view:layout_constraintStart_toEndOf="@+id/iconContact"
+            card_view:layout_constraintTop_toBottomOf="@+id/txtSubtitle"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:fontFamily="@font/robo_bold"
+            android:textSize="24dp"
+            android:layout_marginLeft="2dp"
+            android:textColor="@color/black"
+            card_view:layout_constraintStart_toEndOf="@+id/txtPercentage"
+            card_view:layout_constraintTop_toBottomOf="@+id/txtSubtitle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="€"
+            android:fontFamily="@font/robo_bold"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:layout_marginRight="5dp"
+            card_view:layout_constraintEnd_toStartOf="@+id/txtPrice"
+            card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"
+            card_view:layout_constraintTop_toTopOf="@+id/topLayout" />
+        <EditText
+            android:id="@+id/txtPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:text="22,20"
+            android:fontFamily="@font/robo_bold"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:layout_marginRight="20dp"
+            card_view:layout_constraintEnd_toEndOf="@+id/topLayout"
+            card_view:layout_constraintBottom_toBottomOf="@+id/topLayout"
+            card_view:layout_constraintTop_toTopOf="@+id/topLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintEnd_toStartOf="@+id/lockerLayout"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintBottom_toBottomOf="parent">
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressTint="@color/yellow"
+                android:thumbTint="@color/yellow"
+                android:min="1"
+                android:max="100"/>
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lockerLayout"
+            android:layout_width="65dp"
+            android:layout_height="55dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/lock_button"
+            card_view:layout_constraintBottom_toBottomOf="parent">
+            <ImageView
+                android:id="@+id/btnLocker"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_password"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
