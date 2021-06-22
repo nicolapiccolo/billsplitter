@@ -1,0 +1,24 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.BillSplitter" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorOnPrimary">@color/blue</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/lightgrey</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="colorControlNormal">@color/white</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- checkbox style -->
+    <style name="colored_checkbox" parent="Theme.MaterialComponents.Light">
+        <!-- selected checkbox color -->
+        <item name="colorAccent">@color/yellow</item>
+        <!-- default/unselected checkbox color -->
+        <item name="android:textColorSecondary">@color/yellow</item>
+    </style>
+
+</resources>
