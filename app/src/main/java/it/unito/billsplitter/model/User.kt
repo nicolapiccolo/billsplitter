@@ -1,12 +1,7 @@
 package it.unito.billsplitter.model
 
-import android.content.Intent
-import android.widget.Toast
-import bolts.Task
-import com.parse.ParseException
+import com.parse.ParseObject
 import com.parse.ParseUser
-import it.unito.billsplitter.activity.MainActivity
-import kotlinx.android.synthetic.main.fragment_login.*
 
 class User {
     companion object{
@@ -14,6 +9,9 @@ class User {
         var username :String = ""
         var email :String = ""
         var id :String = ""
+        var isPayPalLinked: Boolean = false
+        var id_paypal: ParseObject? = null
+
 
 
         fun loginUser(email: String, password: String): ParseUser?  {
@@ -49,7 +47,29 @@ class User {
             val user = ParseUser.getCurrentUser()
             username = user?.username.toString()
             email = user?.email.toString()
+
+            //println(" --- LINK: " + user?.getRelation<ParseObject>("id_paypal")?.query?.find()?.size)
+
+            val a = user?.getRelation<ParseObject>("id_paypal")?.query?.find()
+
+            if (a?.size!! > 0){
+                println("--LINKED--")
+                this.isPayPalLinked = true
+                id_paypal = a.get(0)
+            }
+
             return user
+        }
+
+        fun isLinked(): Boolean{
+            val user = ParseUser.getCurrentUser()
+            val a = user?.getRelation<ParseObject>("id_paypal")?.query?.find()
+            if (a?.size!! > 0){
+                println("--LINKED--")
+                return true
+            }
+            else
+                return false
         }
 
         fun logOut(){

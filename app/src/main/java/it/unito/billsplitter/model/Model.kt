@@ -404,6 +404,24 @@ class Model private constructor()   {
         else return false
     }
 
+    fun getPayPalAccount(email :String, password: String): ParseObject?{
+        val query = ParseQuery.getQuery<ParseObject>("PayPalAccount")
+        query.whereEqualTo("email",email)
+        query.whereEqualTo("password",password)
+
+        val result_size = query.find().size
+        if(result_size > 0){
+            val account = query.find().get(0)
+            val relation = User.getCurrentUser()?.getRelation<ParseObject>("id_paypal")
+            relation?.add(account)
+            User.getCurrentUser()?.save()
+
+            return account
+        }
+        else
+            return null
+    }
+
     fun sendPaymentNotification(member: ArrayList<SplitMember>, id_split: String){
         var list: ArrayList<String> = ArrayList<String>()
 

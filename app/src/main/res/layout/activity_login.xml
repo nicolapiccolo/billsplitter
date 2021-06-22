@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LoginActivity">
+    tools:context=".view.activity.LoginActivity">
 
     <fragment
         android:id="@+id/fragment"
-        android:name="it.unito.billsplitter.fragment.LoginFragment"
+        android:name="it.unito.billsplitter.view.fragment.LoginFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
