@@ -32,6 +32,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.change_password_dialog.view.d_btnCancel
 import kotlinx.android.synthetic.main.login_paypal_dialog.*
 import kotlinx.android.synthetic.main.login_paypal_dialog.view.*
+import kotlinx.android.synthetic.main.pay_error_dialog.*
+import kotlinx.android.synthetic.main.progress_dialog.*
 
 
 class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, UpdateDataListener,
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
 
     private lateinit var adapter: RvAdapterMain
     private lateinit var bottomSheet: ProfileBottomSheetActivity
+    private var progressDialog: AlertDialog? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,6 +170,23 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         progressBar.setVisibility(View.VISIBLE)
     }
 
+    private fun payPalError(ctx: Context, message: String){
+        val mDialogView = LayoutInflater.from(ctx).inflate(R.layout.pay_error_dialog, null)
+        //AlertDialogBuilder
+        val mBuilder = AlertDialog.Builder(ctx)
+            .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
+
+        mAlertDialog.txtMessage.text = message
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        mAlertDialog.d_btnClose.setOnClickListener {
+            mAlertDialog.dismiss()
+        }
+    }
+
     private fun payPalDialog(ctx: Context){
         val mDialogView = LayoutInflater.from(ctx).inflate(R.layout.login_paypal_dialog, null)
         //AlertDialogBuilder
@@ -185,21 +206,36 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
 
                     val account = PayPalAccount(email,password)
                     //showProgressBar(true)
-                    LoadPayPalAsyncTask(ctx).execute(account)
 
-                    if(User.isPayPalLinked){
-                        mAlertDialog.dismiss()
-                        intent = Intent(this, CreateSplitActivity::class.java)
-                        startActivityForResult(intent,CreateSplitActivity.ID)
-                    }
+                    progressDialog = showProgressDialog(this,"Login...")
+
+                    var controller = LoadPayPalAsyncTask()
+                    controller.setAsyncListener(this)
+                    controller.execute(account)
+
+                    mAlertDialog.dismiss()
             }
             else
                 Toast.makeText(ctx, "Fields can't be empty!", Toast.LENGTH_SHORT).show()
 
         }
-        mDialogView.d_btnCancel.setOnClickListener {
-            mAlertDialog.dismiss()
-        }
+    }
+
+    fun getAlertDialog( context: Context, layout: Int, setCancellationOnTouchOutside: Boolean): AlertDialog {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        val customLayout: View =
+            layoutInflater.inflate(layout, null)
+        builder.setView(customLayout)
+        val dialog = builder.create()
+        dialog.setCanceledOnTouchOutside(setCancellationOnTouchOutside)
+        return dialog
+    }
+
+    fun showProgressDialog(context: Context, message: String): AlertDialog {
+        val dialog = getAlertDialog(context, R.layout.progress_dialog, setCancellationOnTouchOutside = false)
+        dialog.show()
+        dialog.text_progress_bar.text = message
+        return dialog
     }
 
     override fun giveProgress(progress: Int?) {
@@ -208,11 +244,24 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         }
     }
 
+    override fun giveProgressLogin(progress: Int?) {
+        TODO("Not yet implemented")
+    }
+
     override fun sendResult(result: Boolean) {
+        progressDialog?.dismiss()
+
         if (result){
             Toast.makeText(this, "PayPal Linked Successfully", Toast.LENGTH_SHORT).show()
+
+            intent = Intent(this, CreateSplitActivity::class.java)
+            startActivityForResult(intent,CreateSplitActivity.ID)
+
         }
-        else Toast.makeText(this, "Incorrect Credentials! Please Retry", Toast.LENGTH_SHORT).show()
+        else{
+            Toast.makeText(this, "Incorrect Credentials! Please Retry", Toast.LENGTH_SHORT).show()
+            payPalError(this,getString(R.string.incorrectCredential))
+        }
     }
 
     override fun sendData(result: Boolean) {

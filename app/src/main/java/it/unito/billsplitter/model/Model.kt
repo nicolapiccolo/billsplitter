@@ -31,6 +31,7 @@ class Model private constructor()   {
 
         val query = ParseQuery.getQuery<ParseObject>("Transaction")
         query.whereEqualTo("id_user", User.getCurrentUser())
+        query.whereEqualTo("paid",false)
         query.addDescendingOrder("createdAt")
 
         val queryList: List<ParseObject> = query.find()
@@ -415,11 +416,77 @@ class Model private constructor()   {
             val relation = User.getCurrentUser()?.getRelation<ParseObject>("id_paypal")
             relation?.add(account)
             User.getCurrentUser()?.save()
+            User.id_paypal = account
 
             return account
         }
         else
             return null
+    }
+
+    fun checkBalancePayPal(share: Float, id_paypal: ParseObject): Boolean{
+        //controllo se saldo disponibile copre la spesa
+        val balance = id_paypal.getNumber("balance")!!.toFloat()
+
+        return (balance>=share)
+    }
+
+
+    fun payWithPayPalTo(share: Float, id_user: ParseUser, id_split: ParseObject): Boolean{
+        val sender_id =  User.id_paypal?.objectId
+
+        if(sender_id!=null){
+            val query = ParseQuery.getQuery<ParseObject>("PayPalAccount")
+            query.whereEqualTo("objectId",sender_id)
+
+            val sender_account = query.first
+
+            println("PWP: user id: " + id_user.objectId)
+
+            val receiver_account_id = id_user.getRelation<ParseObject>("id_paypal")
+
+            val receiver_account = receiver_account_id.query.find().get(0)
+
+            println("PWP: receiver account id: " + receiver_account.objectId)
+
+
+
+            if(sender_account!=null && receiver_account!=null){
+                //salvo i totali attuali
+                val total_sender = sender_account.getNumber("balance")!!.toFloat()
+                val total_receiver = receiver_account.getNumber("balance")!!.toFloat()
+
+                println("SENDER TOTAL: " + total_sender)
+                println("RECEIVER TOTAL: " + total_receiver)
+
+
+                //modifico saldo sender
+                sender_account.put("balance", total_sender - share)
+                sender_account.save()
+
+                
+                //modifico saldo receiver
+                receiver_account.put("balance",total_receiver + share)
+                receiver_account.save()
+
+                //println("\n AFTER PAY")
+                //println("SENDER TOTAL: " + sender_account.getNumber("balance")!!.toFloat())
+                //println("RECEIVER TOTAL: " + receiver_account.getNumber("balance")!!.toFloat())
+
+                return  setPaid(id_split, User.getCurrentUser()!!,true)
+            }
+            else
+            {
+                println("Sender or receiver is null")
+                return false
+            }
+
+        }
+        else{
+            println("SENDER ID IS NULL!")
+            return false
+        }
+
     }
 
     fun sendPaymentNotification(member: ArrayList<SplitMember>, id_split: String){

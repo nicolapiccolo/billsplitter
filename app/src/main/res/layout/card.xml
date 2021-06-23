@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/robo_bold"
-                android:text="with: "
+                android:text=""
                 android:textColor="@color/red"
                 android:textSize="24dp"
                 card_view:layout_constraintBottom_toBottomOf="@+id/c_txtTotal"
