@@ -59,7 +59,7 @@ class CreateSplitActivity : AppCompatActivity() {
             android.R.id.home -> {
                 //val resId:Int = resources.getIdentifier("action_bar_container", "id", "android")
                 if(isTitle){
-                    Toast.makeText(this,"BACK TO MAIN", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this,"BACK TO MAIN", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 else{
@@ -76,7 +76,7 @@ class CreateSplitActivity : AppCompatActivity() {
     fun nextBtn(view: View){
         if (isTitle){
             if(edtInsertTitle.text.toString().equals(""))
-                Toast.makeText(this, "Title can't be empty!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.emptyTitle, Toast.LENGTH_SHORT).show()
             else{
                 title=edtInsertTitle.text.toString()
                 setTotal()
@@ -84,7 +84,7 @@ class CreateSplitActivity : AppCompatActivity() {
         }
         else{
             if (edtInsertTotal.text.toString().equals(""))
-                Toast.makeText(this, "Total can't be empty!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.emptyTotal, Toast.LENGTH_SHORT).show()
             else{
                 intent = Intent(this, ContactActivity::class.java)
                 intent.putExtra("title", title)

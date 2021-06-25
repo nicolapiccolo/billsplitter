@@ -10,12 +10,15 @@
 
 
     <LinearLayout
+        android:id="@+id/layout_landing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="100dp"
@@ -23,14 +26,14 @@
             android:src="@drawable/logo" />
 
         <TextView
-            android:layout_marginTop="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/baloo_bold"
             android:inputType="textPersonName"
             android:text="BillSplit"
-            android:textSize="64dp"
-            android:fontFamily="@font/baloo_bold"
             android:textColor="@color/blue"
+            android:textSize="64dp"
             app:layout_constraintBottom_toTopOf="@+id/txt" />
     </LinearLayout>
 

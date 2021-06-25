@@ -117,33 +117,47 @@ class RegisterActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
     fun Register(view : View){
 
         val user = ParseUser()
-        user.setUsername(txtName.text.toString())
-        user.setPassword(txtPassword.text.toString())
-        user.setEmail(txtEmail.text.toString())
-        user.put("phone",phone)
 
-        if(phone.isEmpty()){
-            Toast.makeText(this, "Per completare la registrazione devi inserire il numero di telefono", Toast.LENGTH_SHORT).show()
-            showDialog()
+        val username = txtName.text.toString()
+        val password = txtPassword.text.toString()
+        val email = txtEmail.text.toString()
+
+        if(!username.isEmpty() && !password.isEmpty() && !email.isEmpty()){
+
+            user.setUsername(username)
+            user.setPassword(password)
+            user.setEmail(email)
+            user.put("phone",phone)
+
+
+
+            if(phone.isEmpty()){
+                Toast.makeText(this, R.string.noPhoneNumber, Toast.LENGTH_SHORT).show()
+                showDialog()
+            }
+
+
+            user.signUpInBackground() { e: ParseException? ->
+                if(e == null){
+                    val installation = ParseInstallation.getCurrentInstallation()
+                    installation.put("user", ParseUser.getCurrentUser())
+                    installation.saveInBackground()
+
+                    Toast.makeText(this, R.string.registrationSuccess, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("RESULT",RegisterActivity.ID.toString())
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                else{
+                    Toast.makeText(this, e?.message, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
-
-        user.signUpInBackground() { e: ParseException? ->
-            if(e == null){
-                val installation = ParseInstallation.getCurrentInstallation()
-                installation.put("user", ParseUser.getCurrentUser())
-                installation.saveInBackground()
-
-                Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("RESULT",RegisterActivity.ID.toString())
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-            }
-            else{
-                Toast.makeText(this, e?.message, Toast.LENGTH_SHORT).show()
-            }
+        else{
+            Toast.makeText(this, R.string.emptyField, Toast.LENGTH_SHORT).show()
         }
     }
 

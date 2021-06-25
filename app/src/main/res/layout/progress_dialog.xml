@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/animation" />
+
+    <TextView
+        android:id="@+id/text_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:orientation="horizontal"
-        android:paddingLeft="30dp"
-        android:paddingTop="30dp"
-        android:paddingRight="30dp"
-        android:paddingBottom="30dp">
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/robo_light"
+        android:text="Loading"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/animationView"
+        app:layout_constraintStart_toStartOf="@+id/animationView"
+        app:layout_constraintTop_toBottomOf="@+id/animationView" />
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/blue"
-            android:paddingRight="20dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/text_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/robo_regular"
-            android:text = "Loading"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-
-</androidx.appcompat.widget.LinearLayoutCompat>

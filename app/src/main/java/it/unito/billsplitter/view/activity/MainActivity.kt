@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         else{
             setContentView(R.layout.activity_main)
 
-
-
             //Toast.makeText(baseContext, "Welcome back ${User.username}", Toast.LENGTH_LONG).show()
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             recyclerHistoryView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -96,7 +94,6 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
                     startActivityForResult(intent,CreateSplitActivity.ID)
                 }
                 else{
-                    Toast.makeText(baseContext, "Link PayPal", Toast.LENGTH_LONG).show()
                     payPalDialog(this)
                 }
             }
