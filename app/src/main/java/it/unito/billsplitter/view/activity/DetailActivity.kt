@@ -167,7 +167,7 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         showMenu(isMySplit)
 
         if(isMySplit){
-            menuFragment = DetailMySplitFragment() as MenuClick
+            menuFragment = DetailMySplitFragment()
             val fragment = DetailMySplitFragment.newIstance()
             fragment.arguments = bundle
             replaceFragment(fragment)

@@ -14,6 +14,16 @@
     <string name="titleNotPaid">Undo Payment</string>
     <string name="contentPaid">Do you want to confirm the payment?</string>
     <string name="contentNotPaid">do you want to undo the payment?</string>
+    <string name="insufficientBalance">" Can't Send Money:\nInsufficient Balance"</string>
+    <string name="incorrectCredential">" Incorrect credential\n please retry"</string>
+    <string name="noPhoneNumber">"Please insert your phone number to complete registration"</string>
+    <string name="registrationSuccess">"Registration successful"</string>
+    <string name="emptyField">"Please insert data for registration"</string>
+    <string name="loginSuccess">"Login Successful"</string>
+    <string name="emptyTitle">"Title can't be empty!"</string>
+    <string name="emptyTotal">"Total can't be empty!"</string>
+    <string name="emptyFriend">"Friends list can't be empty!"</string>
+
 
 
 </resources>

@@ -100,7 +100,7 @@ class ContactActivity : AppCompatActivity(), LoadContactListener {
 
         btnAdd.setOnClickListener {
             if (selectedContacts.size==1)
-                Toast.makeText(this, "Friends list can't be empty!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.emptyFriend), Toast.LENGTH_SHORT).show()
             else {
 
                 intent = Intent(this, SplittingActivity::class.java)

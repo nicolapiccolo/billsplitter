@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
                         installation.put("user", ParseUser.getCurrentUser())
                         installation.saveInBackground()
 
-                        Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.loginSuccess, Toast.LENGTH_SHORT).show()
                         val intent = Intent(context, MainActivity::class.java)
                         intent.putExtra("RESULT", LoginActivity.ID.toString())
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -92,50 +92,6 @@ class LoginFragment : Fragment() {
 
         }
     }
-
-
-    /*
-    fun loginUser(email: String, password: String) {
-        ParseUser.logInInBackground(email, password) { user: ParseUser?, e: ParseException ->
-            if (user != null) {
-                // Hooray! The user is logged in.
-                //Toast.makeText(context,"Login successful",Toast.LENGTH_SHORT).show()
-
-            } else {
-                // Login failed. Look at the ParseException to see what happened.
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-
-            }
-        }
-    }
-
-    fun createUser(username: String,password: String,email: String) {
-        val user = ParseUser()
-        user.username = username
-        user.setPassword(password)
-        user.email = email
-
-        // Other fields can be set just like any other ParseObject,
-        // using the "put" method, like this: user.put("attribute", "its value");
-        // If this field does not exists, it will be automatically created
-        user.signUpInBackground { e: ParseException? ->
-            if (e == null) {
-                // Hooray! Let them use the app now.
-            } else {
-                // Sign up didn't succeed. Look at the ParseException
-                // to figure out what went wrong
-                    println(e.message)
-                println(e.code)
-                println(e.stackTrace)
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-*/
-
-
-
-
     interface OnFirstPageFragmentInteractionListener {
         fun onLoginButtonPressed(username: String)
     }

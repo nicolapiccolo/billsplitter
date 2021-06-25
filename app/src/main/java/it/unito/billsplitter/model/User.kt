@@ -45,18 +45,23 @@ class User {
             // we don't need to login every time we open this
             // application
             val user = ParseUser.getCurrentUser()
-            username = user?.username.toString()
-            email = user?.email.toString()
+            println("USER: "+ user)
 
-            //println(" --- LINK: " + user?.getRelation<ParseObject>("id_paypal")?.query?.find()?.size)
+            if(user != null){
+                username = user?.username.toString()
+                email = user?.email.toString()
 
-            val a = user?.getRelation<ParseObject>("id_paypal")?.query?.find()
+                //println(" --- LINK: " + user?.getRelation<ParseObject>("id_paypal")?.query?.find()?.size)
 
-            if (a?.size!! > 0){
-                println("--LINKED--")
-                this.isPayPalLinked = true
-                id_paypal = a.get(0)
+                val a = user?.getRelation<ParseObject>("id_paypal")?.query?.find()
+
+                if (a?.size!! > 0){
+                    println("--LINKED--")
+                    this.isPayPalLinked = true
+                    id_paypal = a.get(0)
+                }
             }
+
 
             return user
         }
