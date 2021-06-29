@@ -106,7 +106,7 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail, LoadPayPal
     private fun pay(share : Float, owner : ParseUser, id_split : String){
 
         if (User.isLinked()){
-            println("-- BALANCE -- : " + User.id_paypal?.getNumber("balance"))
+            //println("-- BALANCE -- : " + User.id_paypal?.getNumber("balance"))
             val payment  = Payment(share, User.id_paypal!! ,owner, id_split)
 
             payPalSend(requireContext(),payment)
@@ -284,11 +284,11 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail, LoadPayPal
         progressDialog?.dismiss()
 
         if (result){
-            Toast.makeText(context, "PayPal Linked Successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.payPalSuccess, Toast.LENGTH_SHORT).show()
             pay(Split.getFloat(mySplit.share),mySplit.owner, id_split)
         }
         else{
-            Toast.makeText(context, "Incorrect Credentials! Please Retry", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.payPaError, Toast.LENGTH_SHORT).show()
             payPalError(requireContext(),getString(R.string.incorrectCredential))
         }
     }

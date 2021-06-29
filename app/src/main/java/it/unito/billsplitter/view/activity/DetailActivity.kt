@@ -119,8 +119,8 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         mAlertDialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-        mAlertDialog.txtConfirmTitle.setText("Closing Split")
-        mAlertDialog.txtDialogMessage.setText("Are you sure to close this split? ")
+        mAlertDialog.txtConfirmTitle.setText(R.string.closeTitle)
+        mAlertDialog.txtDialogMessage.setText(R.string.closeMessage)
         mAlertDialog.btnSend.setOnClickListener {
             showProgressBar(true)
             UpdateDataAsyncTask(this).execute(split)
@@ -140,8 +140,8 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         mAlertDialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-        mAlertDialog.txtConfirmTitle.setText("Deleting Split")
-        mAlertDialog.txtDialogMessage.setText("Are you sure to delete this split? ")
+        mAlertDialog.txtConfirmTitle.setText(R.string.deleteTitle)
+        mAlertDialog.txtDialogMessage.setText(R.string.deleteMessage)
         mAlertDialog.btnSend.setOnClickListener {
             showProgressBar(true)
             DeleteDataAsyncTask(this).execute(split)
@@ -208,8 +208,6 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
     override fun sendResult(result: Boolean) {
         println("RELOAD")
         recreate()
-        //finish();
-        //startActivity(getIntent());
         DetailActivity.modified = true
     }
 

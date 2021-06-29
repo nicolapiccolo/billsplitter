@@ -534,6 +534,31 @@ class Model private constructor()   {
         })
     }
 
+    fun sendEmailNotification(member: ArrayList<SplitMember>, id_split: String){
+        var list: ArrayList<String> = ArrayList<String>()
+
+        val map = HashMap<String, Any>()
+
+        val split = getSplit(id_split)
+
+        map["owner"] = getOwnerSplit(split!!)?.username.capitalize()
+
+        member.forEach{
+            if(!it.user.objectId.equals(User.getCurrentUser()?.objectId) && !it.paid) list.add(it.user.objectId)
+
+            map["userId"] = it.user.objectId.toString()
+            map["splitId"] = id_split
+
+            ParseCloud.callFunctionInBackground("sendgridEmail", map, FunctionCallback<Any?> { `object`, e ->
+                // handle callback
+                if (e == null)
+                    println(`object`)
+                else
+                    println(e.message)
+            })
+        }
+    }
+
 
 
 

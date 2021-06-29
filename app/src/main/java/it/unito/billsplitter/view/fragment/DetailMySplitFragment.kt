@@ -85,13 +85,6 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick, Up
 
 
     private fun displaySplit(split: MySplit){
-
-        s_txtTitle.measure(0, 0)
-        val height: Int = s_txtTitle.getMeasuredWidth()
-
-        println("H: " + height)
-        println("T: " + split.name.length)
-
         s_txtName.text = "You"
 
         icon_text.text = "Y"
@@ -109,6 +102,7 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick, Up
     private fun sendNotification(member: ArrayList<SplitMember>, id_split: String){
         if(shouldSend()){
             Model.instance.sendPaymentNotification(member,id_split)
+            Model.instance.sendEmailNotification(member,id_split)
             showSnackBar(getString(R.string.notificationSend))
         }
         else
@@ -129,8 +123,6 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick, Up
     }
 
     override fun onCellClickListener(data: SplitMember?) {
-        Toast.makeText(context, "Long Click to: ${data?.name}, is ${data?.paid}", Toast.LENGTH_LONG).show()
-
         if (data!=null) confirmDialogPaid(data)
     }
 
@@ -159,6 +151,7 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick, Up
         }
 
         builder.setNegativeButton(R.string.no) { dialog, which ->
+
         }
 
         builder.show()

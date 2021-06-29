@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/ic_check_paypal" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/txtSucces"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -50,6 +50,6 @@
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/txtSucces" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
