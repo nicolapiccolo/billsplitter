@@ -23,6 +23,13 @@
     <string name="emptyTitle">"Title can't be empty!"</string>
     <string name="emptyTotal">"Total can't be empty!"</string>
     <string name="emptyFriend">"Friends list can't be empty!"</string>
+    <string name="closeTitle">"Closing Split"</string>
+    <string name="closeMessage">"Are you sure to close this Split? </string>
+    <string name="deleteTitle">"Deleting Split"</string>
+    <string name="deleteMessage">"Are you sure to delete this Split? </string>
+    <string name="payPalSuccess">"PayPal Linked Successfully"</string>
+    <string name="payPaError">"Incorrect Credentials! Please Retry"</string>
+
 
 
 
