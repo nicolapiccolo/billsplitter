@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.AsyncTask
 import it.unito.billsplitter.controller.task_inteface.PaySplitListener
 import it.unito.billsplitter.model.Model
+import it.unito.billsplitter.model.User
 import it.unito.billsplitter.view.fragment.Payment
 
 class PaySplitAsyncTask () : AsyncTask<Payment, Int, Boolean>() {
@@ -19,7 +20,7 @@ class PaySplitAsyncTask () : AsyncTask<Payment, Int, Boolean>() {
             //check se saldo disponibile
             if(Model.instance.checkBalancePayPal(payment.share, payment.account)){
                 val split = Model.instance.getSplit(payment.id_split)
-                return Model.instance.payWithPayPalTo(payment.share, payment.owner, split!!)
+                return Model.instance.payWithPayPalTo(payment.share, payment.owner, User.getCurrentUser()!!, split!!)
             }
             else return false
         }

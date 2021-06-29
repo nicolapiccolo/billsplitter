@@ -2,6 +2,7 @@ package it.unito.billsplitter.model
 
 import android.widget.Toast
 import com.parse.*
+import com.parse.ParseQuery
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -24,6 +25,36 @@ class Model private constructor()   {
         val query = ParseQuery.getQuery<ParseObject>("Split")
         query.whereEqualTo("objectId", id_split)
 
+        return query.find().get(0)
+    }
+
+    fun findUser(email: String): ParseUser?{
+        var result: ParseUser? = null
+        val query = ParseUser.getQuery()
+        query.whereEqualTo("email", email)
+        /*query.findInBackground { users: List<ParseUser>, e: ParseException? ->
+            if (e == null) {
+                // The query was successful, returns the users that matches
+                // the criteria.
+                for (user1 in users) {
+                    result = user1
+                }
+            } else {
+                // Something went wrong.
+                println("error")
+            }
+        }
+        return result
+        */
+        for (user in query.find())
+            result = user
+        return result
+
+    }
+
+    fun getSplitByName(name: String):ParseObject?{
+        val query = ParseQuery.getQuery<ParseObject>("Split")
+        query.whereEqualTo("name", name)
         return query.find().get(0)
     }
 
@@ -333,6 +364,22 @@ class Model private constructor()   {
         return true
     }
 
+    fun updatePercentages(id_split: ParseObject, members: ArrayList<SplitMember>): Boolean{
+        members.forEach {
+            updateShare(id_split, it.user, it.share.toFloat())
+        }
+        return true
+    }
+
+    private fun updateShare(id_split: ParseObject, id_user: ParseUser, share: Float){
+        val query = ParseQuery.getQuery<ParseObject>("Transaction")
+        query.whereEqualTo("id_split", id_split)
+        query.whereEqualTo("id_user", id_user)
+        val obj = query.find().get(0)
+        obj.put("share",share)
+        obj.save()
+    }
+
     fun closeSplit(id_split: ParseObject){
         val query =  ParseQuery.getQuery<ParseObject>("Split")
         query.whereEqualTo("objectId", id_split.objectId)
@@ -355,7 +402,7 @@ class Model private constructor()   {
         }
     }
 
-      fun deleteTransaction(id_split: ParseObject): Boolean{
+    fun deleteTransaction(id_split: ParseObject): Boolean{
         val query =  ParseQuery.getQuery<ParseObject>("Transaction")
         query.whereEqualTo("id_split",id_split)
 
@@ -432,7 +479,7 @@ class Model private constructor()   {
     }
 
 
-    fun payWithPayPalTo(share: Float, id_user: ParseUser, id_split: ParseObject): Boolean{
+    fun payWithPayPalTo(share: Float, id_user: ParseUser,id_sender: ParseUser, id_split: ParseObject): Boolean{
         val sender_id =  User.id_paypal?.objectId
 
         if(sender_id!=null){
@@ -473,7 +520,7 @@ class Model private constructor()   {
                 //println("SENDER TOTAL: " + sender_account.getNumber("balance")!!.toFloat())
                 //println("RECEIVER TOTAL: " + receiver_account.getNumber("balance")!!.toFloat())
 
-                return  setPaid(id_split, User.getCurrentUser()!!,true)
+                return  setPaid(id_split, id_sender,true)
             }
             else
             {

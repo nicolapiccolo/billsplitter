@@ -1,5 +1,6 @@
 package it.unito.billsplitter.view.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -17,10 +18,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.parse.ParseObject
 import com.parse.ParseUser
 import it.unito.billsplitter.controller.task.CreateDataAsyncTask
 import it.unito.billsplitter.controller.task_inteface.CreateDataListener
 import it.unito.billsplitter.R
+import it.unito.billsplitter.controller.task.UpdateShareAsynkTask
 import it.unito.billsplitter.model.*
 import kotlinx.android.synthetic.main.activity_setting_percentage.*
 import kotlinx.android.synthetic.main.splitting_card.view.*
@@ -35,22 +38,43 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting_percentage)
-
         recyclerViewSplitting.layoutManager = LinearLayoutManager(this)
-        val title = getIntent().getStringExtra("title").toString()
-        val total = getIntent().getStringExtra("total")?.toFloat()
-        val contacts = this.intent.getParcelableArrayListExtra<ParseUser>("selectedContacts")
-        val members = setMembers(contacts,total!!.toFloat())
-        val mysplit = MySplit(title,total.toString(),"","",User.getCurrentUser()!!, members)
-        totalPrice.setText(mysplit.total)
-        recyclerViewSplitting.adapter = SplittingAdapter(members,this, mysplit.total.toFloat())
+        if(!getIntent().getBooleanExtra("modify", false)){
+            val title = getIntent().getStringExtra("title").toString()
+            val total = getIntent().getStringExtra("total")?.toFloat()
+            val contacts = this.intent.getParcelableArrayListExtra<ParseUser>("selectedContacts")
+            val members = setMembers(contacts,total!!.toFloat())
+            val mysplit = MySplit(title,total.toString(),"","",User.getCurrentUser()!!, members)
+            totalPrice.setText(mysplit.total)
+            recyclerViewSplitting.adapter = SplittingAdapter(members,this, mysplit.total.toFloat())
 
 
-        d_btnSend.setOnClickListener {
-            recyclerViewSplitting.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
-            CreateDataAsyncTask(this).execute(mysplit,members)
+            d_btnSend.setOnClickListener {
+                recyclerViewSplitting.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
+                CreateDataAsyncTask(this).execute(mysplit,members)
+            }
         }
+        else{
+            val mysplit = getIntent().getParcelableExtra<ParseObject>("split")
+            val members = getIntent().getParcelableArrayListExtra<SplitMember>("members")
+            val total = Split.getFormatFoat(mysplit?.get("total").toString()).toString()
+            totalPrice.setText(total)
+            recyclerViewSplitting.adapter = SplittingAdapter(members!!,this, total.toFloat())
+
+
+            d_btnSend.setOnClickListener {
+                recyclerViewSplitting.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
+                UpdateShareAsynkTask(this).execute(mysplit,members)
+            }
+
+        }
+
+        btnBack.setOnClickListener {
+            finish()
+        }
+
     }
 
     fun setMembers(contacts: ArrayList<ParseUser>?, total: Float):ArrayList<SplitMember>{

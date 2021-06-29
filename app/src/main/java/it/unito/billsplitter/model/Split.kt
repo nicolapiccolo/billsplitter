@@ -30,7 +30,6 @@ class Split(var name: String, var total: String, var date: String, var owner: St
             }
             else
                 return "€${"%.2f".format(t)}"
-
         }
 
         fun getFloat(n: String): Float {
@@ -41,7 +40,11 @@ class Split(var name: String, var total: String, var date: String, var owner: St
         }
 
         fun getFormatFoat(n: String): Float{
-            val number = "${"%.2f".format(n.toFloat())}".replace(",",".")
+            var number = ""
+            if("€" in n)
+                number = n.replace("€","")
+            else
+                number = "${"%.2f".format(n.toFloat())}".replace(",",".")
             return number.toFloat()
         }
 
