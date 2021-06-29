@@ -25,6 +25,7 @@ import it.unito.billsplitter.controller.task_inteface.LoadHistListener
 import it.unito.billsplitter.controller.task_inteface.LoadDataListener
 import it.unito.billsplitter.controller.task_inteface.LoadPayPalListener
 import it.unito.billsplitter.controller.task_inteface.UpdateDataListener
+import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.PayPalAccount
 import it.unito.billsplitter.model.Split
 import it.unito.billsplitter.model.User
@@ -53,7 +54,6 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         }
 
         println("MAIN ACTIVITY")
-
         val user = User.getCurrentUser()
 
         if (user==null) {

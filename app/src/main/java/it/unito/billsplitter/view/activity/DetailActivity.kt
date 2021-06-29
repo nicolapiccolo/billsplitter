@@ -95,6 +95,12 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
                 //addSomething()
                 showProgressBar(true)
                 menuFragment?.modifySplit(split)
+                val members = Model.instance.getListMember(split!!)
+                intent = Intent(this, SplittingActivity::class.java)
+                intent.putExtra("split",split)
+                intent.putParcelableArrayListExtra("members", members)
+                intent.putExtra("modify",true)
+                startActivity(intent)
                 true
             }
             R.id.action_close -> {

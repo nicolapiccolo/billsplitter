@@ -107,6 +107,7 @@ class ContactActivity : AppCompatActivity(), LoadContactListener {
                 intent.putParcelableArrayListExtra("selectedContacts", selectedContacts)
                 intent.putExtra("title", title)
                 intent.putExtra("total", total)
+                intent.putExtra("modify",false)
                 startActivity(intent)
             }
 
