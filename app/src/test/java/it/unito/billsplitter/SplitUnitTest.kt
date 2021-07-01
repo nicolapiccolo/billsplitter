@@ -40,7 +40,7 @@ class SplitUnitTest {
 
     @Test
     fun getFormatFloat(){
-        val result = Split.getFormatFoat(split.total)
+        val result = Split.getFormatFloat(split.total)
         assertEquals(
             70.0F,
             result

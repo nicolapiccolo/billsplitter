@@ -39,12 +39,18 @@ class Split(var name: String, var total: String, var date: String, var owner: St
             return nn.toFloat()
         }
 
-        fun getFormatFoat(n: String): Float{
+        fun getFormatFloat(n: String): Float{
             var number = ""
+            var nn = n
+
+            if("," in n )
+                nn = n.replace(",", ".")
+
             if("€" in n)
-                number = n.replace("€","")
-            else
-                number = "${"%.2f".format(n.toFloat())}".replace(",",".")
+                number = nn.replace("€","")
+            else {
+                number = "${"%.2f".format(nn.toFloat())}".replace(",",".")
+            }
             return number.toFloat()
         }
 

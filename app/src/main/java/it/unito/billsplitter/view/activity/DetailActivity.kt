@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -40,8 +41,8 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
     //private var modified: Boolean = false
     private lateinit var menu : Menu
     private var isMySplit: Boolean = false
-    private var menuFragment: MenuClick? = null
     private var split: ParseObject? = null
+    private lateinit var mySplit: MySplit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,19 +93,10 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
             }
 
             R.id.action_modify -> {
-                //addSomething()
-                showProgressBar(true)
-                menuFragment?.modifySplit(split)
-                val members = Model.instance.getListMember(split!!)
-                intent = Intent(this, SplittingActivity::class.java)
-                intent.putExtra("split",split)
-                intent.putParcelableArrayListExtra("members", members)
-                intent.putExtra("modify",true)
-                startActivity(intent)
+                modifyPercentage()
                 true
             }
             R.id.action_close -> {
-                //startSettings()
                 confirmDialogClose()
                 true
             }
@@ -122,6 +114,9 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         val mBuilder = android.app.AlertDialog.Builder(this!!)
             .setView(mDialogView)
         val mAlertDialog = mBuilder.show()
+
+        mAlertDialog.window?.attributes?.windowAnimations = R.style.DialogAnimationBottom
+
         mAlertDialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
@@ -143,6 +138,16 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         val mBuilder = android.app.AlertDialog.Builder(this!!)
             .setView(mDialogView)
         val mAlertDialog = mBuilder.show()
+
+        val animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),
+            R.anim.bottom_up);
+
+        val animSlideDown = AnimationUtils.loadAnimation(getApplicationContext(),
+            R.anim.bottom_down);
+
+        //mDialogView.startAnimation(animSlideUp)
+        mAlertDialog.window?.attributes?.windowAnimations = R.style.DialogAnimationBottom
+
         mAlertDialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
@@ -156,7 +161,14 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         mDialogView.btnCancel.setOnClickListener {
             mAlertDialog.dismiss()
         }
+    }
 
+    private fun modifyPercentage(){
+        intent = Intent(this, SplittingActivity::class.java)
+        intent.putExtra("split",split)
+        intent.putParcelableArrayListExtra("members", mySplit.memberList)
+        intent.putExtra("modify",true)
+        startActivity(intent)
     }
 
     private fun showMenu(show: Boolean){
@@ -173,7 +185,6 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         showMenu(isMySplit)
 
         if(isMySplit){
-            menuFragment = DetailMySplitFragment()
             val fragment = DetailMySplitFragment.newIstance()
             fragment.arguments = bundle
             replaceFragment(fragment)
@@ -224,13 +235,9 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
     }
 
     override fun sendData(mySplit: MySplit) {
+        this.mySplit = mySplit
         setFragment(mySplit)
     }
-}
-
-interface MenuClick{
-    fun closeSplit(s: ParseObject?)
-    fun modifySplit(s: ParseObject?)
 }
 
 interface CellClickListenerDetail {

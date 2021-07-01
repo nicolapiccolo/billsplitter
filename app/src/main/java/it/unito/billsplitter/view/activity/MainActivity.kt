@@ -108,11 +108,19 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
                 swiperefresh.isRefreshing = false
             }
 
-            bottomSheet = ProfileBottomSheetActivity()
+
 
             icon.setOnClickListener{
-                if(!bottomSheet.isAdded())
+
+                Split.getFormatFloat("10,00")
+
+                val progressDialog = showProgressDialog(this,"Loading...")
+                bottomSheet = ProfileBottomSheetActivity(progressDialog)
+
+                if(!bottomSheet.isAdded()){
                     bottomSheet.show(supportFragmentManager, "BottomSheetDialog")
+                }
+
             }
 
         }
@@ -191,6 +199,8 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
             .setView(mDialogView)
         val mAlertDialog = mBuilder.show()
 
+        mAlertDialog.window?.attributes?.windowAnimations = R.style.DialogAnimationSlide
+
         mAlertDialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
@@ -218,7 +228,7 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         }
     }
 
-    fun getAlertDialog( context: Context, layout: Int, setCancellationOnTouchOutside: Boolean): AlertDialog {
+    private fun getAlertDialog( context: Context, layout: Int, setCancellationOnTouchOutside: Boolean): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         val customLayout: View =
             layoutInflater.inflate(layout, null)
@@ -228,7 +238,7 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         return dialog
     }
 
-    fun showProgressDialog(context: Context, message: String): AlertDialog {
+    private fun showProgressDialog(context: Context, message: String): AlertDialog {
         val dialog = getAlertDialog(context, R.layout.progress_dialog, setCancellationOnTouchOutside = false)
         dialog.show()
         dialog.text_progress_bar.text = message
