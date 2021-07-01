@@ -15,7 +15,6 @@ import it.unito.billsplitter.controller.adapter.RvAdapterDetail
 import it.unito.billsplitter.controller.task.UpdatePayAsyncTask
 import it.unito.billsplitter.controller.task_inteface.UpdateDataListener
 import it.unito.billsplitter.view.activity.CellClickListenerDetail
-import it.unito.billsplitter.view.activity.MenuClick
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
@@ -33,7 +32,7 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 
-class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick, UpdateDataListener {
+class DetailMySplitFragment : Fragment(), CellClickListenerDetail, UpdateDataListener {
 
     private lateinit var id_split: String
     private lateinit var split: ParseObject
@@ -107,14 +106,6 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, MenuClick, Up
         }
         else
             showSnackBar(getString(R.string.notificationAlreadySend))
-    }
-
-    override fun closeSplit(s: ParseObject?) {
-        println("CLOSE SPLIT")
-    }
-
-    override fun modifySplit(s: ParseObject?) {
-        println("MODIFY SPLIT")
     }
 
     companion object {

@@ -170,6 +170,9 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail, LoadPayPal
                 .setView(mDialogView)
         val mAlertDialog = mBuilder.show()
 
+        mAlertDialog.getWindow()?.getAttributes()?.windowAnimations = R.style.DialogAnimationBottom
+
+
         mAlertDialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
@@ -229,7 +232,7 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail, LoadPayPal
     }
 
 
-    fun getAlertDialog( context: Context, layout: Int, setCancellationOnTouchOutside: Boolean): AlertDialog {
+    private fun getAlertDialog( context: Context, layout: Int, setCancellationOnTouchOutside: Boolean): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         val customLayout: View =
             layoutInflater.inflate(layout, null)
@@ -239,7 +242,7 @@ class DetailOtherSplitFragment : Fragment(), CellClickListenerDetail, LoadPayPal
         return dialog
     }
 
-    fun showProgressDialog(context: Context, message: String): AlertDialog {
+    private fun showProgressDialog(context: Context, message: String): AlertDialog {
         val dialog = getAlertDialog(context, R.layout.progress_dialog, setCancellationOnTouchOutside = false)
         dialog.show()
         dialog.text_progress_bar.text = message

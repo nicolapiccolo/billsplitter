@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="32dp"
+    android:padding="24dp"
     android:backgroundTint="@color/white"
     android:background="@drawable/fill_button">
 
@@ -26,7 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dialog Message"
-        android:textSize="16dp"
+        android:textSize="18dp"
+        android:fontFamily="@font/robo_regular"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,10 +40,10 @@
         android:layout_height="wrap_content"
         style="?android:attr/borderlessButtonStyle"
         android:text="Confirm"
-        android:textSize="24dp"
-        android:fontFamily="@font/robo_regular"
+        android:textSize="18dp"
+        android:fontFamily="@font/robo_medium"
         android:textAllCaps="false"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDialogMessage"/>
 
@@ -52,10 +53,10 @@
         android:layout_height="wrap_content"
         style="?android:attr/borderlessButtonStyle"
         android:text="Back"
-        android:textSize="24dp"
-        android:fontFamily="@font/robo_regular"
+        android:textSize="18dp"
+        android:fontFamily="@font/robo_medium"
         android:textAllCaps="false"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDialogMessage"/>
 

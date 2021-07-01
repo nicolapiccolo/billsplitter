@@ -17,22 +17,31 @@ import it.unito.billsplitter.model.User
 import kotlinx.android.synthetic.main.change_password_dialog.*
 import kotlinx.android.synthetic.main.change_password_dialog.view.*
 import kotlinx.android.synthetic.main.profile_bottomsheet_fragment.*
+import kotlinx.android.synthetic.main.progress_dialog.*
 
-class ProfileBottomSheetActivity: BottomSheetDialogFragment(){
+class ProfileBottomSheetActivity(val progress: AlertDialog): BottomSheetDialogFragment(){
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.profile_bottomsheet_fragment, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val username = User.getCurrentUser()?.get("username").toString().capitalize()
+
+
+        val user = User.getCurrentUser()!!
+
+        val username = user.get("username").toString().capitalize()
         txtUsername.text = username
-        txtEmail.text = User.getCurrentUser()?.get("email").toString()
-        txtPhone.text = User.getCurrentUser()?.get("phone").toString()
+        txtEmail.text = user.get("email").toString()
+        txtPhone.text = user.get("phone").toString()
         icon_text.text = username[0].toString()
+
         btnChangePassword.setOnClickListener {
             changePasswordDialog(requireContext())
+
         }
 
         btnLogOut.setOnClickListener {
@@ -42,14 +51,18 @@ class ProfileBottomSheetActivity: BottomSheetDialogFragment(){
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
+
+        progress.dismiss()
     }
 
     public fun updateContext(){
         showProgressBar(false)
-        val username = User.getCurrentUser()?.get("username").toString().capitalize()
+
+        val user = User.getCurrentUser()!!
+        val username = user.get("username").toString().capitalize()
         txtUsername.text = username
-        txtEmail.text = User.getCurrentUser()?.get("email").toString()
-        txtPhone.text = User.getCurrentUser()?.get("phone").toString()
+        txtEmail.text = user.get("email").toString()
+        txtPhone.text = user.get("phone").toString()
         icon_text.text = username[0].toString()
     }
 
@@ -91,4 +104,5 @@ class ProfileBottomSheetActivity: BottomSheetDialogFragment(){
             progressBar.visibility = View.GONE
         }
     }
+
 }

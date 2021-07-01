@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.change_password_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_phone.*
 import kotlinx.android.synthetic.main.dialog_phone.btnSend
 import kotlinx.android.synthetic.main.dialog_phone.view.*
+import kotlinx.android.synthetic.main.progress_dialog.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -137,8 +138,11 @@ class RegisterActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
             }
 
 
+            val progressDialog = showProgressDialog(this,"Registering...")
+
             user.signUpInBackground() { e: ParseException? ->
                 if(e == null){
+                    progressDialog.dismiss()
                     val installation = ParseInstallation.getCurrentInstallation()
                     installation.put("user", ParseUser.getCurrentUser())
                     installation.saveInBackground()
@@ -181,5 +185,22 @@ class RegisterActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
 
     override fun onConnectionFailed(p0: ConnectionResult) {
 
+    }
+
+    private fun getAlertDialog( context: Context, layout: Int, setCancellationOnTouchOutside: Boolean): android.app.AlertDialog {
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+        val customLayout: View =
+            layoutInflater.inflate(layout, null)
+        builder.setView(customLayout)
+        val dialog = builder.create()
+        dialog.setCanceledOnTouchOutside(setCancellationOnTouchOutside)
+        return dialog
+    }
+
+    private fun showProgressDialog(context: Context, message: String): android.app.AlertDialog {
+        val dialog = getAlertDialog(context, R.layout.progress_dialog, setCancellationOnTouchOutside = false)
+        dialog.show()
+        dialog.text_progress_bar.text = message
+        return dialog
     }
 }

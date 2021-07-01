@@ -1,6 +1,5 @@
 package it.unito.billsplitter.view.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -58,7 +57,7 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
         else{
             val mysplit = getIntent().getParcelableExtra<ParseObject>("split")
             val members = getIntent().getParcelableArrayListExtra<SplitMember>("members")
-            val total = Split.getFormatFoat(mysplit?.get("total").toString()).toString()
+            val total = Split.getFormatFloat(mysplit?.get("total").toString()).toString()
             totalPrice.setText(total)
             recyclerViewSplitting.adapter = SplittingAdapter(members!!,this, total.toFloat())
 
@@ -130,7 +129,7 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
             var rem: Float= total
             for (i in 0..txtPrices.size-1){
                 if(i==position || !txtPrices[i].isEnabled)
-                    rem -= Split.getFormatFoat(txtPrices[i].text.toString())
+                    rem -= Split.getFormatFloat(txtPrices[i].text.toString())
 
             }
             return rem
@@ -176,7 +175,7 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
         private fun updateShare(seekbarList: ArrayList<SeekBar>, txtPrices: ArrayList<EditText>){
             for (i in 0..seekbarList.size - 1) {
                 list[i].share = ((total*seekbarList[i].progress)/100).toString()
-                txtPrices[i].setText((Split.getFormatFoat(list[i].share)).toString())
+                txtPrices[i].setText((Split.getFormatFloat(list[i].share)).toString())
             }
         }
 
@@ -225,7 +224,8 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
                 holder.icon_text.text = list[position].name[0].toString().capitalize()
             }
             Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
-            holder.price.setText((Split.getFormatFoat(list[position].share)).toString())
+            println("SHARE: " + list[position].share)
+            holder.price.setText((Split.getFormatFloat(list[position].share)).toString())
             holder.seekBar.setProgress((100/list.size))
             holder.percentage.text = (100/list.size).toString()
             txtPrices.add(holder.price)
@@ -234,7 +234,7 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     holder.percentage.text = progress.toString()
                     if(focus){
-                        holder.price.setText((Split.getFormatFoat(((total*progress)/100).toString())).toString())
+                        holder.price.setText((Split.getFormatFloat(((total*progress)/100).toString())).toString())
                         focus=!focus
                     }
                 }

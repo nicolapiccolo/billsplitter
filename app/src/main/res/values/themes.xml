@@ -21,4 +21,14 @@
         <item name="android:textColorSecondary">@color/yellow</item>
     </style>
 
+    <style name="DialogAnimationBottom">
+        <item name="android:windowEnterAnimation">@anim/bottom_up</item>
+        <item name="android:windowExitAnimation">@anim/bottom_down</item>
+    </style>
+
+    <style name="DialogAnimationSlide">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
 </resources>
