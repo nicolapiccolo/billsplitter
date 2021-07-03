@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -215,19 +216,21 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
 
         override fun onBindViewHolder(holder: SplittingViewHolder, position: Int){
             if (list[position].owner){
-                holder.name.text = "you pay for"
+                holder.name.text = "You pay for"
                 holder.icon_text.text = "Y"
                 holder.image.setImageResource(R.drawable.circle_icon_stock)
             }
             else {
-                holder.name.text = list[position].name + " pay for"
+                holder.name.text = list[position].name.capitalize() + " pay for"
                 holder.icon_text.text = list[position].name[0].toString().capitalize()
             }
             Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
             println("SHARE: " + list[position].share)
             holder.price.setText((Split.getFormatFloat(list[position].share)).toString())
-            holder.seekBar.setProgress((100/list.size))
-            holder.percentage.text = (100/list.size).toString()
+            var share = getPercentage(Split.getFormatFloat(list[position].share)).toString()
+            holder.percentage.text = share
+            holder.seekBar.setProgress(share.toInt())
+
             txtPrices.add(holder.price)
             seekbarList.add(holder.seekBar)
             holder.seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
@@ -246,22 +249,35 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
                     updateShare(seekbarList, txtPrices)
                 }
             })
+
+            fun lockHolder(bool: Boolean){
+                holder.state= !bool
+                holder.seekBar.setEnabled(bool)
+                holder.price.setEnabled(bool)
+            }
+
             holder.loker.setOnClickListener {
                 //unlock
                 if(holder.state) {
-                    holder.state = false
                     holder.loker.setBackgroundResource(R.drawable.ic_password)
-                    holder.seekBar.setEnabled(true)
-                    holder.price.setEnabled(true)
                     lockedPerc-=holder.seekBar.progress
+                    lockHolder(true)
                 }else{
                     //lock
-                    holder.state = true
+                    lockHolder(false)
                     holder.loker.setBackgroundResource(R.drawable.ic_lock)
-                    holder.seekBar.setEnabled(false)
-                    holder.price.setEnabled(false)
                     lockedPerc+=holder.seekBar.progress
                 }
+            }
+            if(list[position].paid){
+                lockedPerc+=holder.seekBar.progress
+                lockHolder(false)
+                holder.loker.setBackgroundResource(R.drawable.ic_check)
+                holder.btnloker.setBackgroundResource(R.drawable.lock_button_green)
+                holder.percentage.setVisibility(View.INVISIBLE)
+                holder.perc.setVisibility(View.INVISIBLE)
+                holder.seekBar.setVisibility(View.INVISIBLE)
+                holder.name.setText((holder.name.text).toString().replace("pay","paid"))
             }
 
 
@@ -283,10 +299,12 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
             val icon_text = v.icon_textC!!
             val name = v.txtSubtitle!!
             val percentage = v.txtPercentage!!
+            val perc = v.perc!!
             var price = v.txtPrice!!
             val seekBar = v.seekBar
             val loker = v.btnLocker
             var state: Boolean = false
+            val btnloker = v.lockerLayout
         }
     }
 
