@@ -82,8 +82,10 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
         val amount = total/ (contacts!!.size)
         contacts?.forEach {
             var m = SplitMember(it.get("username").toString(),amount.toString(),false,it,false)
-            if (User.getCurrentUser()!!.objectId!!.equals(it.objectId!!))
-                m.owner=true
+            if (User.getCurrentUser()!!.objectId!!.equals(it.objectId!!)){
+                m.owner = true
+                m.paid  = true
+            }
             members.add(m)
         }
         return members

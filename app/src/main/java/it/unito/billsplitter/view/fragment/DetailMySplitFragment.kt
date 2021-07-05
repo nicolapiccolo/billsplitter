@@ -1,11 +1,12 @@
 package it.unito.billsplitter.view.fragment
 
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import android.view.animation.LinearInterpolator
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -14,18 +15,13 @@ import it.unito.billsplitter.R
 import it.unito.billsplitter.controller.adapter.RvAdapterDetail
 import it.unito.billsplitter.controller.task.UpdatePayAsyncTask
 import it.unito.billsplitter.controller.task_inteface.UpdateDataListener
-import it.unito.billsplitter.view.activity.CellClickListenerDetail
 import it.unito.billsplitter.model.Model
 import it.unito.billsplitter.model.MySplit
 import it.unito.billsplitter.model.SplitMember
+import it.unito.billsplitter.view.activity.CellClickListenerDetail
+import kotlinx.android.synthetic.main.confirm_action_dialog.*
+import kotlinx.android.synthetic.main.confirm_action_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_my_split.*
-import kotlinx.android.synthetic.main.fragment_my_split.icon_text
-import kotlinx.android.synthetic.main.fragment_my_split.s_btnSend
-import kotlinx.android.synthetic.main.fragment_my_split.s_recyclerView
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtDate
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtName
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtTitle
-import kotlinx.android.synthetic.main.fragment_my_split.s_txtTotal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -36,15 +32,28 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, UpdateDataLis
 
     private lateinit var id_split: String
     private lateinit var split: ParseObject
+    private lateinit var adapter: RvAdapterDetail
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater!!)
+        menu.setGroupVisible(R.id.detail_menu_group,true)
+     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         val mySplit: MySplit = (arguments?.getParcelable("split") as MySplit?)!!
         id_split = (arguments?.getString("id_split"))!!
+
 
         getSplit()
 
@@ -53,11 +62,12 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, UpdateDataLis
 
         s_recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        val adapter = RvAdapterDetail(this, mySplit.memberList)
+        adapter = RvAdapterDetail(this, mySplit.memberList)
         s_recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 
         displaySplit(mySplit)
+
 
         s_btnSend.setOnClickListener{
             sendNotification(mySplit.memberList,id_split)
@@ -71,7 +81,7 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, UpdateDataLis
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?{
-       return inflater.inflate(R.layout.fragment_my_split, container, false)
+        return inflater.inflate(R.layout.fragment_my_split, container, false)
     }
 
     private fun getSplit(){
@@ -84,6 +94,8 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, UpdateDataLis
 
 
     private fun displaySplit(split: MySplit){
+
+
         s_txtName.text = "You"
 
         icon_text.text = "Y"
@@ -93,8 +105,19 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, UpdateDataLis
         s_txtTotal.text = split.total
         s_txtDate.text = split.date
         s_txtGet.text = split.share
+
+
+
+        println("Progress: " + progressTotal.progress)
+        println("Split: " + split.percentage)
+
+
+        val animation = ObjectAnimator.ofInt(progressTotal, "progress", progressTotal.progress, split.percentage)
+        animation.duration = 2000 // 3.5 second
+        animation.interpolator = LinearInterpolator()
+        animation.start()
+
         progressTotal.setProgress(split.percentage)
-        //s_txtShare.text = split.share
     }
 
 
@@ -117,35 +140,41 @@ class DetailMySplitFragment : Fragment(), CellClickListenerDetail, UpdateDataLis
         if (data!=null) confirmDialogPaid(data)
     }
 
-    private fun confirmDialogPaid(data: SplitMember) {
+    private fun confirmDialogPaid(data: SplitMember){
         val name = data.name.capitalize()
         val user = data.user
         val paid : Boolean = data.paid
 
+        val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.confirm_action_dialog, null)
+        //AlertDialogBuilder
+        val mBuilder = android.app.AlertDialog.Builder(requireContext())
+            .setView(mDialogView)
+        val mAlertDialog = mBuilder.show()
 
-        val builder = AlertDialog.Builder(context)
+        mAlertDialog.window?.attributes?.windowAnimations = R.style.DialogAnimationBottom
+
+        mAlertDialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
         if(!paid){
-            builder.setTitle(R.string.titlePaid)
-            builder.setMessage(R.string.contentPaid)
+            mAlertDialog.txtConfirmTitle.setText(R.string.titlePaid)
+            mAlertDialog.txtDialogMessage.setText(R.string.contentPaid)
         }
         else{
-            builder.setTitle(R.string.titleNotPaid)
-            builder.setMessage(R.string.contentNotPaid)
+            mAlertDialog.txtConfirmTitle.setText(R.string.titleNotPaid)
+            mAlertDialog.txtDialogMessage.setText(R.string.contentNotPaid)
         }
 
-        builder.setPositiveButton(R.string.yes) { dialog, which ->
-            //showProgressBar(true)
-            //UpdateDataAsyncTask(this).execute(split)
+        mAlertDialog.btnSend.setOnClickListener {
 
-            Toast.makeText(context, "Confirming payment to: ${name}", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "Confirming payment to: ${name}", Toast.LENGTH_SHORT).show()
             UpdatePayAsyncTask(requireContext(),!paid).execute(split,user)
+            mAlertDialog.dismiss()
         }
-
-        builder.setNegativeButton(R.string.no) { dialog, which ->
-
+        mDialogView.btnCancel.setOnClickListener {
+            mAlertDialog.dismiss()
         }
-
-        builder.show()
     }
 
     private fun showSnackBar(message : String){

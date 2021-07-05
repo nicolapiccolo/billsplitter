@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group
-        android:id="@+id/detail_menu_group">
+        android:id="@+id/detail_menu_group"
+        android:visible="false">
         <item
             android:icon="@drawable/ic_unselected_checkbox"
             android:id="@+id/action_modify"

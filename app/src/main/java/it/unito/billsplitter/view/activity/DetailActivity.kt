@@ -1,6 +1,7 @@
 package it.unito.billsplitter.view.activity
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -29,6 +30,7 @@ import it.unito.billsplitter.model.SplitMember
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.confirm_action_dialog.*
 import kotlinx.android.synthetic.main.confirm_action_dialog.view.*
+import kotlinx.android.synthetic.main.progress_dialog.*
 
 
 class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListener, UpdatePayListener {
@@ -43,6 +45,8 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
     private var isMySplit: Boolean = false
     private var split: ParseObject? = null
     private lateinit var mySplit: MySplit
+    private var progressDialog: AlertDialog? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,13 +143,6 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
             .setView(mDialogView)
         val mAlertDialog = mBuilder.show()
 
-        val animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),
-            R.anim.bottom_up);
-
-        val animSlideDown = AnimationUtils.loadAnimation(getApplicationContext(),
-            R.anim.bottom_down);
-
-        //mDialogView.startAnimation(animSlideUp)
         mAlertDialog.window?.attributes?.windowAnimations = R.style.DialogAnimationBottom
 
         mAlertDialog.apply {
@@ -171,7 +168,7 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         startActivity(intent)
     }
 
-    private fun showMenu(show: Boolean){
+    public fun showMenu(show: Boolean){
         if(menu!=null){
             menu.setGroupVisible(R.id.detail_menu_group,show)
         }
@@ -182,12 +179,12 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
         bundle.putParcelable("split", mySplit)
         bundle.putString("id_split",split?.objectId)
 
-        showMenu(isMySplit)
 
         if(isMySplit){
             val fragment = DetailMySplitFragment.newIstance()
             fragment.arguments = bundle
             replaceFragment(fragment)
+            //showMenu(isMySplit)
         }
         else{
             val fragment = DetailOtherSplitFragment.newIstance()
@@ -224,9 +221,14 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
 
     override fun sendResult(result: Boolean) {
         println("RELOAD")
-        recreate()
+        //recreate()
+        progressDialog = showProgressDialog(this,"Confirming...")
+
+        LoadFragmentAsyncTask(this).execute(split)
         DetailActivity.modified = true
     }
+
+
 
     override fun sendData(result: Boolean) {
         val intent = Intent()
@@ -235,8 +237,28 @@ class DetailActivity : AppCompatActivity(),LoadFragmentListener, UpdateDataListe
     }
 
     override fun sendData(mySplit: MySplit) {
+
+        progressDialog?.dismiss()
+
         this.mySplit = mySplit
         setFragment(mySplit)
+    }
+
+    private fun getAlertDialog(context: Context, layout: Int, setCancellationOnTouchOutside: Boolean): AlertDialog {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        val customLayout: View =
+            layoutInflater.inflate(layout, null)
+        builder.setView(customLayout)
+        val dialog = builder.create()
+        dialog.setCanceledOnTouchOutside(setCancellationOnTouchOutside)
+        return dialog
+    }
+
+    private fun showProgressDialog(context: Context, message: String): AlertDialog {
+        val dialog = getAlertDialog(context, R.layout.progress_dialog, setCancellationOnTouchOutside = false)
+        dialog.show()
+        dialog.text_progress_bar.text = message
+        return dialog
     }
 }
 

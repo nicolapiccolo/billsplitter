@@ -23,16 +23,7 @@ import it.unito.billsplitter.controller.task_inteface.LoadPayPalListener
 import it.unito.billsplitter.controller.task_inteface.PaySplitListener
 import it.unito.billsplitter.model.*
 import it.unito.billsplitter.view.activity.CellClickListenerDetail
-import it.unito.billsplitter.view.activity.CreateSplitActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.change_password_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_other_split.*
-import kotlinx.android.synthetic.main.fragment_other_split.icon_text
-import kotlinx.android.synthetic.main.fragment_other_split.s_recyclerView
-import kotlinx.android.synthetic.main.fragment_other_split.s_txtDate
-import kotlinx.android.synthetic.main.fragment_other_split.s_txtName
-import kotlinx.android.synthetic.main.fragment_other_split.s_txtTitle
-import kotlinx.android.synthetic.main.fragment_other_split.s_txtTotal
 import kotlinx.android.synthetic.main.login_paypal_dialog.*
 import kotlinx.android.synthetic.main.login_paypal_dialog.view.*
 import kotlinx.android.synthetic.main.money_sent_dialog.*
