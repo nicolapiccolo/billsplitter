@@ -1,8 +1,10 @@
 package it.unito.billsplitter.controller.adapter
 
-import it.unito.billsplitter.R
+import android.animation.ObjectAnimator
 import android.content.Context
+import android.os.Handler
 import android.util.Log
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +12,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import it.unito.billsplitter.view.activity.CellClickListenerDetail
+import it.unito.billsplitter.R
 import it.unito.billsplitter.model.Contact
 import it.unito.billsplitter.model.SplitMember
+import it.unito.billsplitter.view.activity.CellClickListenerDetail
+
 
 class RvAdapterDetail(private val cellClickListener: CellClickListenerDetail, private val dataList: ArrayList<SplitMember>) : RecyclerView.Adapter<RvAdapterDetail.ViewHolder>() {
     private lateinit var context: Context
@@ -31,7 +35,8 @@ class RvAdapterDetail(private val cellClickListener: CellClickListenerDetail, pr
 
         if(!data.owner) {
             p0.itemView.setOnLongClickListener {
-                //cellClickListener.onCellClickListener(data)
+                it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+
                 cellClickListener.onCellClickListener(data)
                 true
             }
@@ -40,6 +45,11 @@ class RvAdapterDetail(private val cellClickListener: CellClickListenerDetail, pr
         p0.name?.text = data.name.capitalize()
         p0.share?.text = data.share
         p0.img?.text = data.name[0].toString().capitalize()
+
+        println("TAG: " + p0.icon.tag)
+        println("DRAW: " + R.drawable.img_account)
+        println("PAID: " + data.paid)
+
 
         if (data.owner){
             p0.name?.setTextColor(ContextCompat.getColor(context, R.color.darkgrey))
@@ -50,10 +60,18 @@ class RvAdapterDetail(private val cellClickListener: CellClickListenerDetail, pr
         else if(data.paid){
             p0.share?.setTextColor(ContextCompat.getColor(context, R.color.green))
             p0.icon?.setImageResource(R.drawable.img_account)
+            p0.icon?.setTag(R.drawable.img_account)
             p0.img?.text = ""
         }
 
-        Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
+        else{
+            p0.icon?.setImageResource(R.drawable.circle_icon)
+            p0.icon?.setTag(R.drawable.circle_icon)
+        }
+
+
+
+        Contact.setColor(Contact.getRandomMaterialColor("400",context),context)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

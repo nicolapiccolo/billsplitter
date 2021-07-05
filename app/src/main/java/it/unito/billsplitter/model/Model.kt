@@ -434,9 +434,31 @@ class Model private constructor()   {
         if(obj!=null){
             obj.put("paid",value)
             obj.save()
+
+            if (checkClose(id_split)) {
+                id_split.put("close",true)
+                id_split.save()
+            }
+
             return true
         }
         else return false
+    }
+
+    fun checkClose(id_split: ParseObject): Boolean{
+        val query =  ParseQuery.getQuery<ParseObject>("Transaction")
+        query.whereEqualTo("id_split", id_split)
+
+        val queryList: List<ParseObject> = query.find()
+
+        if(queryList.size > 0){
+            queryList.forEach{
+                if (!it.getBoolean("paid")) return false
+            }
+        } else return false
+
+        println("TO CLOSE")
+        return true
     }
 
     fun setDate(id_split: ParseObject) :Boolean{
