@@ -46,10 +46,11 @@ class LoginFragment : Fragment() {
                 txtEmail.text.toString(),
                 txtPassword.text.toString()
             ) { user: ParseUser?, e: ParseException? ->
+                progressDialog.dismiss()
+
                 if (user != null) {
                     // Hooray! The user is logged in.
 
-                        progressDialog.dismiss()
                     val installation = ParseInstallation.getCurrentInstallation()
                     installation.put("user", ParseUser.getCurrentUser())
                     installation.saveInBackground()
