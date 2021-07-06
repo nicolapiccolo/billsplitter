@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         if (user==null) {
             val intent = Intent(this, SlidingActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_id_bottom)
         }
         else{
             setContentView(R.layout.activity_main)
@@ -92,6 +93,7 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
                 if (User.isLinked()){
                     intent = Intent(this, CreateSplitActivity::class.java)
                     startActivityForResult(intent,CreateSplitActivity.ID)
+                    overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_id_bottom)
                 }
                 else{
                     payPalDialog(this)
@@ -133,6 +135,7 @@ class MainActivity : AppCompatActivity(),CellClickListener, LoadDataListener, Up
         intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("split", data)
         startActivityForResult(intent,DetailActivity.ID)
+        overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_id_bottom)
         DetailActivity.modified = false
     }
 

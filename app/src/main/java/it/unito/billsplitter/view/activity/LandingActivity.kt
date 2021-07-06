@@ -22,16 +22,20 @@ class LandingActivity : AppCompatActivity(){
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         intent.putExtra("Exit", true)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_id_bottom)
         finish()
     }
 
     fun Login(view : View){
         intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_id_bottom)
+
     }
 
     fun Register(view : View){
         intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_id_bottom)
     }
 }
