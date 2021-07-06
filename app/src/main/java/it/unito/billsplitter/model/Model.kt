@@ -337,9 +337,12 @@ class Model private constructor()   {
 
     private fun createTransaction(m: SplitMember, id_split: ParseObject): Boolean{
         val member = ParseObject("Transaction")
+        val relation_user = member.getRelation<ParseUser>("id_user")
+
+        if(m.user.objectId == ParseUser.getCurrentUser().objectId) m.paid = true
+
         member.put("paid",m.paid)
         member.put("share",m.share.toFloat())
-        val relation_user = member.getRelation<ParseUser>("id_user")
         relation_user.add(m.user)
         val relation = member.getRelation<ParseObject>("id_split")
         relation.add(id_split)

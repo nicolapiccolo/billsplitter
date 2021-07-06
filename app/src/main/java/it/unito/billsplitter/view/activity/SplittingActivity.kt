@@ -84,7 +84,7 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
             var m = SplitMember(it.get("username").toString(),amount.toString(),false,it,false)
             if (User.getCurrentUser()!!.objectId!!.equals(it.objectId!!)){
                 m.owner = true
-                m.paid  = true
+                //m.paid  = true
             }
             members.add(m)
         }
@@ -226,7 +226,7 @@ class SplittingActivity: AppCompatActivity(), CreateDataListener {
                 holder.name.text = list[position].name.capitalize() + " pay for"
                 holder.icon_text.text = list[position].name[0].toString().capitalize()
             }
-            Contact.setColor(Contact.getRandomMaterialColor("300",context),context)
+            Contact.setColor(Contact.getRandomMaterialColor("400",context),context)
             println("SHARE: " + list[position].share)
             holder.price.setText((Split.getFormatFloat(list[position].share)).toString())
             var share = getPercentage(Split.getFormatFloat(list[position].share)).toString()
